@@ -1,13 +1,43 @@
-@model IEnumerable<TourismHajj.Models.Entities.Payment>
+@model PaymentListViewModel
 @{ ViewData["Title"] = "Payment Receipts"; }
 @await Html.PartialAsync("_Alerts")
-<div class="page-header"><div><h2>Payment Receipts</h2></div>
-<div class="d-flex gap-2">
-<form method="get" class="d-flex gap-2"><input class="form-control form-control-sm" name="q" value="@ViewBag.Q" placeholder="Search..." /><button class="btn btn-sm btn-outline-secondary">Search</button></form>
-<a class="btn btn-sm btn-accent" asp-action="Create"><i class="fa-solid fa-plus"></i> Add</a></div></div>
-<div class="card-panel"><div class="table-responsive"><table class="table table-hover mb-0">
-<thead><tr><th>Date</th><th>Booking</th><th>Customer</th><th>Amount</th><th>Method</th><th>Type</th></tr></thead>
-<tbody>@foreach (var item in Model){<tr>
-<td>@item.PaymentDate?.ToString("dd-MMM-yyyy")</td><td>@item.Booking?.BookingNo</td><td>@item.Booking?.Customer?.CustomerName</td>
-<td>@item.Amount.ToString("N2")</td><td>@item.PaymentMethod</td><td>@item.PaymentType</td></tr>}
-</tbody></table></div>@await Html.PartialAsync("_Pager")</div>
+<div class="page-header">
+    <div><h2>Payment Receipts</h2></div>
+    <div class="d-flex gap-2">
+        <form method="get" class="d-flex gap-2">
+            <input class="form-control form-control-sm" type="date" name="fromDate" value="@(Model.FromDate?.ToString("yyyy-MM-dd"))" />
+            <input class="form-control form-control-sm" type="date" name="toDate" value="@(Model.ToDate?.ToString("yyyy-MM-dd"))" />
+            <button class="btn btn-sm btn-outline-secondary" type="submit">Filter</button>
+        </form>
+        <a class="btn btn-sm btn-accent" asp-action="Create"><i class="fa-solid fa-plus"></i> Add</a>
+    </div>
+</div>
+<div class="card-panel">
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Booking</th>
+                    <th>Customer</th>
+                    <th>Amount</th>
+                    <th>Method</th>
+                    <th>Type</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model.Payments)
+            {
+                <tr>
+                    <td>@item.PaymentDate?.ToString("dd-MMM-yyyy")</td>
+                    <td>@item.Booking?.BookingNo</td>
+                    <td>@item.Booking?.Customer?.CustomerName</td>
+                    <td>@item.Amount.ToString("N2")</td>
+                    <td>@item.PaymentMethod</td>
+                    <td>@item.PaymentType</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

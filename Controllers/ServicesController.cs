@@ -13,21 +13,18 @@ public class ServicesController : Controller
     private readonly IMasterDataService _service;
     public ServicesController(IMasterDataService service) => _service = service;
 
-    public async Task<IActionResult> Index(string? search, int page = 1, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> Index(string? q, string? search, int page = 1, CancellationToken cancellationToken = default)
     {
         const int pageSize = 10;
-        var query = _service.GetServicesQuery(search);
+        var term = q ?? search;
+        var query = _service.GetServicesQuery(term);
         var total = await query.CountAsync(cancellationToken);
         var items = await query.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync(cancellationToken);
-        return View(new PagedResult<Service>
-        {
-            Items = items,
-            PageIndex = page,
-            PageSize = pageSize,
-            TotalCount = total,
-            TotalPages = (int)Math.Ceiling(total / (double)pageSize),
-            Search = search
-        });
+        ViewBag.Q = term;
+        ViewBag.Page = page;
+        ViewBag.Total = total;
+        ViewBag.PageSize = pageSize;
+        return View(items);
     }
 
     public IActionResult Create() => View(new Service { IsActive = true });

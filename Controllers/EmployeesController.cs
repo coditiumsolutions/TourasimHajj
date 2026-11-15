@@ -13,21 +13,18 @@ public class EmployeesController : Controller
     private readonly IMasterDataService _service;
     public EmployeesController(IMasterDataService service) => _service = service;
 
-    public async Task<IActionResult> Index(string? search, int page = 1, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> Index(string? q, string? search, int page = 1, CancellationToken cancellationToken = default)
     {
         const int pageSize = 10;
-        var query = _service.GetEmployeesQuery(search);
+        var term = q ?? search;
+        var query = _service.GetEmployeesQuery(term);
         var total = await query.CountAsync(cancellationToken);
         var items = await query.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync(cancellationToken);
-        return View(new PagedResult<Employee>
-        {
-            Items = items,
-            PageIndex = page,
-            PageSize = pageSize,
-            TotalCount = total,
-            TotalPages = (int)Math.Ceiling(total / (double)pageSize),
-            Search = search
-        });
+        ViewBag.Q = term;
+        ViewBag.Page = page;
+        ViewBag.Total = total;
+        ViewBag.PageSize = pageSize;
+        return View(items);
     }
 
     public IActionResult Create() => View(new Employee { IsActive = true });

@@ -1,18 +1,51 @@
-@model IEnumerable<TourismHajj.Models.Entities.HajjSeason>
+@model HajjSeasonListViewModel
 @{ ViewData["Title"] = "Hajj Seasons"; }
 @await Html.PartialAsync("_Alerts")
-<div class="page-header"><div><h2>Hajj Seasons</h2></div>
-<div class="d-flex gap-2">
-<form method="get" class="d-flex gap-2"><input class="form-control form-control-sm" name="q" value="@ViewBag.Q" placeholder="Search..." /><button class="btn btn-sm btn-outline-secondary">Search</button></form>
-<a class="btn btn-sm btn-accent" asp-action="Create"><i class="fa-solid fa-plus"></i> Add</a></div></div>
-<div class="card-panel"><div class="table-responsive"><table class="table table-hover mb-0">
-<thead><tr><th>Season</th><th>Year</th><th>Reg Start</th><th>Reg End</th><th></th></tr></thead><tbody>
-@foreach (var item in Model) {
-<tr><td>@item.SeasonName</td><td>@item.HajjYear</td><td>@item.RegistrationStartDate</td><td>@item.RegistrationEndDate</td>
-<td class="text-end">
-<a class="btn btn-sm btn-outline-primary" asp-action="Edit" asp-route-id="@item.HajjSeasonId"><i class="fa-solid fa-pen"></i></a>
-<a class="btn btn-sm btn-outline-secondary" asp-action="Details" asp-route-id="@item.HajjSeasonId"><i class="fa-solid fa-eye"></i></a>
-<form asp-action="Delete" asp-route-id="@item.HajjSeasonId" method="post" class="d-inline">@Html.AntiForgeryToken()
-<button class="btn btn-sm btn-outline-danger" data-confirm="Deactivate this record?" type="submit"><i class="fa-solid fa-ban"></i></button></form>
-</td></tr>}
-</tbody></table></div>@await Html.PartialAsync("_Pager")</div>
+<div class="page-header">
+    <div><h2>Hajj Seasons</h2></div>
+    <div class="d-flex gap-2 align-items-center">
+        <form method="get" class="d-flex gap-2 align-items-center">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="includeInactive" value="true" id="includeInactive" @(Model.IncludeInactive ? "checked" : null) onchange="this.form.submit()" />
+                <label class="form-check-label" for="includeInactive">Include inactive</label>
+            </div>
+        </form>
+        <a class="btn btn-sm btn-accent" asp-action="Create"><i class="fa-solid fa-plus"></i> Add</a>
+    </div>
+</div>
+<div class="card-panel">
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>Season</th>
+                    <th>Year</th>
+                    <th>Reg Start</th>
+                    <th>Reg End</th>
+                    <th>Active</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model.Seasons)
+            {
+                <tr>
+                    <td>@item.SeasonName</td>
+                    <td>@item.HajjYear</td>
+                    <td>@item.RegistrationStartDate?.ToString("dd-MMM-yyyy")</td>
+                    <td>@item.RegistrationEndDate?.ToString("dd-MMM-yyyy")</td>
+                    <td>@(item.IsActive == true ? "Yes" : "No")</td>
+                    <td class="text-end text-nowrap">
+                        <a class="btn btn-sm btn-outline-primary" asp-action="Edit" asp-route-id="@item.HajjSeasonId"><i class="fa-solid fa-pen"></i></a>
+                        <a class="btn btn-sm btn-outline-secondary" asp-action="Details" asp-route-id="@item.HajjSeasonId"><i class="fa-solid fa-eye"></i></a>
+                        <form asp-action="Delete" asp-route-id="@item.HajjSeasonId" method="post" class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <button class="btn btn-sm btn-outline-danger" data-confirm="Deactivate this record?" type="submit"><i class="fa-solid fa-ban"></i></button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

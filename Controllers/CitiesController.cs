@@ -14,23 +14,19 @@ public class CitiesController : Controller
     private readonly IMasterDataService _service;
     public CitiesController(IMasterDataService service) => _service = service;
 
-    public async Task<IActionResult> Index(string? search, int? countryId, int page = 1, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> Index(string? q, string? search, int? countryId, int page = 1, CancellationToken cancellationToken = default)
     {
         const int pageSize = 10;
-        var query = _service.GetCitiesQuery(search, countryId);
+        var term = q ?? search;
+        var query = _service.GetCitiesQuery(term, countryId);
         var total = await query.CountAsync(cancellationToken);
         var items = await query.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync(cancellationToken);
         ViewBag.Countries = new SelectList(await _service.GetActiveCountriesListAsync(cancellationToken), nameof(Country.CountryId), nameof(Country.CountryName), countryId);
-        var model = new PagedResult<City>
-        {
-            Items = items,
-            PageIndex = page,
-            PageSize = pageSize,
-            TotalCount = total,
-            TotalPages = (int)Math.Ceiling(total / (double)pageSize),
-            Search = search
-        };
-        return View(model);
+        ViewBag.Q = term;
+        ViewBag.Page = page;
+        ViewBag.Total = total;
+        ViewBag.PageSize = pageSize;
+        return View(items);
     }
 
     public async Task<IActionResult> Create(CancellationToken cancellationToken)
