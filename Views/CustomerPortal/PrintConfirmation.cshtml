@@ -1,0 +1,15 @@
+@model BookingDetailsViewModel
+@{ Layout = null; var b = Model.Booking; }
+<!DOCTYPE html>
+<html><head><title>Confirmation @b.BookingNo</title>
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+</head><body class="p-4">
+<h2>Booking Confirmation</h2>
+<p><strong>@b.BookingNo</strong> · @b.Package?.PackageName</p>
+<p>Customer: @b.Customer?.CustomerName</p>
+<p>Departure: @b.Departure?.DepartureDate.ToString("dd MMM yyyy")</p>
+<p>Net: @((b.NetAmount ?? 0).ToString("N2")) · Paid: @((b.PaidAmount ?? 0).ToString("N2")) · Balance: @((b.BalanceAmount ?? 0).ToString("N2"))</p>
+<h5>Travelers</h5>
+<ul>@foreach (var t in Model.Travelers){<li>@t.Traveler?.FullName</li>}</ul>
+<script>window.print()</script>
+</body></html>

@@ -1,0 +1,14 @@
+@model Payment
+@{ Layout = null; }
+<!DOCTYPE html>
+<html><head><title>Receipt #@Model.PaymentId</title>
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+</head><body class="p-4">
+<h2>Payment Receipt</h2>
+<p>Receipt #@Model.PaymentId</p>
+<p>Date: @Model.PaymentDate?.ToString("dd MMM yyyy")</p>
+<p>Booking: @Model.Booking?.BookingNo</p>
+<p>Method: @Model.PaymentMethod</p>
+<p>Amount: @Model.Amount.ToString("N2") @Model.CurrencyCode</p>
+<script>window.print()</script>
+</body></html>

@@ -1,0 +1,24 @@
+@model List<Traveler>
+@{ Layout = "_CustomerLayout"; }
+<div class="d-flex justify-content-between mb-3">
+    <h2 class="h4 mb-0">My Travelers</h2>
+    <a class="btn btn-sm btn-accent" asp-action="CreateTraveler"><i class="fa-solid fa-plus"></i> Add Traveler</a>
+</div>
+<div class="card-panel">
+<table class="table table-hover mb-0">
+<thead><tr><th>Name</th><th>Relation</th><th>Passport</th><th>Expiry</th><th>Mobile</th><th></th></tr></thead>
+<tbody>
+@foreach (var t in Model)
+{
+    <tr>
+        <td>@t.FullName</td>
+        <td>@t.Relationship</td>
+        <td>@t.PassportNo</td>
+        <td>@t.PassportExpiryDate?.ToString("dd-MMM-yyyy")</td>
+        <td>@t.MobileNo</td>
+        <td class="text-end"><a class="btn btn-sm btn-outline-primary" asp-action="EditTraveler" asp-route-id="@t.TravelerId"><i class="fa-solid fa-pen"></i></a></td>
+    </tr>
+}
+</tbody>
+</table>
+</div>

@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Authorization;
+using TourismHajj.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using TourismHajj.Interfaces;
 using TourismHajj.ViewModels;
 
 namespace TourismHajj.Controllers;
 
-[Authorize]
+[Authorize(Policy = AppRoles.AdminOnly)]
 public class PaymentsController : Controller
 {
     private readonly IAccountsService _accounts;

@@ -1,0 +1,11 @@
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Access Denied";
+}
+<div class="text-center py-5">
+    <h1 class="h3" style="color:#0b1f3a;">Access Denied</h1>
+    <p class="text-muted">You do not have permission to open this management page.</p>
+    <a class="btn text-white me-2" style="background:#2f80c4;" asp-controller="Account" asp-action="Login">Admin Login</a>
+    <a class="btn btn-outline-secondary" asp-controller="CustomerAccount" asp-action="Login">Customer Login</a>
+    <a class="btn btn-link" asp-controller="Home" asp-action="Index">Website Home</a>
+</div>

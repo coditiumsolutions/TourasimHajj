@@ -1,0 +1,42 @@
+@model CustomerBookingRequestViewModel
+@{ Layout = "_CustomerLayout"; }
+<div class="card-panel p-4 col-lg-8">
+    <h3 class="mb-3">Book: @Model.PackageName</h3>
+    <form asp-action="CreateBooking" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="PackageId" />
+        <input type="hidden" asp-for="PackageName" />
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">Departure</label>
+                <select asp-for="DepartureId" class="form-select">
+                    <option value="">Select departure</option>
+                    @foreach (var d in Model.DepartureOptions)
+                    {
+                        <option value="@d.DepartureId">@d.DepartureDate.ToString("dd MMM yyyy") · seats @(d.AvailableSeats ?? 0)</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-2"><label class="form-label">Adults</label><input asp-for="TotalAdults" class="form-control" type="number" min="1" /></div>
+            <div class="col-md-2"><label class="form-label">Children</label><input asp-for="TotalChildren" class="form-control" type="number" min="0" /></div>
+            <div class="col-md-2"><label class="form-label">Infants</label><input asp-for="TotalInfants" class="form-control" type="number" min="0" /></div>
+            <div class="col-12">
+                <label class="form-label">Select Travelers</label>
+                @foreach (var t in Model.TravelerOptions)
+                {
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="TravelerIds" value="@t.TravelerId" id="t@t.TravelerId" />
+                        <label class="form-check-label" for="t@t.TravelerId">@t.FullName</label>
+                    </div>
+                }
+                @if (!Model.TravelerOptions.Any())
+                {
+                    <div class="alert alert-warning">Add travelers in My Travelers before booking. <a asp-action="CreateTraveler">Add now</a></div>
+                }
+            </div>
+            <div class="col-12">
+                <button class="btn-gold border-0" type="submit">Confirm Booking</button>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,88 @@
+@model AdminLoginViewModel
+@{
+    Layout = "_PublicLayout";
+    ViewData["Title"] = "Admin Login";
+}
+
+<section class="auth-shell">
+    <div class="auth-card">
+        <div class="text-center mb-3">
+            <a class="auth-brand d-inline-block mb-1" asp-controller="Home" asp-action="Index">Tourism</a>
+            <h1 class="h4 mt-1 mb-1" style="color: var(--navy);">Admin Login</h1>
+            <p class="text-muted small mb-0">Sign in to the management portal</p>
+        </div>
+
+        <form id="admin-login-form" method="post" asp-action="Login">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-2" role="alert"></div>
+            <input type="hidden" asp-for="ReturnUrl" />
+
+            <div class="row g-2 align-items-center mb-2">
+                <div class="col-3">
+                    <label asp-for="Email" class="col-form-label mb-0">Email</label>
+                </div>
+                <div class="col-9">
+                    <input asp-for="Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" id="Input_Email" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row g-2 align-items-center mb-3">
+                <div class="col-3">
+                    <label asp-for="Password" class="col-form-label mb-0">Password</label>
+                </div>
+                <div class="col-9">
+                    <input asp-for="Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" id="Input_Password" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-check mb-3">
+                <input class="form-check-input" asp-for="RememberMe" />
+                <label class="form-check-label" asp-for="RememberMe">Remember me?</label>
+            </div>
+
+            <div class="row g-2 auth-actions">
+                <div class="col-6">
+                    <button id="login-submit" type="submit" class="btn-gold w-100 border-0">Log in</button>
+                </div>
+                <div class="col-6">
+                    <button type="button" id="btnFillLogin" class="btn-navy w-100">Fill My Login</button>
+                </div>
+            </div>
+        </form>
+
+        <div class="d-flex justify-content-between mt-3 small">
+            <a asp-controller="CustomerAccount" asp-action="Login">Customer Login</a>
+            <a asp-controller="Home" asp-action="Index">Back to website</a>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.getElementById('btnFillLogin')?.addEventListener('click', function () {
+            const form = document.getElementById('admin-login-form');
+            const email = document.getElementById('Input_Email');
+            const password = document.getElementById('Input_Password');
+            if (!email || !password || !form) return;
+
+            email.value = 'msghauri3@yahoo.com';
+            password.value = '$hahidGhauri786';
+
+            email.dispatchEvent(new Event('input', { bubbles: true }));
+            email.dispatchEvent(new Event('change', { bubbles: true }));
+            password.dispatchEvent(new Event('input', { bubbles: true }));
+            password.dispatchEvent(new Event('change', { bubbles: true }));
+
+            if (window.jQuery) {
+                const $form = window.jQuery(form);
+                if ($form.valid && !$form.valid()) {
+                    $form.find('.field-validation-error').empty();
+                    $form.find('.input-validation-error').removeClass('input-validation-error');
+                }
+            }
+            form.requestSubmit ? form.requestSubmit() : form.submit();
+        });
+    </script>
+}

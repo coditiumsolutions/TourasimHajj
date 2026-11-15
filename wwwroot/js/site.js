@@ -67,6 +67,34 @@
     });
   });
 
+  // Module top-nav: show matching sublinks in the side navbar
+  const moduleStorageKey = 'tourismhajj.activeModule';
+
+  function setActiveModule(module) {
+    if (!module) return;
+    document.querySelectorAll('.admin-module-link').forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-module') === module);
+    });
+    document.querySelectorAll('[data-module-panel]').forEach(panel => {
+      panel.classList.toggle('active', panel.getAttribute('data-module-panel') === module);
+    });
+    localStorage.setItem(moduleStorageKey, module);
+    if (isMobile()) openMobileSidebar();
+  }
+
+  document.querySelectorAll('[data-module]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const module = btn.getAttribute('data-module');
+      setActiveModule(module);
+    });
+  });
+
+  const serverModule = document.querySelector('.admin-mainnav')?.getAttribute('data-active-module');
+  const savedModule = localStorage.getItem(moduleStorageKey);
+  const path = (location.pathname || '').toLowerCase();
+  const onDashboard = path === '/dashboard' || path.endsWith('/dashboard/index') || path.endsWith('/dashboard');
+  setActiveModule(onDashboard ? (savedModule || 'travel') : (serverModule || savedModule || 'travel'));
+
   if (window.toastr) {
     toastr.options = {
       closeButton: true,

@@ -1,0 +1,21 @@
+@model List<Payment>
+@{ Layout = "_CustomerLayout"; }
+<div class="card-panel">
+<table class="table table-hover mb-0">
+<thead><tr><th>Date</th><th>Receipt</th><th>Booking</th><th>Method</th><th>Amount</th><th>Status</th><th></th></tr></thead>
+<tbody>
+@foreach (var p in Model)
+{
+    <tr>
+        <td>@p.PaymentDate?.ToString("dd-MMM-yyyy")</td>
+        <td>#@p.PaymentId</td>
+        <td>@p.Booking?.BookingNo</td>
+        <td>@p.PaymentMethod</td>
+        <td>@p.Amount.ToString("N2")</td>
+        <td>@(p.PaymentType ?? "Received")</td>
+        <td><a class="btn btn-sm btn-outline-primary" asp-action="PrintReceipt" asp-route-id="@p.PaymentId" target="_blank">Print</a></td>
+    </tr>
+}
+</tbody>
+</table>
+</div>

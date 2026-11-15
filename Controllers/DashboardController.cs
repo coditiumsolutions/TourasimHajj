@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Authorization;
+using TourismHajj.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using TourismHajj.Interfaces;
 
 namespace TourismHajj.Controllers;
 
-[Authorize]
+[Authorize(Policy = AppRoles.AdminOnly)]
 public class DashboardController : Controller
 {
     private readonly IDashboardService _dashboard;

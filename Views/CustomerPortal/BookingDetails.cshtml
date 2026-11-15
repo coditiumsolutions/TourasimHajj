@@ -1,0 +1,39 @@
+@model BookingDetailsViewModel
+@{ Layout = "_CustomerLayout"; var b = Model.Booking; }
+<div class="card-panel p-4 mb-3">
+    <div class="d-flex justify-content-between">
+        <div>
+            <h3>@b.BookingNo</h3>
+            <div class="text-muted">@b.Package?.PackageName · @b.BookingStatus</div>
+        </div>
+        <a class="btn btn-sm btn-outline-primary" asp-action="PrintConfirmation" asp-route-id="@b.BookingId" target="_blank">Print Confirmation</a>
+    </div>
+    <div class="row g-3 mt-2">
+        <div class="col-md-3"><strong>Booking Date</strong><div>@b.BookingDate?.ToString("dd-MMM-yyyy")</div></div>
+        <div class="col-md-3"><strong>Departure</strong><div>@b.Departure?.DepartureDate.ToString("dd-MMM-yyyy")</div></div>
+        <div class="col-md-3"><strong>Net Amount</strong><div>@((b.NetAmount ?? 0).ToString("N2"))</div></div>
+        <div class="col-md-3"><strong>Balance</strong><div>@((b.BalanceAmount ?? 0).ToString("N2"))</div></div>
+    </div>
+</div>
+<div class="row g-3">
+    <div class="col-lg-6">
+        <div class="card-panel p-3">
+            <h5>Travelers</h5>
+            <ul class="mb-0">
+                @foreach (var t in Model.Travelers) { <li>@t.Traveler?.FullName</li> }
+            </ul>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card-panel p-3">
+            <h5>Payments</h5>
+            @foreach (var p in Model.Payments)
+            {
+                <div class="d-flex justify-content-between border-bottom py-2">
+                    <span>@p.PaymentDate?.ToString("dd-MMM-yyyy") · @p.PaymentMethod</span>
+                    <strong>@p.Amount.ToString("N2")</strong>
+                </div>
+            }
+        </div>
+    </div>
+</div>

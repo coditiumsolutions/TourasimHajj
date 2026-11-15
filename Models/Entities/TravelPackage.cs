@@ -46,6 +46,9 @@ public partial class TravelPackage
 
     public bool? IsFeatured { get; set; }
 
+    [StringLength(500)]
+    public string? CoverImageUrl { get; set; }
+
     public bool? IsActive { get; set; }
 
     public DateTime? CreatedDate { get; set; }

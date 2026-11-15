@@ -1,0 +1,27 @@
+@model List<Booking>
+@{ Layout = "_CustomerLayout"; }
+<div class="card-panel">
+<table class="table table-hover mb-0">
+<thead><tr><th>Booking</th><th>Package</th><th>Date</th><th>Departure</th><th>Travelers</th><th>Total</th><th>Paid</th><th>Balance</th><th>Status</th><th></th></tr></thead>
+<tbody>
+@foreach (var b in Model)
+{
+    <tr>
+        <td>@b.BookingNo</td>
+        <td>@b.Package?.PackageName</td>
+        <td>@b.BookingDate?.ToString("dd-MMM-yyyy")</td>
+        <td>@b.Departure?.DepartureDate.ToString("dd-MMM-yyyy")</td>
+        <td>@((b.TotalAdults ?? 0) + (b.TotalChildren ?? 0) + (b.TotalInfants ?? 0))</td>
+        <td>@((b.NetAmount ?? b.TotalAmount ?? 0).ToString("N2"))</td>
+        <td>@((b.PaidAmount ?? 0).ToString("N2"))</td>
+        <td>@((b.BalanceAmount ?? 0).ToString("N2"))</td>
+        <td>@b.BookingStatus</td>
+        <td class="text-end text-nowrap">
+            <a class="btn btn-sm btn-outline-secondary" asp-action="BookingDetails" asp-route-id="@b.BookingId">View</a>
+            <a class="btn btn-sm btn-outline-primary" asp-action="PrintConfirmation" asp-route-id="@b.BookingId" target="_blank">Print</a>
+        </td>
+    </tr>
+}
+</tbody>
+</table>
+</div>

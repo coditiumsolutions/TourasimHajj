@@ -1,0 +1,61 @@
+@model ContactFormViewModel
+@using Microsoft.Extensions.Options
+@using TourismHajj.Helpers
+@inject IOptions<CompanyProfileOptions> CompanyOptions
+@{
+    Layout = "_PublicLayout";
+    var company = CompanyOptions.Value;
+}
+<section class="section-pad">
+    <div class="container-xl">
+        <div class="row g-4">
+            <div class="col-lg-5">
+                <h1 class="section-title">Contact Us</h1>
+                <p class="section-sub">Send us a message and our team will respond shortly.</p>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><i class="fa-solid fa-location-dot me-2"></i>@company.Address</li>
+                    <li class="mb-2"><i class="fa-solid fa-phone me-2"></i>@company.Phone</li>
+                    <li class="mb-2"><i class="fa-brands fa-whatsapp me-2"></i>@company.WhatsApp</li>
+                    <li class="mb-2"><i class="fa-solid fa-envelope me-2"></i>@company.Email</li>
+                </ul>
+                <iframe class="map-frame" src="@company.MapEmbedUrl" loading="lazy" title="Map"></iframe>
+            </div>
+            <div class="col-lg-7">
+                <div class="contact-panel">
+                    <form asp-action="Index" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="FullName" class="form-label"></label>
+                                <input asp-for="FullName" class="form-control" />
+                                <span asp-validation-for="FullName" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Email" class="form-label"></label>
+                                <input asp-for="Email" class="form-control" />
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Phone" class="form-label"></label>
+                                <input asp-for="Phone" class="form-control" />
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Subject" class="form-label"></label>
+                                <input asp-for="Subject" class="form-control" />
+                            </div>
+                            <div class="col-12">
+                                <label asp-for="Message" class="form-label"></label>
+                                <textarea asp-for="Message" class="form-control" rows="5"></textarea>
+                                <span asp-validation-for="Message" class="text-danger"></span>
+                            </div>
+                            <div class="col-12">
+                                <button class="btn-gold" type="submit">Send Message</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

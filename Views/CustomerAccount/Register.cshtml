@@ -1,0 +1,62 @@
+@model CustomerRegisterViewModel
+@{
+    Layout = "_PublicLayout";
+    ViewData["Title"] = "Customer Registration";
+}
+<section class="auth-shell">
+    <div class="auth-card" style="width:min(560px,100%);">
+        <div class="text-center mb-3">
+            <span class="brand-mark">TH</span>
+            <h1 class="h4 mt-2 mb-1">Create Customer Account</h1>
+        </div>
+        <form asp-action="Register" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label asp-for="FullName" class="form-label"></label>
+                    <input asp-for="FullName" class="form-control" />
+                    <span asp-validation-for="FullName" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="FatherName" class="form-label"></label>
+                    <input asp-for="FatherName" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="MobileNo" class="form-label"></label>
+                    <input asp-for="MobileNo" class="form-control" />
+                    <span asp-validation-for="MobileNo" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="WhatsAppNo" class="form-label"></label>
+                    <input asp-for="WhatsAppNo" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Email" class="form-label"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Cnic" class="form-label"></label>
+                    <input asp-for="Cnic" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Password" class="form-label"></label>
+                    <input asp-for="Password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="ConfirmPassword" class="form-label"></label>
+                    <input asp-for="ConfirmPassword" class="form-control" />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                </div>
+                <div class="col-12">
+                    <button class="btn-gold w-100 border-0" type="submit">Create Account</button>
+                </div>
+            </div>
+        </form>
+        <div class="text-center mt-3 small">
+            Already registered? <a asp-action="Login">Customer Login</a>
+        </div>
+    </div>
+</section>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

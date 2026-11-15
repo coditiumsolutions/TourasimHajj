@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
+using TourismHajj.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TourismHajj.Interfaces;
@@ -7,7 +8,7 @@ using TourismHajj.ViewModels;
 
 namespace TourismHajj.Controllers;
 
-[Authorize]
+[Authorize(Policy = AppRoles.AdminOnly)]
 public class CountriesController : Controller
 {
     private readonly IMasterDataService _service;

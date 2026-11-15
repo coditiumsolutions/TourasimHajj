@@ -1,0 +1,31 @@
+@{
+    var controller = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+    string ModuleActive(params string[] controllers) =>
+        controllers.Any(c => string.Equals(controller, c, StringComparison.OrdinalIgnoreCase))
+            ? "active" : "";
+
+    var activeModule =
+        ModuleActive("TravelPackages", "Destinations", "Services") == "active" ? "travel" :
+        ModuleActive("HajjSeasons", "PilgrimGroups") == "active" ? "hajj" :
+        ModuleActive("VisaApplications") == "active" ? "umrah" :
+        ModuleActive("Customers", "Travelers") == "active" ? "customer" :
+        ModuleActive("Suppliers", "Hotels", "TransportProviders") == "active" ? "supplier" :
+        ModuleActive("Bookings") == "active" ? "booking" :
+        ModuleActive("Payments", "SupplierPayments", "Expenses", "Refunds") == "active" ? "accounts" :
+        ModuleActive("Reports") == "active" ? "reports" :
+        ModuleActive("Employees", "Countries", "Cities") == "active" ? "administration" :
+        "travel";
+}
+<nav class="admin-mainnav no-print" data-active-module="@activeModule">
+    <div class="admin-mainnav-inner">
+        <button type="button" class="admin-module-link @(activeModule == "travel" ? "active" : "")" data-module="travel">Travel</button>
+        <button type="button" class="admin-module-link @(activeModule == "hajj" ? "active" : "")" data-module="hajj">Hajj</button>
+        <button type="button" class="admin-module-link @(activeModule == "umrah" ? "active" : "")" data-module="umrah">Umrah</button>
+        <button type="button" class="admin-module-link @(activeModule == "customer" ? "active" : "")" data-module="customer">Customer</button>
+        <button type="button" class="admin-module-link @(activeModule == "supplier" ? "active" : "")" data-module="supplier">Supplier</button>
+        <button type="button" class="admin-module-link @(activeModule == "booking" ? "active" : "")" data-module="booking">Booking</button>
+        <button type="button" class="admin-module-link @(activeModule == "accounts" ? "active" : "")" data-module="accounts">Accounts</button>
+        <button type="button" class="admin-module-link @(activeModule == "reports" ? "active" : "")" data-module="reports">Reports</button>
+        <button type="button" class="admin-module-link @(activeModule == "administration" ? "active" : "")" data-module="administration">Administration</button>
+    </div>
+</nav>

@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using TourismHajj.Helpers
 @using TourismHajj.Models
 @inject SignInManager<ApplicationUser> SignInManager
 <!DOCTYPE html>
@@ -6,7 +7,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Tourism Hajj</title>
+    <title>@ViewData["Title"] - Tourism Hajj Admin</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" crossorigin="anonymous" />
@@ -14,11 +15,14 @@
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body class="admin-body">
-@if (SignInManager.IsSignedIn(User))
+@if (SignInManager.IsSignedIn(User) && AppRoles.Staff.Any(User.IsInRole))
 {
+    <header class="admin-header no-print">
+        <partial name="_Topbar" />
+        <partial name="_AdminMainNav" />
+    </header>
     <partial name="_Sidebar" />
     <div class="admin-main">
-        <partial name="_Topbar" />
         <main class="page-content">
             @RenderBody()
         </main>

@@ -8,11 +8,12 @@
     var initial = string.IsNullOrWhiteSpace(displayName) ? "U" : displayName.Trim()[0].ToString().ToUpperInvariant();
 }
 
-<header class="admin-topbar no-print">
+<header class="admin-topbar admin-topbar-primary no-print">
     <div class="topbar-left">
         <button type="button" class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
             <i class="fa-solid fa-bars"></i>
         </button>
+        <a class="admin-topbar-brand" asp-controller="Dashboard" asp-action="Index">Tourism</a>
         <partial name="_Breadcrumb" />
     </div>
 
@@ -51,7 +52,7 @@
                 <li><a class="dropdown-item" href="/Identity/Account/Manage/ChangePassword"><i class="fa-solid fa-key me-2"></i>Change Password</a></li>
                 <li><hr class="dropdown-divider" /></li>
                 <li>
-                    <form method="post" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="/Identity/Account/Login">
+                    <form method="post" asp-controller="Account" asp-action="Logout">
                         <button type="submit" class="dropdown-item"><i class="fa-solid fa-right-from-bracket me-2"></i>Logout</button>
                     </form>
                 </li>

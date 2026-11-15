@@ -1,0 +1,27 @@
+<nav class="public-mainnav sticky-top">
+    <div class="public-mainnav-inner">
+        <ul class="public-nav-links">
+            <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index">Home</a></li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Tourism</a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" asp-controller="Home" asp-action="Search" asp-route-PackageType="Domestic">Domestic</a></li>
+                    <li><a class="dropdown-item" asp-controller="Home" asp-action="Search" asp-route-PackageType="International">International</a></li>
+                    <li><a class="dropdown-item" asp-controller="Home" asp-action="Search" asp-route-PackageType="Tourism">All Tourism</a></li>
+                </ul>
+            </li>
+            <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Search" asp-route-PackageType="Hajj">Hajj</a></li>
+            <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Search" asp-route-PackageType="Umrah">Umrah</a></li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Modules</a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" asp-controller="Home" asp-action="Search" asp-route-PackageType="Domestic">Domestic</a></li>
+                    <li><a class="dropdown-item" asp-controller="Home" asp-action="Search" asp-route-PackageType="International">International</a></li>
+                    <li><a class="dropdown-item" href="/#destinations">Destinations</a></li>
+                    <li><a class="dropdown-item" asp-controller="Home" asp-action="About">About</a></li>
+                    <li><a class="dropdown-item" asp-controller="Contact" asp-action="Index">Contact</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>

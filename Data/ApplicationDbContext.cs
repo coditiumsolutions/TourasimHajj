@@ -26,6 +26,8 @@ public partial class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 
     public virtual DbSet<Customer> Customers { get; set; }
 
+    public virtual DbSet<ContactInquiry> ContactInquiries { get; set; }
+
     public virtual DbSet<DepartureFlight> DepartureFlights { get; set; }
 
     public virtual DbSet<Destination> Destinations { get; set; }
@@ -156,6 +158,10 @@ public partial class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())");
             entity.Property(e => e.CustomerType).HasDefaultValue("Individual");
             entity.Property(e => e.IsActive).HasDefaultValue(true);
+
+            entity.HasIndex(e => e.AspNetUserId)
+                .IsUnique()
+                .HasFilter("[AspNetUserId] IS NOT NULL");
 
             entity.HasOne(d => d.City).WithMany(p => p.Customers).HasConstraintName("FK__Customers__CityI__45F365D3");
         });
@@ -462,6 +468,13 @@ public partial class ApplicationDbContext : IdentityDbContext<ApplicationUser>
                 .HasConstraintName("FK__VisaAppli__Count__40058253");
 
             entity.HasOne(d => d.Supplier).WithMany(p => p.VisaApplications).HasConstraintName("FK__VisaAppli__Suppl__40F9A68C");
+        });
+
+        modelBuilder.Entity<ContactInquiry>(entity =>
+        {
+            entity.HasKey(e => e.InquiryId);
+            entity.Property(e => e.CreatedDate).HasDefaultValueSql("(sysutcdatetime())");
+            entity.Property(e => e.IsRead).HasDefaultValue(false);
         });
 
         OnModelCreatingPartial(modelBuilder);

@@ -1,0 +1,104 @@
+@model PublicPackageDetailsViewModel
+@{
+    Layout = "_PublicLayout";
+    var p = Model.Package;
+}
+<section class="package-hero" style="background-image:url('@Model.CoverImageUrl');">
+    <div class="container-xl package-hero-content">
+        <span class="badge-type bg-warning text-dark">@p.PackageType</span>
+        <h1 class="mt-2 mb-2">@p.PackageName</h1>
+        <p class="mb-0">@(Model.DestinationSummary ?? "Curated itinerary") · @(p.DurationDays ?? 0) days / @(p.DurationNights ?? 0) nights</p>
+    </div>
+</section>
+
+<section class="section-pad">
+    <div class="container-xl">
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <div class="contact-panel mb-4">
+                    <h3>Overview</h3>
+                    <p>@(p.Description ?? "Package details will be updated by the travel operations team.")</p>
+                    <div class="price mb-3">From @(p.CurrencyCode ?? "PKR") @((p.AdultPrice ?? 0).ToString("N0"))</div>
+                    <a class="btn-gold" asp-controller="Packages" asp-action="Book" asp-route-id="@p.PackageId">Book Now</a>
+                </div>
+
+                <div class="contact-panel mb-4">
+                    <h3>Daily Itinerary</h3>
+                    @if (!Model.Itineraries.Any())
+                    {
+                        <p class="text-muted mb-0">Itinerary will be published soon.</p>
+                    }
+                    else
+                    {
+                        <div class="list-group list-group-flush">
+                            @foreach (var day in Model.Itineraries)
+                            {
+                                <div class="list-group-item px-0">
+                                    <strong>Day @day.DayNumber — @(day.Title ?? "Program")</strong>
+                                    <div class="text-muted">@day.Description</div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="contact-panel h-100">
+                            <h4>Included</h4>
+                            <ul>
+                                @foreach (var s in Model.IncludedServices)
+                                {
+                                    <li>@(s.Service?.ServiceName ?? "Service")</li>
+                                }
+                                @if (!Model.IncludedServices.Any()) { <li class="text-muted">Details available on request.</li> }
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="contact-panel h-100">
+                            <h4>Excluded</h4>
+                            <ul>
+                                @foreach (var s in Model.ExcludedServices)
+                                {
+                                    <li>@(s.Service?.ServiceName ?? "Service")</li>
+                                }
+                                @if (!Model.ExcludedServices.Any()) { <li class="text-muted">No exclusions listed.</li> }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="contact-panel mb-4">
+                    <h4>Departures</h4>
+                    @foreach (var d in Model.Departures)
+                    {
+                        <div class="border-bottom py-2">
+                            <strong>@d.DepartureDate.ToString("dd MMM yyyy")</strong>
+                            <div class="small text-muted">Seats available: @(d.AvailableSeats ?? 0)</div>
+                        </div>
+                    }
+                    @if (!Model.Departures.Any())
+                    {
+                        <p class="text-muted mb-0">No upcoming departures listed.</p>
+                    }
+                </div>
+                <div class="contact-panel">
+                    <h4>Hotels</h4>
+                    @foreach (var h in Model.Hotels)
+                    {
+                        <div class="mb-2">
+                            <strong>@h.HotelName</strong>
+                            <div class="small text-muted">@h.City?.CityName · @(h.StarRating?.ToString() ?? "-")★</div>
+                        </div>
+                    }
+                    @if (!Model.Hotels.Any())
+                    {
+                        <p class="text-muted mb-0">Hotel allocation confirmed after booking.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

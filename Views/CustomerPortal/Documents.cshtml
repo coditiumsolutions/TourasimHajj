@@ -1,0 +1,21 @@
+@model List<TravelerDocument>
+@{ Layout = "_CustomerLayout"; }
+<div class="card-panel">
+<table class="table table-hover mb-0">
+<thead><tr><th>Traveler</th><th>Type</th><th>Number</th><th>Uploaded</th><th>Expiry</th><th>Status</th></tr></thead>
+<tbody>
+@foreach (var d in Model)
+{
+    <tr>
+        <td>@d.Traveler?.FullName</td>
+        <td>@d.DocumentType</td>
+        <td>@d.DocumentNumber</td>
+        <td>@d.UploadedDate?.ToString("dd-MMM-yyyy")</td>
+        <td>@d.ExpiryDate?.ToString("dd-MMM-yyyy")</td>
+        <td>@(string.IsNullOrWhiteSpace(d.FilePath) ? "Pending upload" : "Uploaded")</td>
+    </tr>
+}
+@if (!Model.Any()) { <tr><td colspan="6" class="text-muted">No documents found.</td></tr> }
+</tbody>
+</table>
+</div>

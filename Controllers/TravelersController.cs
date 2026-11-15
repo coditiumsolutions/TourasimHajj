@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
+using TourismHajj.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +9,7 @@ using TourismHajj.Models.Entities;
 
 namespace TourismHajj.Controllers;
 
-[Authorize]
+[Authorize(Policy = AppRoles.AdminOnly)]
 public class TravelersController : Controller
 {
     private readonly ITravelerService _service;

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TourismHajj.Data;
+using TourismHajj.Helpers;
 using TourismHajj.Interfaces;
 using TourismHajj.Models;
 using TourismHajj.Services;
@@ -25,12 +26,23 @@ builder.Services
     .AddDefaultTokenProviders()
     .AddDefaultUI();
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy(AppRoles.AdminOnly, policy =>
+        policy.RequireRole(AppRoles.Staff));
+    options.AddPolicy(AppRoles.CustomerOnly, policy =>
+        policy.RequireRole(AppRoles.Customer));
+});
+
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.LoginPath = "/Identity/Account/Login";
-    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+    options.LoginPath = "/CustomerAccount/Login";
+    options.AccessDeniedPath = "/Account/AccessDenied";
     options.SlidingExpiration = true;
 });
+
+builder.Services.Configure<CompanyProfileOptions>(
+    builder.Configuration.GetSection(CompanyProfileOptions.SectionName));
 
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
@@ -44,6 +56,8 @@ builder.Services.AddScoped<IAccountsService, AccountsService>();
 builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<IMasterDataService, MasterDataService>();
 builder.Services.AddScoped<IAuditService, AuditService>();
+builder.Services.AddScoped<IPublicSiteService, PublicSiteService>();
+builder.Services.AddScoped<ICustomerPortalService, CustomerPortalService>();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddControllersWithViews();
@@ -66,7 +80,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Dashboard}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
 
 await DbSeeder.SeedAsync(app.Services);

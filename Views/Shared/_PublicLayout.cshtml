@@ -1,0 +1,46 @@
+@using Microsoft.Extensions.Options
+@using TourismHajj.Helpers
+@inject IOptions<CompanyProfileOptions> CompanyOptions
+@{
+    var company = CompanyOptions.Value;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@(ViewData["Title"] ?? "Home") - @company.CompanyName</title>
+    @if (ViewData["MetaDescription"] != null)
+    {
+        <meta name="description" content="@ViewData["MetaDescription"]" />
+    }
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="~/css/public.css" asp-append-version="true" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body class="public-body">
+    <partial name="_PublicTopBar" />
+    <partial name="_PublicMainNav" />
+
+    <main>
+        @RenderBody()
+    </main>
+    <partial name="_PublicFooter" />
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" crossorigin="anonymous"></script>
+    <script src="~/js/public.js" asp-append-version="true"></script>
+    <partial name="_Alerts" />
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

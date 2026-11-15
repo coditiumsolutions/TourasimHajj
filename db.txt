@@ -99,6 +99,7 @@ Columns:
   WhatsAppNo          nvarchar(30)  NULL
   Email               nvarchar(150) NULL
   CNIC                nvarchar(30)  NULL
+  AspNetUserId        nvarchar(450) NULL      FK -> AspNetUsers.Id (portal login link)
   Address             nvarchar(500) NULL
   CityID              int           NULL      FK -> Cities.CityID
   CustomerType        nvarchar(30)  NULL
@@ -444,8 +445,23 @@ Columns:
   MinimumPersons      int           NULL
   MaximumPersons      int           NULL
   IsFeatured          bit           NULL
+  CoverImageUrl       nvarchar(500) NULL
   IsActive            bit           NULL
   CreatedDate         datetime2     NULL
+
+================================================================================
+TABLE: ContactInquiries
+================================================================================
+Purpose: Public website contact form submissions
+Columns:
+  InquiryId           int           NOT NULL  PK IDENTITY
+  FullName            nvarchar(150) NOT NULL
+  Email               nvarchar(150) NOT NULL
+  Phone               nvarchar(30)  NULL
+  Subject             nvarchar(200) NULL
+  Message             nvarchar(max) NOT NULL
+  CreatedDate         datetime2     NOT NULL
+  IsRead              bit           NOT NULL
 
 ================================================================================
 TABLE: VisaApplications

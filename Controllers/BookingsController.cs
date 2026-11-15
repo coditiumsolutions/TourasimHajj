@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
+using TourismHajj.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -10,7 +11,7 @@ using TourismHajj.ViewModels;
 
 namespace TourismHajj.Controllers;
 
-[Authorize]
+[Authorize(Policy = AppRoles.AdminOnly)]
 public class BookingsController : Controller
 {
     private readonly IBookingService _service;

@@ -1,0 +1,34 @@
+@model List<PublicPackageCardViewModel>
+<div class="row g-4">
+@if (Model == null || Model.Count == 0)
+{
+    <div class="col-12"><div class="alert alert-light border mb-0">No packages available in this category yet.</div></div>
+}
+else
+{
+    foreach (var p in Model)
+    {
+        <div class="col-md-6 col-xl-4">
+            <article class="package-card">
+                <img src="@p.CoverImageUrl" alt="@p.PackageName" loading="lazy" />
+                <div class="body">
+                    <span class="badge-type">@p.PackageType</span>
+                    <h5 class="mt-2 mb-1">@p.PackageName</h5>
+                    <div class="text-muted small mb-2">
+                        <i class="fa-solid fa-location-dot me-1"></i>@(p.DestinationName ?? "Multiple destinations")
+                        · @(p.DurationDays ?? 0)D / @(p.DurationNights ?? 0)N
+                    </div>
+                    @if (p.NextDepartureDate.HasValue)
+                    {
+                        <div class="small text-muted mb-2">Departure: @p.NextDepartureDate.Value.ToString("dd MMM yyyy")</div>
+                    }
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="price">@(p.CurrencyCode ?? "PKR") @((p.AdultPrice ?? 0).ToString("N0"))</div>
+                        <a class="btn btn-sm btn-navy" asp-controller="Packages" asp-action="Details" asp-route-id="@p.PackageId">View Details</a>
+                    </div>
+                </div>
+            </article>
+        </div>
+    }
+}
+</div>

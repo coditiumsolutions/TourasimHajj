@@ -43,6 +43,7 @@ public static class DbSeeder
         }
 
         const string ownerEmail = "msghauri3@yahoo.com";
+        const string ownerPassword = "$hahidGhauri786";
         var owner = await userManager.FindByEmailAsync(ownerEmail);
         if (owner == null)
         {
@@ -56,12 +57,34 @@ public static class DbSeeder
                 IsActive = true
             };
 
-            var ownerResult = await userManager.CreateAsync(owner, "$hahidGhauri786");
+            var ownerResult = await userManager.CreateAsync(owner, ownerPassword);
             if (ownerResult.Succeeded)
             {
                 await userManager.AddToRoleAsync(owner, AppRoles.SuperAdmin);
                 await userManager.AddToRoleAsync(owner, AppRoles.Admin);
             }
         }
+        else
+        {
+            // Keep Fill My Login credentials working for the owner account.
+            owner.EmailConfirmed = true;
+            owner.IsActive = true;
+            owner.UserName = ownerEmail;
+            owner.NormalizedUserName = ownerEmail.ToUpperInvariant();
+            owner.NormalizedEmail = ownerEmail.ToUpperInvariant();
+            await userManager.UpdateAsync(owner);
+
+            if (!await userManager.CheckPasswordAsync(owner, ownerPassword))
+            {
+                var token = await userManager.GeneratePasswordResetTokenAsync(owner);
+                await userManager.ResetPasswordAsync(owner, token, ownerPassword);
+            }
+
+            if (!await userManager.IsInRoleAsync(owner, AppRoles.SuperAdmin))
+                await userManager.AddToRoleAsync(owner, AppRoles.SuperAdmin);
+            if (!await userManager.IsInRoleAsync(owner, AppRoles.Admin))
+                await userManager.AddToRoleAsync(owner, AppRoles.Admin);
+        }
     }
 }
+

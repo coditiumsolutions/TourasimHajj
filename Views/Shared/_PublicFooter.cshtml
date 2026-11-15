@@ -1,0 +1,64 @@
+@using Microsoft.Extensions.Options
+@using TourismHajj.Helpers
+@inject IOptions<CompanyProfileOptions> CompanyOptions
+@{
+    var c = CompanyOptions.Value;
+}
+<footer class="public-footer">
+    <div class="container-xl py-5">
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <strong class="brand-name">@c.CompanyName</strong>
+                </div>
+                <p>@c.Tagline. We craft memorable tourism journeys and carefully organized Hajj &amp; Umrah experiences.</p>
+                <div class="footer-socials d-flex gap-2">
+                    <a href="@c.FacebookUrl" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="@c.InstagramUrl" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="@c.YouTubeUrl" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="col-6 col-lg-2">
+                <h6>Quick Links</h6>
+                <ul class="list-unstyled">
+                    <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li><a asp-controller="Home" asp-action="About">About Us</a></li>
+                    <li><a asp-controller="Contact" asp-action="Index">Contact</a></li>
+                    <li><a asp-controller="Home" asp-action="Privacy">Privacy Policy</a></li>
+                    <li><a asp-controller="Home" asp-action="Terms">Terms</a></li>
+                </ul>
+            </div>
+            <div class="col-6 col-lg-3">
+                <h6>Tourism Packages</h6>
+                <ul class="list-unstyled">
+                    <li><a asp-controller="Home" asp-action="Search" asp-route-PackageType="Domestic">Domestic Tours</a></li>
+                    <li><a asp-controller="Home" asp-action="Search" asp-route-PackageType="International">International Tours</a></li>
+                    <li><a href="/#featured">Featured Packages</a></li>
+                </ul>
+                <h6 class="mt-3">Hajj &amp; Umrah</h6>
+                <ul class="list-unstyled">
+                    <li><a asp-controller="Home" asp-action="Search" asp-route-PackageType="Hajj">Hajj Packages</a></li>
+                    <li><a asp-controller="Home" asp-action="Search" asp-route-PackageType="Umrah">Umrah Packages</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-3">
+                <h6>Contact</h6>
+                <ul class="list-unstyled footer-contact">
+                    <li><i class="fa-solid fa-location-dot"></i> @c.Address</li>
+                    <li><i class="fa-solid fa-phone"></i> @c.Phone</li>
+                    <li><i class="fa-brands fa-whatsapp"></i> @c.WhatsApp</li>
+                    <li><i class="fa-solid fa-envelope"></i> @c.Email</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <div class="container-xl d-flex flex-wrap justify-content-between gap-2 py-3">
+            <span>&copy; @DateTime.Now.Year @c.CompanyName. All rights reserved.</span>
+            <span>
+                <a asp-controller="Home" asp-action="Privacy">Privacy Policy</a> ·
+                <a asp-controller="Home" asp-action="Terms">Terms and Conditions</a>
+            </span>
+        </div>
+    </div>
+</footer>

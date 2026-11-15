@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Authorization;
+using TourismHajj.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using TourismHajj.Interfaces;
 using TourismHajj.Models.Entities;
 
 namespace TourismHajj.Controllers;
 
-[Authorize]
+[Authorize(Policy = AppRoles.AdminOnly)]
 public class TravelPackagesController : Controller
 {
     private readonly IPackageService _service;

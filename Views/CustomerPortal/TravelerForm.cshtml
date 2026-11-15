@@ -1,0 +1,20 @@
+@model Traveler
+@{ Layout = "_CustomerLayout"; }
+<div class="card-panel p-4 col-lg-8">
+<form asp-action="SaveTraveler" method="post">
+    <input type="hidden" asp-for="TravelerId" />
+    <div class="row g-3">
+        <div class="col-md-6"><label class="form-label">Full Name</label><input asp-for="FullName" class="form-control" required /></div>
+        <div class="col-md-6"><label class="form-label">Father Name</label><input asp-for="FatherName" class="form-control" /></div>
+        <div class="col-md-4"><label class="form-label">Gender</label><input asp-for="Gender" class="form-control" /></div>
+        <div class="col-md-4"><label class="form-label">Date of Birth</label><input asp-for="DateOfBirth" class="form-control" type="date" /></div>
+        <div class="col-md-4"><label class="form-label">Relationship</label><input asp-for="Relationship" class="form-control" /></div>
+        <div class="col-md-4"><label class="form-label">CNIC</label><input asp-for="Cnic" class="form-control" /></div>
+        <div class="col-md-4"><label class="form-label">Passport No</label><input asp-for="PassportNo" class="form-control" /></div>
+        <div class="col-md-4"><label class="form-label">Mobile</label><input asp-for="MobileNo" class="form-control" /></div>
+        <div class="col-md-6"><label class="form-label">Passport Issue</label><input asp-for="PassportIssueDate" class="form-control" type="date" /></div>
+        <div class="col-md-6"><label class="form-label">Passport Expiry</label><input asp-for="PassportExpiryDate" class="form-control" type="date" /></div>
+        <div class="col-12"><button class="btn btn-navy" type="submit">Save Traveler</button></div>
+    </div>
+</form>
+</div>

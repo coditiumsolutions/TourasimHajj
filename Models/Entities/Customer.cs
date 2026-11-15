@@ -31,6 +31,9 @@ public partial class Customer
     [StringLength(30)]
     public string? Cnic { get; set; }
 
+    [StringLength(450)]
+    public string? AspNetUserId { get; set; }
+
     [StringLength(500)]
     public string? Address { get; set; }
 

@@ -1,0 +1,47 @@
+@model PackageSearchViewModel
+@{
+    Layout = "_PublicLayout";
+    var results = ViewBag.Results as List<PublicPackageCardViewModel> ?? new();
+}
+<section class="section-pad">
+    <div class="container-xl">
+        <h2 class="section-title">Search Packages</h2>
+        <p class="section-sub">Filter live packages from TravelManagementDB.</p>
+        <form method="get" class="search-panel mb-4">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label">Package Type</label>
+                    <select class="form-select" name="PackageType" asp-for="PackageType">
+                        <option value="All">All</option>
+                        <option value="Domestic">Domestic</option>
+                        <option value="International">International</option>
+                        <option value="Hajj">Hajj</option>
+                        <option value="Umrah">Umrah</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Destination</label>
+                    <select class="form-select" name="DestinationId" asp-for="DestinationId">
+                        <option value="">Any destination</option>
+                        @foreach (var d in Model.DestinationOptions)
+                        {
+                            <option value="@d.DestinationId">@d.DestinationName</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Departure</label>
+                    <input class="form-control" type="date" name="DepartureDate" value="@Model.DepartureDate?.ToString("yyyy-MM-dd")" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Travelers</label>
+                    <input class="form-control" type="number" min="1" name="Travelers" value="@Model.Travelers" />
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-navy w-100" type="submit">Search</button>
+                </div>
+            </div>
+        </form>
+        <partial name="_PackageCards" model="results" />
+    </div>
+</section>
