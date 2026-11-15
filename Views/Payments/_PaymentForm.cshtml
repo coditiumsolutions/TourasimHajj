@@ -1,0 +1,69 @@
+@model PaymentInputModel
+<div class="card-panel">
+    <div class="card-panel-body">
+        <form asp-action="@(Model.PaymentId > 0 ? "Edit" : "Create")" method="post" class="form-4col">
+            <input type="hidden" asp-for="PaymentId" />
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+            <div class="form-4col-row">
+                <label class="form-4col-label" asp-for="BookingId">Booking</label>
+                <div class="form-4col-field">
+                    <select asp-for="BookingId" class="form-select" asp-items="@(new SelectList(Model.BookingOptions, nameof(Booking.BookingId), nameof(Booking.BookingNo)))"></select>
+                    <span asp-validation-for="BookingId" class="text-danger"></span>
+                </div>
+                <label class="form-4col-label" asp-for="PaymentDate">Payment Date</label>
+                <div class="form-4col-field">
+                    <input asp-for="PaymentDate" type="datetime-local" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-4col-row">
+                <label class="form-4col-label" asp-for="Amount">Amount</label>
+                <div class="form-4col-field">
+                    <input asp-for="Amount" class="form-control" />
+                    <span asp-validation-for="Amount" class="text-danger"></span>
+                </div>
+                <label class="form-4col-label" asp-for="PaymentMethod">Payment Method</label>
+                <div class="form-4col-field">
+                    <input asp-for="PaymentMethod" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-4col-row">
+                <label class="form-4col-label" asp-for="PaymentType">Payment Type</label>
+                <div class="form-4col-field">
+                    <input asp-for="PaymentType" class="form-control" />
+                </div>
+                <label class="form-4col-label" asp-for="CurrencyCode">Currency</label>
+                <div class="form-4col-field">
+                    <input asp-for="CurrencyCode" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-4col-row">
+                <label class="form-4col-label" asp-for="ReferenceNo">Reference No</label>
+                <div class="form-4col-field">
+                    <input asp-for="ReferenceNo" class="form-control" />
+                </div>
+                <label class="form-4col-label" asp-for="ReceivedBy">Received By</label>
+                <div class="form-4col-field">
+                    <input asp-for="ReceivedBy" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-4col-row">
+                <label class="form-4col-label" asp-for="Remarks">Remarks</label>
+                <div class="form-4col-field">
+                    <textarea asp-for="Remarks" class="form-control" rows="2"></textarea>
+                </div>
+                <span></span>
+                <span></span>
+            </div>
+
+            <div class="form-4col-actions">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>

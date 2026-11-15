@@ -301,9 +301,52 @@ body.sidebar-collapsed .admin-main {
 
 .admin-topbar .user-chip {
   color: #fff !important;
+  max-width: none;
+  overflow: visible;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  padding: .2rem .15rem;
+  gap: 0;
+}
+
+.admin-topbar .user-chip::after {
+  margin-left: .4rem;
+  vertical-align: .15em;
+}
+
+.admin-topbar .user-chip .user-avatar {
+  display: none !important;
 }
 
 .admin-topbar .user-chip small { color: rgba(255,255,255,.65) !important; }
+
+.admin-topbar .user-meta {
+  display: flex !important;
+  flex-direction: column;
+  align-items: flex-end;
+  max-width: none !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
+.admin-topbar .user-meta strong {
+  display: inline !important;
+  max-width: none !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: nowrap !important;
+  font-weight: 400;
+  font-size: 0.86rem;
+  color: #fff !important;
+  letter-spacing: normal;
+}
+
+.admin-breadcrumb {
+  display: block !important;
+}
 
 /* Second white module navbar */
 .admin-mainnav {
@@ -313,6 +356,7 @@ body.sidebar-collapsed .admin-main {
   position: relative;
   z-index: 1;
   box-shadow: var(--shadow-sm);
+  overflow: visible;
 }
 
 .admin-mainnav-inner {
@@ -321,7 +365,8 @@ body.sidebar-collapsed .admin-main {
   height: 100%;
   padding: 0 0.85rem;
   gap: 0.15rem;
-  overflow-x: auto;
+  overflow: visible;
+  flex-wrap: wrap;
 }
 
 .admin-module-link {
@@ -339,6 +384,56 @@ body.sidebar-collapsed .admin-main {
 .admin-module-link.active {
   background: rgba(90,24,154,.1);
   color: #5a189a;
+}
+
+.admin-module-group {
+  position: relative;
+}
+
+.admin-module-group-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.admin-module-group-toggle i {
+  font-size: 0.65rem;
+  transition: transform .2s ease;
+}
+
+.admin-module-group.open > .admin-module-group-toggle i {
+  transform: rotate(180deg);
+}
+
+.admin-module-group.active > .admin-module-group-toggle {
+  background: rgba(90,24,154,.1);
+  color: #5a189a;
+}
+
+.admin-module-group-menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  left: auto;
+  min-width: 180px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.4rem;
+  box-shadow: 0 12px 28px rgba(11, 31, 58, 0.14);
+  z-index: 1090;
+}
+
+.admin-module-group.open > .admin-module-group-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.admin-module-group-menu .admin-module-link {
+  width: 100%;
+  text-align: left;
 }
 
 .module-panel {
@@ -487,12 +582,20 @@ body.sidebar-collapsed .admin-main {
 
 .user-meta {
   line-height: 1.15;
+  max-width: none;
+  overflow: visible;
+  text-overflow: clip;
 }
 
 .user-meta strong {
   display: block;
   font-size: .84rem;
+  font-weight: 500;
   color: var(--navy);
+  max-width: none;
+  overflow: visible;
+  text-overflow: clip;
+  white-space: nowrap;
 }
 
 .user-meta small {
@@ -696,6 +799,93 @@ body.sidebar-collapsed .admin-main {
   color: var(--navy);
 }
 
+.form-4col {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  container-type: inline-size;
+  container-name: form4col;
+}
+
+.form-4col-row {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr) 150px minmax(0, 1fr);
+  gap: .55rem 1.1rem;
+  align-items: center;
+  padding: .55rem 0;
+  border-bottom: 2px solid var(--sky);
+}
+
+.form-4col-label {
+  margin: 0;
+  font-weight: 400;
+  font-size: .86rem;
+  color: var(--navy);
+  text-align: right;
+  line-height: 1.25;
+}
+
+.form-4col-field {
+  min-width: 0;
+}
+
+.form-4col-field .form-control,
+.form-4col-field .form-select {
+  width: 100%;
+  min-height: 32px;
+  height: 32px;
+  padding-top: .25rem;
+  padding-bottom: .25rem;
+  font-size: .875rem;
+}
+
+.form-4col-field textarea.form-control {
+  height: auto;
+  min-height: 56px;
+}
+
+.form-4col-field .text-danger {
+  display: block;
+  font-size: .78rem;
+  margin-top: .15rem;
+}
+
+.form-4col-check {
+  display: flex;
+  align-items: center;
+  min-height: 32px;
+}
+
+.form-4col-check .form-check-input {
+  margin: 0;
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+.form-4col-actions {
+  display: flex;
+  gap: .6rem;
+  padding-top: 1rem;
+  margin-top: .25rem;
+}
+
+@container form4col (max-width: 720px) {
+  .form-4col-row {
+    grid-template-columns: 130px minmax(0, 1fr);
+  }
+}
+
+@container form4col (max-width: 420px) {
+  .form-4col-row {
+    grid-template-columns: 1fr;
+    gap: .35rem;
+  }
+
+  .form-4col-label {
+    text-align: left;
+  }
+}
+
 .form-control:focus,
 .form-select:focus {
   border-color: var(--sky);
@@ -746,10 +936,6 @@ body.sidebar-collapsed .admin-main {
 
   .topbar-search {
     display: none !important;
-  }
-
-  .user-meta {
-    display: none;
   }
 }
 

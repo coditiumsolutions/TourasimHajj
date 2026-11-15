@@ -1,15 +1,5 @@
-@model TourismHajj.Models.Entities.HajjSeason
+@model HajjSeasonInputModel
 @{ ViewData["Title"] = "New Hajj Season"; }
 <div class="page-header"><h2>@ViewData["Title"]</h2></div>
-<div class="card-panel"><div class="card-panel-body">
-<form asp-action="Create" method="post">@Html.AntiForgeryToken()
-<div class="row g-3"><div class="col-md-4"><label class="form-label">Season</label><input asp-for="SeasonName" class="form-control" /></div>
-<div class="col-md-4"><label class="form-label">Year</label><input asp-for="HajjYear" class="form-control" /></div>
-<div class="col-md-3"><label class="form-label">Reg Start</label><input asp-for="RegistrationStartDate" class="form-control" type="date" /></div>
-<div class="col-md-3"><label class="form-label">Reg End</label><input asp-for="RegistrationEndDate" class="form-control" type="date" /></div>
-<div class="col-md-3"><label class="form-label">Dep Start</label><input asp-for="DepartureStartDate" class="form-control" type="date" /></div>
-<div class="col-md-3"><label class="form-label">Dep End</label><input asp-for="DepartureEndDate" class="form-control" type="date" /></div>
-<div class="col-md-12"><label class="form-label">Notes</label><textarea asp-for="Notes" class="form-control" rows="3"></textarea></div>
-<div class="col-md-3 form-check mt-4"><input asp-for="IsActive" class="form-check-input" /><label asp-for="IsActive" class="form-check-label">Active</label></div></div>
-<div class="mt-3"><button class="btn btn-primary" type="submit">Save</button> <a class="btn btn-outline-secondary" asp-action="Index">Cancel</a></div>
-</form></div></div>
+<partial name="_SeasonForm" model="Model" />
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

@@ -69,14 +69,19 @@
 
   // Module top-nav: show matching sublinks in the side navbar
   const moduleStorageKey = 'tourismhajj.activeModule';
+  const nestedModules = ['hajj', 'umrah', 'supplier', 'accounts'];
 
   function setActiveModule(module) {
     if (!module) return;
-    document.querySelectorAll('.admin-module-link').forEach(btn => {
+    document.querySelectorAll('.admin-module-link[data-module]').forEach(btn => {
       btn.classList.toggle('active', btn.getAttribute('data-module') === module);
     });
     document.querySelectorAll('[data-module-panel]').forEach(panel => {
       panel.classList.toggle('active', panel.getAttribute('data-module-panel') === module);
+    });
+    document.querySelectorAll('[data-module-group]').forEach(group => {
+      group.classList.toggle('active', nestedModules.includes(module));
+      group.classList.remove('open');
     });
     localStorage.setItem(moduleStorageKey, module);
     if (isMobile()) openMobileSidebar();
@@ -87,6 +92,26 @@
       const module = btn.getAttribute('data-module');
       setActiveModule(module);
     });
+  });
+
+  document.querySelectorAll('[data-module-group-toggle]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const group = btn.closest('[data-module-group]');
+      if (!group) return;
+      document.querySelectorAll('[data-module-group].open').forEach(openGroup => {
+        if (openGroup !== group) openGroup.classList.remove('open');
+      });
+      group.classList.toggle('open');
+    });
+  });
+
+  document.addEventListener('click', (e) => {
+    const target = e.target;
+    if (!(target instanceof Element)) return;
+    if (target.closest('[data-module-group]')) return;
+    document.querySelectorAll('[data-module-group].open').forEach(group => group.classList.remove('open'));
   });
 
   const serverModule = document.querySelector('.admin-mainnav')?.getAttribute('data-active-module');

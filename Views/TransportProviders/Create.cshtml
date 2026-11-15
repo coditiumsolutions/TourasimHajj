@@ -1,15 +1,5 @@
-@model TourismHajj.Models.Entities.TransportProvider
+@model TransportProviderInputModel
 @{ ViewData["Title"] = "New Transport Provider"; }
 <div class="page-header"><h2>New Transport Provider</h2></div>
-<div class="card-panel"><div class="card-panel-body">
-<form asp-action="Create" method="post">@Html.AntiForgeryToken()
-<div class="row g-3">
-<div class="col-md-6"><label class="form-label">Provider Name</label><input asp-for="ProviderName" class="form-control" /></div>
-<div class="col-md-6"><label class="form-label">Supplier</label><select asp-for="SupplierId" class="form-select" asp-items="ViewBag.Suppliers"><option value="">--</option></select></div>
-<div class="col-md-4"><label class="form-label">Vehicle Type</label><input asp-for="VehicleType" class="form-control" /></div>
-<div class="col-md-4"><label class="form-label">Capacity</label><input asp-for="VehicleCapacity" class="form-control" /></div>
-<div class="col-md-4"><label class="form-label">Contact</label><input asp-for="ContactNo" class="form-control" /></div>
-<div class="col-md-3 form-check mt-4"><input asp-for="IsActive" class="form-check-input" /><label class="form-check-label">Active</label></div>
-</div>
-<button class="btn btn-primary mt-3" type="submit">Save</button>
-</form></div></div>
+<partial name="_TransportProviderForm" model="Model" />
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

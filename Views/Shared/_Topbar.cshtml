@@ -3,9 +3,7 @@
 @inject UserManager<ApplicationUser> UserManager
 @{
     var user = await UserManager.GetUserAsync(User);
-    var displayName = user?.FullName ?? user?.Email ?? "User";
-    var designation = user?.Designation ?? "Staff";
-    var initial = string.IsNullOrWhiteSpace(displayName) ? "U" : displayName.Trim()[0].ToString().ToUpperInvariant();
+    var displayEmail = user?.Email ?? user?.FullName ?? "User";
 }
 
 <header class="admin-topbar admin-topbar-primary no-print">
@@ -41,10 +39,8 @@
 
         <div class="dropdown">
             <a class="user-chip text-decoration-none dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                <span class="user-avatar">@initial</span>
                 <span class="user-meta">
-                    <strong>@displayName</strong>
-                    <small>@designation</small>
+                    <strong>@displayEmail</strong>
                 </span>
             </a>
             <ul class="dropdown-menu dropdown-menu-end shadow">

@@ -1,17 +1,5 @@
-@model TourismHajj.Models.Entities.Payment
+@model PaymentInputModel
 @{ ViewData["Title"] = "New Payment"; }
-@await Html.PartialAsync("_Alerts")
-<div class="page-header"><h2>New Payment Receipt</h2></div>
-<div class="card-panel"><div class="card-panel-body">
-<form asp-action="Create" method="post">@Html.AntiForgeryToken()
-<div class="row g-3">
-<div class="col-md-6"><label class="form-label">Booking</label><select asp-for="BookingId" class="form-select" asp-items="ViewBag.Bookings"></select></div>
-<div class="col-md-3"><label class="form-label">Amount</label><input asp-for="Amount" class="form-control" /></div>
-<div class="col-md-3"><label class="form-label">Date</label><input asp-for="PaymentDate" class="form-control" /></div>
-<div class="col-md-4"><label class="form-label">Method</label><select asp-for="PaymentMethod" class="form-select"><option>Cash</option><option>Bank Transfer</option><option>Card</option></select></div>
-<div class="col-md-4"><label class="form-label">Type</label><input asp-for="PaymentType" class="form-control" /></div>
-<div class="col-md-4"><label class="form-label">Reference</label><input asp-for="ReferenceNo" class="form-control" /></div>
-<div class="col-md-12"><label class="form-label">Remarks</label><textarea asp-for="Remarks" class="form-control"></textarea></div>
-</div>
-<button class="btn btn-primary mt-3" type="submit">Post Payment</button>
-</form></div></div>
+<div class="page-header"><h2>New Payment</h2></div>
+<partial name="_PaymentForm" model="Model" />
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

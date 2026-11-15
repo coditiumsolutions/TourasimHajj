@@ -1,40 +1,81 @@
 @model SupplierInputModel
-<form asp-action="@(Model.SupplierId > 0 ? "Edit" : "Create")" method="post" class="card-panel p-4">
-    <input type="hidden" asp-for="SupplierId" />
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="row g-3">
-        <div class="col-md-6">
-            <label asp-for="SupplierName" class="form-label"></label>
-            <input asp-for="SupplierName" class="form-control" />
-            <span asp-validation-for="SupplierName" class="text-danger"></span>
-        </div>
-        <div class="col-md-6">
-            <label asp-for="SupplierType" class="form-label"></label>
-            <input asp-for="SupplierType" class="form-control" list="supplierTypes" />
-            <datalist id="supplierTypes">
-                <option value="General" /><option value="Hotel" /><option value="Transport" /><option value="Visa" /><option value="Airline" />
-            </datalist>
-        </div>
-        <div class="col-md-4"><label asp-for="ContactPerson" class="form-label"></label><input asp-for="ContactPerson" class="form-control" /></div>
-        <div class="col-md-4"><label asp-for="MobileNo" class="form-label"></label><input asp-for="MobileNo" class="form-control" /></div>
-        <div class="col-md-4"><label asp-for="Email" class="form-label"></label><input asp-for="Email" class="form-control" /></div>
-        <div class="col-md-6">
-            <label asp-for="CountryId" class="form-label"></label>
-            <select asp-for="CountryId" class="form-select" asp-items="@(new SelectList(Model.CountryOptions, nameof(Country.CountryId), nameof(Country.CountryName)))">
-                <option value="">— Select —</option>
-            </select>
-        </div>
-        <div class="col-md-6">
-            <label asp-for="CityId" class="form-label"></label>
-            <select asp-for="CityId" class="form-select" asp-items="@(new SelectList(Model.CityOptions, nameof(City.CityId), nameof(City.CityName)))">
-                <option value="">— Select —</option>
-            </select>
-        </div>
-        <div class="col-12"><label asp-for="Address" class="form-label"></label><textarea asp-for="Address" class="form-control" rows="2"></textarea></div>
-        <div class="col-12 form-check"><input asp-for="IsActive" class="form-check-input" /><label asp-for="IsActive" class="form-check-label"></label></div>
+<div class="card-panel">
+    <div class="card-panel-body">
+        <form asp-action="@(Model.SupplierId > 0 ? "Edit" : "Create")" method="post" class="form-4col">
+            <input type="hidden" asp-for="SupplierId" />
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+            <div class="form-4col-row">
+                <label class="form-4col-label" asp-for="SupplierName">Supplier Name</label>
+                <div class="form-4col-field">
+                    <input asp-for="SupplierName" class="form-control" />
+                    <span asp-validation-for="SupplierName" class="text-danger"></span>
+                </div>
+                <label class="form-4col-label" asp-for="SupplierType">Supplier Type</label>
+                <div class="form-4col-field">
+                    <input asp-for="SupplierType" class="form-control" list="supplierTypes" />
+                    <datalist id="supplierTypes">
+                        <option value="General"></option>
+                        <option value="Hotel"></option>
+                        <option value="Transport"></option>
+                        <option value="Visa"></option>
+                        <option value="Airline"></option>
+                    </datalist>
+                    <span asp-validation-for="SupplierType" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-4col-row">
+                <label class="form-4col-label" asp-for="ContactPerson">Contact Person</label>
+                <div class="form-4col-field">
+                    <input asp-for="ContactPerson" class="form-control" />
+                </div>
+                <label class="form-4col-label" asp-for="MobileNo">Mobile</label>
+                <div class="form-4col-field">
+                    <input asp-for="MobileNo" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-4col-row">
+                <label class="form-4col-label" asp-for="Email">Email</label>
+                <div class="form-4col-field">
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <label class="form-4col-label" asp-for="CountryId">Country</label>
+                <div class="form-4col-field">
+                    <select asp-for="CountryId" class="form-select" asp-items="@(new SelectList(Model.CountryOptions, nameof(Country.CountryId), nameof(Country.CountryName)))">
+                        <option value="">— Select —</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-4col-row">
+                <label class="form-4col-label" asp-for="CityId">City</label>
+                <div class="form-4col-field">
+                    <select asp-for="CityId" class="form-select" asp-items="@(new SelectList(Model.CityOptions, nameof(City.CityId), nameof(City.CityName)))">
+                        <option value="">— Select —</option>
+                    </select>
+                </div>
+                <label class="form-4col-label" asp-for="IsActive">Active</label>
+                <div class="form-4col-field form-4col-check">
+                    <input asp-for="IsActive" class="form-check-input" />
+                </div>
+            </div>
+
+            <div class="form-4col-row">
+                <label class="form-4col-label" asp-for="Address">Address</label>
+                <div class="form-4col-field">
+                    <textarea asp-for="Address" class="form-control" rows="2"></textarea>
+                </div>
+                <span></span>
+                <span></span>
+            </div>
+
+            <div class="form-4col-actions">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+        </form>
     </div>
-    <div class="mt-3">
-        <button type="submit" class="btn btn-primary">Save</button>
-        <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
-    </div>
-</form>
+</div>

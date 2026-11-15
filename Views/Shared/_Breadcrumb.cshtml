@@ -1,9 +1,32 @@
 @{
-    var title = ViewData["Title"]?.ToString() ?? "Page";
+    var title = ViewData["Title"]?.ToString();
     var controller = ViewContext.RouteData.Values["controller"]?.ToString() ?? "Dashboard";
+    var action = ViewContext.RouteData.Values["action"]?.ToString() ?? "Index";
     var crumbs = ViewData["Breadcrumbs"] as IEnumerable<(string Text, string? Url)>;
+
+    string Humanize(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value)) return "Page";
+        var sb = new System.Text.StringBuilder();
+        for (var i = 0; i < value.Length; i++)
+        {
+            var c = value[i];
+            if (i > 0 && char.IsUpper(c) && !char.IsUpper(value[i - 1]))
+                sb.Append(' ');
+            sb.Append(c);
+        }
+        return sb.ToString();
+    }
+
+    var controllerLabel = Humanize(controller);
+    var isDashboardHome = string.Equals(controller, "Dashboard", StringComparison.OrdinalIgnoreCase)
+        && string.Equals(action, "Index", StringComparison.OrdinalIgnoreCase);
+    var isControllerIndex = string.Equals(action, "Index", StringComparison.OrdinalIgnoreCase);
+    var pageLabel = !string.IsNullOrWhiteSpace(title)
+        ? title!
+        : (isControllerIndex ? controllerLabel : Humanize(action));
 }
-<nav aria-label="breadcrumb" class="d-none d-md-block">
+<nav aria-label="breadcrumb" class="admin-breadcrumb">
     <ol class="breadcrumb mb-0">
         <li class="breadcrumb-item">
             <a asp-controller="Dashboard" asp-action="Index">Home</a>
@@ -22,13 +45,20 @@
                 }
             }
         }
-        else if (!string.Equals(controller, "Dashboard", StringComparison.OrdinalIgnoreCase))
+        else if (isDashboardHome)
         {
-            <li class="breadcrumb-item active" aria-current="page">@title</li>
+            <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+        }
+        else if (isControllerIndex)
+        {
+            <li class="breadcrumb-item active" aria-current="page">@pageLabel</li>
         }
         else
         {
-            <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+            <li class="breadcrumb-item">
+                <a asp-controller="@controller" asp-action="Index">@controllerLabel</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">@pageLabel</li>
         }
     </ol>
 </nav>

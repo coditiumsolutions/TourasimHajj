@@ -1,12 +1,36 @@
 @model TourismHajj.Models.Entities.Country
 @{ ViewData["Title"] = "Edit Country"; }
 <div class="page-header"><h2>Edit Country</h2></div>
-<div class="card-panel"><div class="card-panel-body">
-<form asp-action="Edit" method="post">@Html.AntiForgeryToken()<input type="hidden" asp-for="CountryId" />
-<div class="row g-3">
-<div class="col-md-6"><label asp-for="CountryName" class="form-label"></label><input asp-for="CountryName" class="form-control" /></div>
-<div class="col-md-3"><label asp-for="CountryCode" class="form-label"></label><input asp-for="CountryCode" class="form-control" /></div>
-<div class="col-md-3 form-check mt-4"><input asp-for="IsActive" class="form-check-input" /><label asp-for="IsActive" class="form-check-label"></label></div>
+<div class="card-panel">
+    <div class="card-panel-body">
+        <form asp-action="Edit" method="post" class="form-4col">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="CountryId" />
+
+            <div class="form-4col-row">
+                <label class="form-4col-label" asp-for="CountryName">Country Name</label>
+                <div class="form-4col-field">
+                    <input asp-for="CountryName" class="form-control" />
+                </div>
+                <label class="form-4col-label" asp-for="CountryCode">Country Code</label>
+                <div class="form-4col-field">
+                    <input asp-for="CountryCode" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-4col-row">
+                <label class="form-4col-label" for="IsActive">Active</label>
+                <div class="form-4col-field form-4col-check">
+                    <input type="checkbox" class="form-check-input" id="IsActive" name="IsActive" value="true" @(Model.IsActive == true ? "checked" : null) />
+                </div>
+                <span></span>
+                <span></span>
+            </div>
+
+            <div class="form-4col-actions">
+                <button class="btn btn-primary" type="submit">Update</button>
+                <a class="btn btn-outline-secondary" asp-action="Index">Cancel</a>
+            </div>
+        </form>
+    </div>
 </div>
-<div class="mt-3"><button class="btn btn-primary" type="submit">Update</button> <a class="btn btn-outline-secondary" asp-action="Index">Cancel</a></div>
-</form></div></div>

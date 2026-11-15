@@ -1,15 +1,73 @@
 @model PilgrimGroupInputModel
-<div class="row g-3">
-    <div class="col-md-4"><label asp-for="HajjSeasonId" class="form-label"></label><select asp-for="HajjSeasonId" class="form-select" asp-items="@(new SelectList(Model.SeasonOptions, nameof(HajjSeason.HajjSeasonId), nameof(HajjSeason.SeasonName)))"></select></div>
-    <div class="col-md-4"><label asp-for="DepartureId" class="form-label"></label><select asp-for="DepartureId" class="form-select"><option value="">—</option>@foreach (var d in Model.DepartureOptions){<option value="@d.DepartureId">@d.DepartureDate — @d.Package?.PackageName</option>}</select></div>
-    <div class="col-md-4"><label asp-for="GroupCode" class="form-label"></label><input asp-for="GroupCode" class="form-control" /></div>
-    <div class="col-md-6"><label asp-for="GroupName" class="form-label"></label><input asp-for="GroupName" class="form-control" /></div>
-    <div class="col-md-3"><label asp-for="GroupStatus" class="form-label"></label><input asp-for="GroupStatus" class="form-control" /></div>
-    <div class="col-md-6"><label asp-for="GroupLeaderName" class="form-label"></label><input asp-for="GroupLeaderName" class="form-control" /></div>
-    <div class="col-md-6"><label asp-for="GroupLeaderMobile" class="form-label"></label><input asp-for="GroupLeaderMobile" class="form-control" /></div>
-    <div class="col-12"><label asp-for="Remarks" class="form-label"></label><textarea asp-for="Remarks" class="form-control"></textarea></div>
-</div>
-<div class="mt-3">
-    <button type="submit" class="btn btn-primary">Save</button>
-    <a asp-action="Index" class="btn btn-link">Cancel</a>
+<div class="card-panel">
+    <div class="card-panel-body">
+        <form asp-action="@(Model.PilgrimGroupId > 0 ? "Edit" : "Create")" method="post" class="form-4col">
+            <input type="hidden" asp-for="PilgrimGroupId" />
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+            <div class="form-4col-row">
+                <label class="form-4col-label" asp-for="HajjSeasonId">Hajj Season</label>
+                <div class="form-4col-field">
+                    <select asp-for="HajjSeasonId" class="form-select" asp-items="@(new SelectList(Model.SeasonOptions, nameof(HajjSeason.HajjSeasonId), nameof(HajjSeason.SeasonName)))"></select>
+                    <span asp-validation-for="HajjSeasonId" class="text-danger"></span>
+                </div>
+                <label class="form-4col-label" asp-for="DepartureId">Departure</label>
+                <div class="form-4col-field">
+                    <select asp-for="DepartureId" class="form-select">
+                        <option value="">— Optional —</option>
+                        @foreach (var d in Model.DepartureOptions)
+                        {
+                            <option value="@d.DepartureId">@d.DepartureDate — @d.Package?.PackageName</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-4col-row">
+                <label class="form-4col-label" asp-for="GroupCode">Group Code</label>
+                <div class="form-4col-field">
+                    <input asp-for="GroupCode" class="form-control" />
+                    <span asp-validation-for="GroupCode" class="text-danger"></span>
+                </div>
+                <label class="form-4col-label" asp-for="GroupName">Group Name</label>
+                <div class="form-4col-field">
+                    <input asp-for="GroupName" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-4col-row">
+                <label class="form-4col-label" asp-for="GroupLeaderName">Leader Name</label>
+                <div class="form-4col-field">
+                    <input asp-for="GroupLeaderName" class="form-control" />
+                </div>
+                <label class="form-4col-label" asp-for="GroupLeaderMobile">Leader Mobile</label>
+                <div class="form-4col-field">
+                    <input asp-for="GroupLeaderMobile" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-4col-row">
+                <label class="form-4col-label" asp-for="GroupStatus">Status</label>
+                <div class="form-4col-field">
+                    <input asp-for="GroupStatus" class="form-control" />
+                </div>
+                <span></span>
+                <span></span>
+            </div>
+
+            <div class="form-4col-row">
+                <label class="form-4col-label" asp-for="Remarks">Remarks</label>
+                <div class="form-4col-field">
+                    <textarea asp-for="Remarks" class="form-control" rows="2"></textarea>
+                </div>
+                <span></span>
+                <span></span>
+            </div>
+
+            <div class="form-4col-actions">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
 </div>

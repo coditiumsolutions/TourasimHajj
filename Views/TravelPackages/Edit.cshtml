@@ -14,24 +14,79 @@
 <div class="tab-content">
     <div class="tab-pane fade show active" id="basic">
         <div class="card-panel"><div class="card-panel-body">
-            <form asp-action="EditBasic" method="post">
+            <form asp-action="EditBasic" method="post" class="form-4col">
                 @Html.AntiForgeryToken()
                 <input type="hidden" name="Package.PackageId" value="@p.PackageId" />
-                <div class="row g-3">
-                    <div class="col-md-3"><label class="form-label">Code</label><input name="Package.PackageCode" value="@p.PackageCode" class="form-control" /></div>
-                    <div class="col-md-5"><label class="form-label">Name</label><input name="Package.PackageName" value="@p.PackageName" class="form-control" /></div>
-                    <div class="col-md-4"><label class="form-label">Type</label><input name="Package.PackageType" value="@p.PackageType" class="form-control" /></div>
-                    <div class="col-md-12"><label class="form-label">Description</label><textarea name="Package.Description" class="form-control" rows="3">@p.Description</textarea></div>
-                    <div class="col-md-2"><label class="form-label">Days</label><input name="Package.DurationDays" value="@p.DurationDays" class="form-control" /></div>
-                    <div class="col-md-2"><label class="form-label">Nights</label><input name="Package.DurationNights" value="@p.DurationNights" class="form-control" /></div>
-                    <div class="col-md-2"><label class="form-label">Adult</label><input name="Package.AdultPrice" value="@p.AdultPrice" class="form-control" /></div>
-                    <div class="col-md-2"><label class="form-label">Child</label><input name="Package.ChildPrice" value="@p.ChildPrice" class="form-control" /></div>
-                    <div class="col-md-2"><label class="form-label">Infant</label><input name="Package.InfantPrice" value="@p.InfantPrice" class="form-control" /></div>
-                    <div class="col-md-2"><label class="form-label">Currency</label><input name="Package.CurrencyCode" value="@p.CurrencyCode" class="form-control" /></div>
-                    <div class="col-md-2 form-check mt-4"><input name="Package.IsFeatured" type="checkbox" value="true" checked="@p.IsFeatured" class="form-check-input" /><label class="form-check-label">Featured</label></div>
-                    <div class="col-md-2 form-check mt-4"><input name="Package.IsActive" type="checkbox" value="true" checked="@p.IsActive" class="form-check-input" /><label class="form-check-label">Active</label></div>
+
+                <div class="form-4col-row">
+                    <label class="form-4col-label" for="Package_PackageCode">Code</label>
+                    <div class="form-4col-field">
+                        <input name="Package.PackageCode" id="Package_PackageCode" value="@p.PackageCode" class="form-control" />
+                    </div>
+                    <label class="form-4col-label" for="Package_PackageName">Name</label>
+                    <div class="form-4col-field">
+                        <input name="Package.PackageName" id="Package_PackageName" value="@p.PackageName" class="form-control" />
+                    </div>
                 </div>
-                <button class="btn btn-primary mt-3" type="submit">Save Basic Info</button>
+
+                <div class="form-4col-row">
+                    <label class="form-4col-label" for="Package_PackageType">Type</label>
+                    <div class="form-4col-field">
+                        <input name="Package.PackageType" id="Package_PackageType" value="@p.PackageType" class="form-control" />
+                    </div>
+                    <label class="form-4col-label" for="Package_DurationDays">Days</label>
+                    <div class="form-4col-field">
+                        <input name="Package.DurationDays" id="Package_DurationDays" value="@p.DurationDays" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="form-4col-row">
+                    <label class="form-4col-label" for="Package_Description">Description</label>
+                    <div class="form-4col-field">
+                        <textarea name="Package.Description" id="Package_Description" class="form-control" rows="3">@p.Description</textarea>
+                    </div>
+                    <label class="form-4col-label" for="Package_DurationNights">Nights</label>
+                    <div class="form-4col-field">
+                        <input name="Package.DurationNights" id="Package_DurationNights" value="@p.DurationNights" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="form-4col-row">
+                    <label class="form-4col-label" for="Package_AdultPrice">Adult</label>
+                    <div class="form-4col-field">
+                        <input name="Package.AdultPrice" id="Package_AdultPrice" value="@p.AdultPrice" class="form-control" />
+                    </div>
+                    <label class="form-4col-label" for="Package_ChildPrice">Child</label>
+                    <div class="form-4col-field">
+                        <input name="Package.ChildPrice" id="Package_ChildPrice" value="@p.ChildPrice" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="form-4col-row">
+                    <label class="form-4col-label" for="Package_InfantPrice">Infant</label>
+                    <div class="form-4col-field">
+                        <input name="Package.InfantPrice" id="Package_InfantPrice" value="@p.InfantPrice" class="form-control" />
+                    </div>
+                    <label class="form-4col-label" for="Package_CurrencyCode">Currency</label>
+                    <div class="form-4col-field">
+                        <input name="Package.CurrencyCode" id="Package_CurrencyCode" value="@p.CurrencyCode" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="form-4col-row">
+                    <label class="form-4col-label" for="Package_IsFeatured">Featured</label>
+                    <div class="form-4col-field form-4col-check">
+                        <input name="Package.IsFeatured" type="checkbox" value="true" id="Package_IsFeatured" class="form-check-input" @(p.IsFeatured == true ? "checked" : null) />
+                    </div>
+                    <label class="form-4col-label" for="Package_IsActive">Active</label>
+                    <div class="form-4col-field form-4col-check">
+                        <input name="Package.IsActive" type="checkbox" value="true" id="Package_IsActive" class="form-check-input" @(p.IsActive == true ? "checked" : null) />
+                    </div>
+                </div>
+
+                <div class="form-4col-actions">
+                    <button class="btn btn-primary" type="submit">Save Basic Info</button>
+                </div>
             </form>
         </div></div>
     </div>
@@ -52,13 +107,33 @@
                     }
                     </tbody>
                 </table>
-                <form asp-action="AddItinerary" method="post" class="row g-2">
+                <form asp-action="AddItinerary" method="post" class="form-4col">
                     @Html.AntiForgeryToken()
                     <input type="hidden" name="PackageId" value="@p.PackageId" />
-                    <div class="col-md-2"><input name="DayNumber" class="form-control" placeholder="Day #" /></div>
-                    <div class="col-md-4"><input name="Title" class="form-control" placeholder="Title" /></div>
-                    <div class="col-md-4"><input name="Description" class="form-control" placeholder="Description" /></div>
-                    <div class="col-md-2"><button class="btn btn-primary w-100" type="submit">Add</button></div>
+
+                    <div class="form-4col-row">
+                        <label class="form-4col-label" for="DayNumber">Day #</label>
+                        <div class="form-4col-field">
+                            <input name="DayNumber" id="DayNumber" class="form-control" placeholder="Day #" />
+                        </div>
+                        <label class="form-4col-label" for="Title">Title</label>
+                        <div class="form-4col-field">
+                            <input name="Title" id="Title" class="form-control" placeholder="Title" />
+                        </div>
+                    </div>
+
+                    <div class="form-4col-row">
+                        <label class="form-4col-label" for="Description">Description</label>
+                        <div class="form-4col-field">
+                            <input name="Description" id="Description" class="form-control" placeholder="Description" />
+                        </div>
+                        <span></span>
+                        <span></span>
+                    </div>
+
+                    <div class="form-4col-actions">
+                        <button class="btn btn-primary" type="submit">Add</button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -100,15 +175,44 @@
                     }
                     </tbody>
                 </table>
-                <form asp-action="AddDeparture" method="post" class="row g-2">
+                <form asp-action="AddDeparture" method="post" class="form-4col">
                     @Html.AntiForgeryToken()
                     <input type="hidden" name="PackageId" value="@p.PackageId" />
-                    <div class="col-md-2"><input name="DepartureDate" type="date" class="form-control" required /></div>
-                    <div class="col-md-2"><input name="ReturnDate" type="date" class="form-control" required /></div>
-                    <div class="col-md-2"><input name="TotalSeats" class="form-control" placeholder="Total seats" /></div>
-                    <div class="col-md-2"><input name="AdultPrice" class="form-control" placeholder="Adult price" /></div>
-                    <div class="col-md-2"><input name="CurrencyCode" class="form-control" value="@(p.CurrencyCode ?? "PKR")" /></div>
-                    <div class="col-md-2"><button class="btn btn-primary w-100" type="submit">Add Departure</button></div>
+
+                    <div class="form-4col-row">
+                        <label class="form-4col-label" for="DepartureDate">Departure</label>
+                        <div class="form-4col-field">
+                            <input name="DepartureDate" id="DepartureDate" type="date" class="form-control" required />
+                        </div>
+                        <label class="form-4col-label" for="ReturnDate">Return</label>
+                        <div class="form-4col-field">
+                            <input name="ReturnDate" id="ReturnDate" type="date" class="form-control" required />
+                        </div>
+                    </div>
+
+                    <div class="form-4col-row">
+                        <label class="form-4col-label" for="TotalSeats">Total Seats</label>
+                        <div class="form-4col-field">
+                            <input name="TotalSeats" id="TotalSeats" class="form-control" placeholder="Total seats" />
+                        </div>
+                        <label class="form-4col-label" for="AdultPrice">Adult Price</label>
+                        <div class="form-4col-field">
+                            <input name="AdultPrice" id="AdultPrice" class="form-control" placeholder="Adult price" />
+                        </div>
+                    </div>
+
+                    <div class="form-4col-row">
+                        <label class="form-4col-label" for="CurrencyCode">Currency</label>
+                        <div class="form-4col-field">
+                            <input name="CurrencyCode" id="CurrencyCode" class="form-control" value="@(p.CurrencyCode ?? "PKR")" />
+                        </div>
+                        <span></span>
+                        <span></span>
+                    </div>
+
+                    <div class="form-4col-actions">
+                        <button class="btn btn-primary" type="submit">Add Departure</button>
+                    </div>
                 </form>
             </div>
         </div>

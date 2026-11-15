@@ -1,17 +1,5 @@
-@model TourismHajj.Models.Entities.PilgrimGroup
-@{ ViewData["Title"] = "Edit Group"; }
-<div class="page-header"><h2>Edit Group</h2></div>
-<div class="card-panel"><div class="card-panel-body">
-<form asp-action="Edit" method="post">@Html.AntiForgeryToken()<input type="hidden" asp-for="PilgrimGroupId" />
-<div class="row g-3">
-<div class="col-md-4"><label class="form-label">Season</label><select asp-for="HajjSeasonId" class="form-select" asp-items="ViewBag.Seasons"></select></div>
-<div class="col-md-4"><label class="form-label">Group Code</label><input asp-for="GroupCode" class="form-control" /></div>
-<div class="col-md-4"><label class="form-label">Group Name</label><input asp-for="GroupName" class="form-control" /></div>
-<div class="col-md-4"><label class="form-label">Leader Name</label><input asp-for="GroupLeaderName" class="form-control" /></div>
-<div class="col-md-4"><label class="form-label">Leader Mobile</label><input asp-for="GroupLeaderMobile" class="form-control" /></div>
-<div class="col-md-4"><label class="form-label">Departure</label><select asp-for="DepartureId" class="form-select" asp-items="ViewBag.Departures"><option value="">--</option></select></div>
-<div class="col-md-4"><label class="form-label">Status</label><input asp-for="GroupStatus" class="form-control" /></div>
-<div class="col-md-12"><label class="form-label">Remarks</label><textarea asp-for="Remarks" class="form-control"></textarea></div>
-</div>
-<button class="btn btn-primary mt-3" type="submit">Update</button>
-</form></div></div>
+@model PilgrimGroupInputModel
+@{ ViewData["Title"] = "Edit Pilgrim Group"; }
+<div class="page-header"><h2>Edit Pilgrim Group</h2></div>
+<partial name="_PilgrimGroupForm" model="Model" />
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }
