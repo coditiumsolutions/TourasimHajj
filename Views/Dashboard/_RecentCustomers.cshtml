@@ -1,0 +1,32 @@
+@model IEnumerable<TourismHajj.ViewModels.RecentCustomerItem>
+<div class="card-panel">
+    <div class="card-panel-header">
+        <h5><i class="fa-solid fa-users me-2 text-primary"></i>Recent Customer Activity</h5>
+        <a class="btn btn-sm btn-outline-primary" asp-controller="Customers" asp-action="Index">Customers</a>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Customer</th>
+                    <th>Mobile</th>
+                    <th>Registered</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var x in Model)
+            {
+                <tr>
+                    <td><a asp-controller="Customers" asp-action="Details" asp-route-id="@x.CustomerId">@x.CustomerName</a></td>
+                    <td>@(x.MobileNo ?? "-")</td>
+                    <td>@x.CreatedDate?.ToString("dd-MMM-yyyy")</td>
+                </tr>
+            }
+            @if (!Model.Any())
+            {
+                <tr><td colspan="3" class="empty-state">No recent customer registrations.</td></tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

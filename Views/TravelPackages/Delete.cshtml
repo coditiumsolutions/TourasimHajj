@@ -1,0 +1,8 @@
+@model TravelPackage
+@{ ViewData["Title"] = "Delete Package"; }
+<h1 class="h3">Delete @Model.PackageName?</h1>
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="PackageId" />
+    <button class="btn btn-danger">Confirm</button>
+    <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+</form>

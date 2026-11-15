@@ -1,0 +1,63 @@
+@model CustomerInputModel
+<div class="card shadow-sm">
+    <div class="card-body">
+        <form asp-action="@(Model.CustomerId > 0 ? "Edit" : "Create")" method="post">
+            <input type="hidden" asp-for="CustomerId" />
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label asp-for="CustomerName" class="form-label"></label>
+                    <input asp-for="CustomerName" class="form-control" />
+                    <span asp-validation-for="CustomerName" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="FatherName" class="form-label"></label>
+                    <input asp-for="FatherName" class="form-control" />
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="MobileNo" class="form-label"></label>
+                    <input asp-for="MobileNo" class="form-control" />
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="WhatsAppNo" class="form-label"></label>
+                    <input asp-for="WhatsAppNo" class="form-control" />
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="Email" class="form-label"></label>
+                    <input asp-for="Email" class="form-control" />
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="Cnic" class="form-label"></label>
+                    <input asp-for="Cnic" class="form-control" />
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="CustomerType" class="form-label"></label>
+                    <select asp-for="CustomerType" asp-items="ViewBag.CustomerTypes" class="form-select"></select>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="CityId" class="form-label"></label>
+                    <select asp-for="CityId" asp-items="ViewBag.CityId" class="form-select">
+                        <option value="">-- Select --</option>
+                    </select>
+                </div>
+                <div class="col-12">
+                    <label asp-for="Address" class="form-label"></label>
+                    <textarea asp-for="Address" rows="2" class="form-control"></textarea>
+                </div>
+                <div class="col-12">
+                    <div class="form-check">
+                        <input asp-for="IsActive" class="form-check-input" />
+                        <label asp-for="IsActive" class="form-check-label"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-4 d-flex gap-2">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

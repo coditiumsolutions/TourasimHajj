@@ -1,0 +1,13 @@
+@model PilgrimGroupMemberInputModel
+@{ ViewData["Title"] = "Add Member"; }
+<h1 class="h3">Add member to @Model.GroupCode</h1>
+<form asp-action="AddMember" method="post" class="card p-4">
+    <input type="hidden" asp-for="PilgrimGroupId" />
+    <div class="mb-3"><label asp-for="BookingTravelerId" class="form-label"></label><select asp-for="BookingTravelerId" class="form-select" asp-items="@(new SelectList(Model.TravelerOptions, nameof(BookingTravelerOption.BookingTravelerId), nameof(BookingTravelerOption.DisplayName)))"></select></div>
+    <div class="form-check mb-3"><input asp-for="IsGroupLeader" class="form-check-input" /><label asp-for="IsGroupLeader" class="form-check-label"></label></div>
+    <div class="row g-2">
+        <div class="col-md-6"><label asp-for="RoomGroup" class="form-label"></label><input asp-for="RoomGroup" class="form-control" /></div>
+        <div class="col-md-6"><label asp-for="TransportGroup" class="form-label"></label><input asp-for="TransportGroup" class="form-control" /></div>
+    </div>
+    <button type="submit" class="btn btn-primary">Add</button>
+</form>

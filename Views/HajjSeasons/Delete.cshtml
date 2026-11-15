@@ -1,0 +1,9 @@
+@model HajjSeason
+@{ ViewData["Title"] = "Delete Season"; }
+<h1 class="h3 text-danger mb-4">Delete Hajj Season</h1>
+<p>Season <strong>@Model.SeasonName</strong> will be deactivated if pilgrim groups exist.</p>
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="HajjSeasonId" />
+    <button type="submit" class="btn btn-danger" data-confirm="Delete or deactivate this season?">Confirm</button>
+    <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+</form>

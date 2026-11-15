@@ -1,0 +1,25 @@
+@model TourismHajj.Models.Entities.PilgrimGroup
+@{ ViewData["Title"] = "Group Details"; }
+@await Html.PartialAsync("_Alerts")
+<div class="page-header"><div><h2>@Model.GroupCode — @Model.GroupName</h2></div>
+<a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@Model.PilgrimGroupId">Edit</a></div>
+<div class="card-panel mb-3"><div class="card-panel-body">
+<p>Season: @Model.HajjSeason?.SeasonName · Leader: @Model.GroupLeaderName (@Model.GroupLeaderMobile) · Status: @Model.GroupStatus</p>
+</div></div>
+<div class="card-panel mb-3"><div class="card-panel-header"><h5>Members</h5></div>
+<table class="table table-sm mb-0"><thead><tr><th>Pilgrim</th><th>Leader</th><th>Room</th><th>Transport</th><th></th></tr></thead>
+<tbody>@foreach (var m in Model.PilgrimGroupMembers){<tr>
+<td>@m.BookingTraveler?.Traveler?.FullName</td><td>@(m.IsGroupLeader==true?"Yes":"No")</td><td>@m.RoomGroup</td><td>@m.TransportGroup</td>
+<td><form asp-action="RemoveMember" method="post" class="d-inline">@Html.AntiForgeryToken()
+<input type="hidden" name="memberId" value="@m.PilgrimGroupMemberId" /><input type="hidden" name="groupId" value="@Model.PilgrimGroupId" />
+<button class="btn btn-sm btn-outline-danger" data-confirm="Remove member?" type="submit">Remove</button></form></td></tr>}
+</tbody></table></div>
+<div class="card-panel"><div class="card-panel-header"><h5>Add Member</h5></div><div class="card-panel-body">
+<form asp-action="AddMember" method="post" class="row g-2">@Html.AntiForgeryToken()
+<input type="hidden" name="PilgrimGroupId" value="@Model.PilgrimGroupId" />
+<div class="col-md-5"><select name="BookingTravelerId" class="form-select" asp-items="ViewBag.BookingTravelers"></select></div>
+<div class="col-md-2"><input name="RoomGroup" class="form-control" placeholder="Room group" /></div>
+<div class="col-md-2"><input name="TransportGroup" class="form-control" placeholder="Transport" /></div>
+<div class="col-md-2 form-check mt-2"><input name="IsGroupLeader" type="checkbox" value="true" class="form-check-input" id="leader" /><label for="leader" class="form-check-label">Leader</label></div>
+<div class="col-md-1"><button class="btn btn-primary w-100" type="submit">Add</button></div>
+</form></div></div>

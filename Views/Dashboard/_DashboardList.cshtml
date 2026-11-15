@@ -1,0 +1,36 @@
+@{
+    var title = ViewData["Title"]?.ToString() ?? "List";
+    var headers = ViewData["Headers"] as string[] ?? Array.Empty<string>();
+    var rows = ViewData["Rows"] as List<string[]> ?? new List<string[]>();
+}
+<div class="col-lg-6">
+    <div class="card-panel">
+        <div class="card-panel-header"><h5>@title</h5></div>
+        <div class="card-panel-body p-0">
+            <div class="table-responsive">
+                <table class="table table-sm mb-0">
+                    <thead>
+                        <tr>
+                            @foreach (var h in headers) { <th>@h</th> }
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @if (rows.Count == 0)
+                    {
+                        <tr><td colspan="@headers.Length" class="text-muted text-center py-3">No records</td></tr>
+                    }
+                    else
+                    {
+                        foreach (var row in rows)
+                        {
+                            <tr>
+                                @foreach (var cell in row) { <td>@cell</td> }
+                            </tr>
+                        }
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

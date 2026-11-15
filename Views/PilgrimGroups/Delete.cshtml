@@ -1,0 +1,8 @@
+@model PilgrimGroup
+@{ ViewData["Title"] = "Delete Group"; }
+<h1 class="h3 text-danger">Delete Group @Model.GroupCode?</h1>
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="PilgrimGroupId" />
+    <button type="submit" class="btn btn-danger" data-confirm="Delete this group?">Confirm</button>
+    <a asp-action="Index" class="btn btn-link">Cancel</a>
+</form>

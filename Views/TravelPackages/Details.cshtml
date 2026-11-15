@@ -1,0 +1,21 @@
+@model PackageEditViewModel
+@{
+    ViewData["Title"] = "Package Details";
+    var p = Model.Basic;
+}
+<div class="page-header">
+    <h2>@p.PackageName</h2>
+    <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@p.PackageId">Edit</a>
+</div>
+<div class="card-panel"><div class="card-panel-body">
+    <p><strong>@p.PackageCode</strong> · @p.PackageType · @p.DurationDays Days / @p.DurationNights Nights</p>
+    <p>@p.Description</p>
+    <p>Adult @((p.AdultPrice ?? 0).ToString("N2")) · Child @((p.ChildPrice ?? 0).ToString("N2")) · Infant @((p.InfantPrice ?? 0).ToString("N2")) @p.CurrencyCode</p>
+    <h5 class="mt-3">Departures</h5>
+    <ul>
+        @foreach (var d in Model.Departures)
+        {
+            <li>@d.DepartureDate → @d.ReturnDate (Available: @d.AvailableSeats)</li>
+        }
+    </ul>
+</div></div>

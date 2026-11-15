@@ -1,0 +1,12 @@
+@model TourismHajj.Models.Entities.Destination
+@{ ViewData["Title"] = "New Destination"; }
+<div class="page-header"><h2>@ViewData["Title"]</h2></div>
+<div class="card-panel"><div class="card-panel-body">
+<form asp-action="Create" method="post">@Html.AntiForgeryToken()
+<div class="row g-3"><div class="col-md-4"><label class="form-label">Name</label><input asp-for="DestinationName" class="form-control" /></div>
+<div class="col-md-4"><label class="form-label">City</label><select asp-for="CityId" class="form-select" asp-items="ViewBag.Cities"></select></div>
+<div class="col-md-3 form-check mt-4"><input asp-for="IsFeatured" class="form-check-input" /><label asp-for="IsFeatured" class="form-check-label">Featured</label></div>
+<div class="col-md-3 form-check mt-4"><input asp-for="IsActive" class="form-check-input" /><label asp-for="IsActive" class="form-check-label">Active</label></div>
+<div class="col-md-12"><label class="form-label">Description</label><textarea asp-for="Description" class="form-control" rows="3"></textarea></div></div>
+<div class="mt-3"><button class="btn btn-primary" type="submit">Save</button> <a class="btn btn-outline-secondary" asp-action="Index">Cancel</a></div>
+</form></div></div>

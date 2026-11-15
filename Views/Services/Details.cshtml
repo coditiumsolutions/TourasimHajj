@@ -1,0 +1,4 @@
+@model TourismHajj.Models.Entities.Service
+@{ ViewData["Title"] = "Services Details"; }
+<div class="page-header"><h2>Services Details</h2><a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@Model.ServiceId">Edit</a></div>
+<div class="card-panel"><div class="card-panel-body"><dl class="row mb-0"><dt class="col-sm-3">Name</dt><dd class="col-sm-9">@Model.ServiceName</dd><dt class="col-sm-3">Category</dt><dd class="col-sm-9">@Model.ServiceCategory</dd><dt class="col-sm-3">Active</dt><dd class="col-sm-9">@Model.IsActive</dd><dt class="col-sm-3">Description</dt><dd class="col-sm-9">@Model.Description</dd></dl></div></div>

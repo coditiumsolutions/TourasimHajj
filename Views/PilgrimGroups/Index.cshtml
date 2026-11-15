@@ -1,0 +1,13 @@
+@model IEnumerable<TourismHajj.Models.Entities.PilgrimGroup>
+@{ ViewData["Title"] = "Pilgrim Groups"; }
+@await Html.PartialAsync("_Alerts")
+<div class="page-header"><div><h2>Pilgrim Groups</h2></div>
+<div class="d-flex gap-2">
+<form method="get" class="d-flex gap-2"><input class="form-control form-control-sm" name="q" value="@ViewBag.Q" placeholder="Search..." /><button class="btn btn-sm btn-outline-secondary">Search</button></form>
+<a class="btn btn-sm btn-accent" asp-action="Create"><i class="fa-solid fa-plus"></i> Add</a></div></div>
+<div class="card-panel"><div class="table-responsive"><table class="table table-hover mb-0">
+<thead><tr><th>Code</th><th>Name</th><th>Season</th><th>Leader</th><th>Pilgrims</th><th>Status</th><th></th></tr></thead>
+<tbody>@foreach (var item in Model){<tr><td>@item.GroupCode</td><td>@item.GroupName</td><td>@item.HajjSeason?.SeasonName</td><td>@item.GroupLeaderName</td><td>@item.TotalPilgrims</td><td>@item.GroupStatus</td>
+<td class="text-end"><a class="btn btn-sm btn-outline-secondary" asp-action="Details" asp-route-id="@item.PilgrimGroupId"><i class="fa-solid fa-eye"></i></a>
+<a class="btn btn-sm btn-outline-primary" asp-action="Edit" asp-route-id="@item.PilgrimGroupId"><i class="fa-solid fa-pen"></i></a></td></tr>}
+</tbody></table></div>@await Html.PartialAsync("_Pager")</div>

@@ -1,0 +1,116 @@
+@model PackageEditViewModel
+@{
+    ViewData["Title"] = "Edit Package";
+    var p = Model.Basic;
+}
+@await Html.PartialAsync("_Alerts")
+<div class="page-header"><h2>@p.PackageName <small class="text-muted">(@p.PackageCode)</small></h2></div>
+<ul class="nav nav-tabs mb-3" role="tablist">
+    <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#basic" type="button">Basic</button></li>
+    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#itinerary" type="button">Itinerary</button></li>
+    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#services" type="button">Services</button></li>
+    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#departures" type="button">Departures</button></li>
+</ul>
+<div class="tab-content">
+    <div class="tab-pane fade show active" id="basic">
+        <div class="card-panel"><div class="card-panel-body">
+            <form asp-action="EditBasic" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="Package.PackageId" value="@p.PackageId" />
+                <div class="row g-3">
+                    <div class="col-md-3"><label class="form-label">Code</label><input name="Package.PackageCode" value="@p.PackageCode" class="form-control" /></div>
+                    <div class="col-md-5"><label class="form-label">Name</label><input name="Package.PackageName" value="@p.PackageName" class="form-control" /></div>
+                    <div class="col-md-4"><label class="form-label">Type</label><input name="Package.PackageType" value="@p.PackageType" class="form-control" /></div>
+                    <div class="col-md-12"><label class="form-label">Description</label><textarea name="Package.Description" class="form-control" rows="3">@p.Description</textarea></div>
+                    <div class="col-md-2"><label class="form-label">Days</label><input name="Package.DurationDays" value="@p.DurationDays" class="form-control" /></div>
+                    <div class="col-md-2"><label class="form-label">Nights</label><input name="Package.DurationNights" value="@p.DurationNights" class="form-control" /></div>
+                    <div class="col-md-2"><label class="form-label">Adult</label><input name="Package.AdultPrice" value="@p.AdultPrice" class="form-control" /></div>
+                    <div class="col-md-2"><label class="form-label">Child</label><input name="Package.ChildPrice" value="@p.ChildPrice" class="form-control" /></div>
+                    <div class="col-md-2"><label class="form-label">Infant</label><input name="Package.InfantPrice" value="@p.InfantPrice" class="form-control" /></div>
+                    <div class="col-md-2"><label class="form-label">Currency</label><input name="Package.CurrencyCode" value="@p.CurrencyCode" class="form-control" /></div>
+                    <div class="col-md-2 form-check mt-4"><input name="Package.IsFeatured" type="checkbox" value="true" checked="@p.IsFeatured" class="form-check-input" /><label class="form-check-label">Featured</label></div>
+                    <div class="col-md-2 form-check mt-4"><input name="Package.IsActive" type="checkbox" value="true" checked="@p.IsActive" class="form-check-input" /><label class="form-check-label">Active</label></div>
+                </div>
+                <button class="btn btn-primary mt-3" type="submit">Save Basic Info</button>
+            </form>
+        </div></div>
+    </div>
+
+    <div class="tab-pane fade" id="itinerary">
+        <div class="card-panel"><div class="card-panel-header"><h5>Day-wise Itinerary</h5></div>
+            <div class="card-panel-body">
+                <table class="table table-sm">
+                    <thead><tr><th>Day</th><th>Title</th><th>Description</th></tr></thead>
+                    <tbody>
+                    @foreach (var i in Model.Itineraries)
+                    {
+                        <tr><td>@i.DayNumber</td><td>@i.Title</td><td>@i.Description</td></tr>
+                    }
+                    @if (!Model.Itineraries.Any())
+                    {
+                        <tr><td colspan="3" class="text-muted">No itinerary yet</td></tr>
+                    }
+                    </tbody>
+                </table>
+                <form asp-action="AddItinerary" method="post" class="row g-2">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="PackageId" value="@p.PackageId" />
+                    <div class="col-md-2"><input name="DayNumber" class="form-control" placeholder="Day #" /></div>
+                    <div class="col-md-4"><input name="Title" class="form-control" placeholder="Title" /></div>
+                    <div class="col-md-4"><input name="Description" class="form-control" placeholder="Description" /></div>
+                    <div class="col-md-2"><button class="btn btn-primary w-100" type="submit">Add</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="services">
+        <div class="card-panel"><div class="card-panel-header"><h5>Package Services</h5></div>
+            <div class="table-responsive">
+                <table class="table table-sm mb-0">
+                    <thead><tr><th>Service</th><th>Included</th><th>Extra Price</th></tr></thead>
+                    <tbody>
+                    @foreach (var s in Model.Services)
+                    {
+                        <tr><td>@s.ServiceName</td><td>@(s.IsIncluded ? "Yes" : "No")</td><td>@s.AdditionalPrice</td></tr>
+                    }
+                    @if (!Model.Services.Any())
+                    {
+                        <tr><td colspan="3" class="text-muted text-center">No services linked</td></tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="departures">
+        <div class="card-panel"><div class="card-panel-header"><h5>Departures &amp; Seats</h5></div>
+            <div class="card-panel-body">
+                <table class="table table-sm">
+                    <thead><tr><th>Departure</th><th>Return</th><th>Seats</th><th>Available</th><th>Adult</th><th>Status</th></tr></thead>
+                    <tbody>
+                    @foreach (var d in Model.Departures)
+                    {
+                        <tr><td>@d.DepartureDate</td><td>@d.ReturnDate</td><td>@d.TotalSeats</td><td>@d.AvailableSeats</td><td>@d.AdultPrice</td><td>@d.DepartureStatus</td></tr>
+                    }
+                    @if (!Model.Departures.Any())
+                    {
+                        <tr><td colspan="6" class="text-muted">No departures</td></tr>
+                    }
+                    </tbody>
+                </table>
+                <form asp-action="AddDeparture" method="post" class="row g-2">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="PackageId" value="@p.PackageId" />
+                    <div class="col-md-2"><input name="DepartureDate" type="date" class="form-control" required /></div>
+                    <div class="col-md-2"><input name="ReturnDate" type="date" class="form-control" required /></div>
+                    <div class="col-md-2"><input name="TotalSeats" class="form-control" placeholder="Total seats" /></div>
+                    <div class="col-md-2"><input name="AdultPrice" class="form-control" placeholder="Adult price" /></div>
+                    <div class="col-md-2"><input name="CurrencyCode" class="form-control" value="@(p.CurrencyCode ?? "PKR")" /></div>
+                    <div class="col-md-2"><button class="btn btn-primary w-100" type="submit">Add Departure</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,183 @@
+@{
+    var controller = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+    var action = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
+    string Active(string c, string? a = null) =>
+        string.Equals(controller, c, StringComparison.OrdinalIgnoreCase) &&
+        (a == null || string.Equals(action, a, StringComparison.OrdinalIgnoreCase))
+            ? "active" : "";
+    bool GroupOpen(params string[] controllers) =>
+        controllers.Any(c => string.Equals(controller, c, StringComparison.OrdinalIgnoreCase));
+}
+
+<aside class="admin-sidebar" id="adminSidebar">
+    <div class="brand-block">
+        <div class="brand-logo" title="Tourism Hajj">TH</div>
+        <div class="brand-text">
+            <h1>Tourism Hajj</h1>
+            <small>Travel &amp; Pilgrimage ERP</small>
+        </div>
+    </div>
+
+    <div class="sidebar-scroll">
+        <div class="nav-section-label">Main</div>
+        <div class="menu-item">
+            <a class="menu-link @Active("Dashboard")" asp-controller="Dashboard" asp-action="Index">
+                <i class="fa-solid fa-gauge-high menu-icon"></i>
+                <span class="menu-label">Dashboard</span>
+            </a>
+        </div>
+
+        <div class="nav-section-label">Operations</div>
+
+        <div class="menu-item @(GroupOpen("TravelPackages","Destinations","Services") ? "open" : "")">
+            <button type="button" class="menu-toggle" data-menu-toggle>
+                <i class="fa-solid fa-suitcase-rolling menu-icon"></i>
+                <span class="menu-label">Travel Management</span>
+                <i class="fa-solid fa-chevron-right menu-caret"></i>
+            </button>
+            <div class="submenu">
+                <a class="@Active("TravelPackages")" asp-controller="TravelPackages" asp-action="Index"><i class="fa-solid fa-circle"></i> Travel Packages</a>
+                <a asp-controller="TravelPackages" asp-action="Index" asp-route-type="Domestic"><i class="fa-solid fa-circle"></i> Domestic Packages</a>
+                <a asp-controller="TravelPackages" asp-action="Index" asp-route-type="International"><i class="fa-solid fa-circle"></i> International Packages</a>
+                <a class="@Active("Destinations")" asp-controller="Destinations" asp-action="Index"><i class="fa-solid fa-circle"></i> Destinations</a>
+                <a class="@Active("Services")" asp-controller="Services" asp-action="Index"><i class="fa-solid fa-circle"></i> Package Services</a>
+                <a asp-controller="TravelPackages" asp-action="Index"><i class="fa-solid fa-circle"></i> Package Departures</a>
+                <a asp-controller="TravelPackages" asp-action="Index"><i class="fa-solid fa-circle"></i> Flight Management</a>
+            </div>
+        </div>
+
+        <div class="menu-item @(GroupOpen("HajjSeasons","PilgrimGroups") ? "open" : "")">
+            <button type="button" class="menu-toggle" data-menu-toggle>
+                <i class="fa-solid fa-kaaba menu-icon"></i>
+                <span class="menu-label">Hajj Management</span>
+                <i class="fa-solid fa-chevron-right menu-caret"></i>
+            </button>
+            <div class="submenu">
+                <a class="@Active("HajjSeasons")" asp-controller="HajjSeasons" asp-action="Index"><i class="fa-solid fa-circle"></i> Hajj Seasons</a>
+                <a asp-controller="TravelPackages" asp-action="Index" asp-route-type="Hajj"><i class="fa-solid fa-circle"></i> Hajj Packages</a>
+                <a class="@Active("PilgrimGroups")" asp-controller="PilgrimGroups" asp-action="Index"><i class="fa-solid fa-circle"></i> Pilgrim Groups</a>
+                <a asp-controller="PilgrimGroups" asp-action="Index"><i class="fa-solid fa-circle"></i> Group Members</a>
+                <a asp-controller="Hotels" asp-action="Index"><i class="fa-solid fa-circle"></i> Hajj Accommodation</a>
+                <a asp-controller="TransportProviders" asp-action="Index"><i class="fa-solid fa-circle"></i> Hajj Transportation</a>
+                <a asp-controller="Reports" asp-action="HajjPilgrimRegister"><i class="fa-solid fa-circle"></i> Hajj Reports</a>
+            </div>
+        </div>
+
+        <div class="menu-item @(GroupOpen("VisaApplications") ? "open" : "")">
+            <button type="button" class="menu-toggle" data-menu-toggle>
+                <i class="fa-solid fa-mosque menu-icon"></i>
+                <span class="menu-label">Umrah Management</span>
+                <i class="fa-solid fa-chevron-right menu-caret"></i>
+            </button>
+            <div class="submenu">
+                <a asp-controller="TravelPackages" asp-action="Index" asp-route-type="Umrah"><i class="fa-solid fa-circle"></i> Umrah Packages</a>
+                <a asp-controller="Bookings" asp-action="Index" asp-route-type="Umrah"><i class="fa-solid fa-circle"></i> Umrah Bookings</a>
+                <a asp-controller="Travelers" asp-action="Index"><i class="fa-solid fa-circle"></i> Umrah Pilgrims</a>
+                <a class="@Active("VisaApplications")" asp-controller="VisaApplications" asp-action="Index"><i class="fa-solid fa-circle"></i> Visa Applications</a>
+                <a asp-controller="Hotels" asp-action="Index"><i class="fa-solid fa-circle"></i> Hotel Assignments</a>
+                <a asp-controller="TransportProviders" asp-action="Index"><i class="fa-solid fa-circle"></i> Transport Assignments</a>
+                <a asp-controller="Reports" asp-action="UmrahPilgrimRegister"><i class="fa-solid fa-circle"></i> Umrah Reports</a>
+            </div>
+        </div>
+
+        <div class="menu-item @(GroupOpen("Customers","Travelers") ? "open" : "")">
+            <button type="button" class="menu-toggle" data-menu-toggle>
+                <i class="fa-solid fa-address-book menu-icon"></i>
+                <span class="menu-label">Customer Management</span>
+                <i class="fa-solid fa-chevron-right menu-caret"></i>
+            </button>
+            <div class="submenu">
+                <a class="@Active("Customers")" asp-controller="Customers" asp-action="Index"><i class="fa-solid fa-circle"></i> Customers</a>
+                <a class="@Active("Travelers")" asp-controller="Travelers" asp-action="Index"><i class="fa-solid fa-circle"></i> Travelers</a>
+                <a asp-controller="Travelers" asp-action="Index"><i class="fa-solid fa-circle"></i> Traveler Documents</a>
+                <a class="@Active("Travelers","PassportAlerts")" asp-controller="Travelers" asp-action="PassportAlerts"><i class="fa-solid fa-circle"></i> Passport Management</a>
+            </div>
+        </div>
+
+        <div class="menu-item @(GroupOpen("Suppliers","Hotels","TransportProviders") ? "open" : "")">
+            <button type="button" class="menu-toggle" data-menu-toggle>
+                <i class="fa-solid fa-truck-field menu-icon"></i>
+                <span class="menu-label">Supplier Management</span>
+                <i class="fa-solid fa-chevron-right menu-caret"></i>
+            </button>
+            <div class="submenu">
+                <a class="@Active("Suppliers")" asp-controller="Suppliers" asp-action="Index"><i class="fa-solid fa-circle"></i> Suppliers</a>
+                <a class="@Active("Hotels")" asp-controller="Hotels" asp-action="Index"><i class="fa-solid fa-circle"></i> Hotels</a>
+                <a asp-controller="Suppliers" asp-action="Index" asp-route-type="Airline"><i class="fa-solid fa-circle"></i> Airlines</a>
+                <a class="@Active("TransportProviders")" asp-controller="TransportProviders" asp-action="Index"><i class="fa-solid fa-circle"></i> Transport Providers</a>
+                <a asp-controller="Suppliers" asp-action="Index" asp-route-type="Visa Agent"><i class="fa-solid fa-circle"></i> Visa Agents</a>
+            </div>
+        </div>
+
+        <div class="menu-item @(GroupOpen("Bookings") ? "open" : "")">
+            <button type="button" class="menu-toggle" data-menu-toggle>
+                <i class="fa-solid fa-bookmark menu-icon"></i>
+                <span class="menu-label">Booking Management</span>
+                <i class="fa-solid fa-chevron-right menu-caret"></i>
+            </button>
+            <div class="submenu">
+                <a class="@Active("Bookings","Create")" asp-controller="Bookings" asp-action="Create"><i class="fa-solid fa-circle"></i> New Booking</a>
+                <a class="@Active("Bookings","Index")" asp-controller="Bookings" asp-action="Index"><i class="fa-solid fa-circle"></i> All Bookings</a>
+                <a asp-controller="Bookings" asp-action="Index"><i class="fa-solid fa-circle"></i> Booking Travelers</a>
+                <a asp-controller="Hotels" asp-action="Index"><i class="fa-solid fa-circle"></i> Room Allocations</a>
+                <a asp-controller="Bookings" asp-action="Index"><i class="fa-solid fa-circle"></i> Service Assignments</a>
+                <a asp-controller="Bookings" asp-action="Index" asp-route-status="Cancelled"><i class="fa-solid fa-circle"></i> Booking Cancellation</a>
+            </div>
+        </div>
+
+        <div class="nav-section-label">Finance</div>
+
+        <div class="menu-item @(GroupOpen("Payments","SupplierPayments","Expenses","Refunds") ? "open" : "")">
+            <button type="button" class="menu-toggle" data-menu-toggle>
+                <i class="fa-solid fa-file-invoice-dollar menu-icon"></i>
+                <span class="menu-label">Accounts</span>
+                <i class="fa-solid fa-chevron-right menu-caret"></i>
+            </button>
+            <div class="submenu">
+                <a class="@Active("Payments")" asp-controller="Payments" asp-action="Index"><i class="fa-solid fa-circle"></i> Payment Receipts</a>
+                <a class="@Active("SupplierPayments")" asp-controller="SupplierPayments" asp-action="Index"><i class="fa-solid fa-circle"></i> Supplier Payments</a>
+                <a class="@Active("Expenses")" asp-controller="Expenses" asp-action="Index"><i class="fa-solid fa-circle"></i> Expenses</a>
+                <a class="@Active("Refunds")" asp-controller="Refunds" asp-action="Index"><i class="fa-solid fa-circle"></i> Refunds</a>
+                <a asp-controller="Reports" asp-action="CustomerLedger"><i class="fa-solid fa-circle"></i> Customer Ledger</a>
+                <a asp-controller="Reports" asp-action="SupplierLedger"><i class="fa-solid fa-circle"></i> Supplier Ledger</a>
+                <a asp-controller="Reports" asp-action="ProfitLoss"><i class="fa-solid fa-circle"></i> Profit &amp; Loss</a>
+            </div>
+        </div>
+
+        <div class="menu-item @(GroupOpen("Reports") ? "open" : "")">
+            <button type="button" class="menu-toggle" data-menu-toggle>
+                <i class="fa-solid fa-chart-pie menu-icon"></i>
+                <span class="menu-label">Reports</span>
+                <i class="fa-solid fa-chevron-right menu-caret"></i>
+            </button>
+            <div class="submenu">
+                <a class="@Active("Reports","Index")" asp-controller="Reports" asp-action="Index"><i class="fa-solid fa-circle"></i> All Reports</a>
+                <a asp-controller="Reports" asp-action="BookingRegister"><i class="fa-solid fa-circle"></i> Booking Reports</a>
+                <a asp-controller="Reports" asp-action="PackageSales"><i class="fa-solid fa-circle"></i> Sales Reports</a>
+                <a asp-controller="Reports" asp-action="MonthlyCollection"><i class="fa-solid fa-circle"></i> Revenue Reports</a>
+                <a asp-controller="Reports" asp-action="CustomerLedger"><i class="fa-solid fa-circle"></i> Customer Reports</a>
+                <a asp-controller="Reports" asp-action="ProfitLoss"><i class="fa-solid fa-circle"></i> Financial Reports</a>
+            </div>
+        </div>
+
+        <div class="nav-section-label">System</div>
+
+        <div class="menu-item @(GroupOpen("Employees","Countries","Cities") ? "open" : "")">
+            <button type="button" class="menu-toggle" data-menu-toggle>
+                <i class="fa-solid fa-gears menu-icon"></i>
+                <span class="menu-label">Administration</span>
+                <i class="fa-solid fa-chevron-right menu-caret"></i>
+            </button>
+            <div class="submenu">
+                <a class="@Active("Employees")" asp-controller="Employees" asp-action="Index"><i class="fa-solid fa-circle"></i> Employees</a>
+                <a class="@Active("Countries")" asp-controller="Countries" asp-action="Index"><i class="fa-solid fa-circle"></i> Countries</a>
+                <a class="@Active("Cities")" asp-controller="Cities" asp-action="Index"><i class="fa-solid fa-circle"></i> Cities</a>
+                <a href="/Identity/Account/Manage"><i class="fa-solid fa-circle"></i> Users / Profile</a>
+                <a asp-controller="Dashboard" asp-action="Index"><i class="fa-solid fa-circle"></i> Roles &amp; Permissions</a>
+                <a asp-controller="Dashboard" asp-action="Index"><i class="fa-solid fa-circle"></i> Audit Logs</a>
+                <a asp-controller="Dashboard" asp-action="Index"><i class="fa-solid fa-circle"></i> Company Settings</a>
+            </div>
+        </div>
+    </div>
+</aside>
+<div class="sidebar-backdrop" id="sidebarBackdrop"></div>

@@ -1,0 +1,9 @@
+@model Traveler
+@{ ViewData["Title"] = "Delete Traveler"; }
+<h1 class="h3 mb-4">Delete Traveler</h1>
+<p>Remove <strong>@Model.FullName</strong>?</p>
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="TravelerId" />
+    <button class="btn btn-danger" type="submit">Delete</button>
+    <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+</form>

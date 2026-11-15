@@ -1,0 +1,33 @@
+@model IEnumerable<TourismHajj.ViewModels.UpcomingDepartureItem>
+<div class="card-panel">
+    <div class="card-panel-header">
+        <h5><i class="fa-solid fa-plane-departure me-2 text-primary"></i>Upcoming Departures</h5>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Package</th>
+                    <th>Departure</th>
+                    <th>Seats</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var x in Model)
+            {
+                <tr>
+                    <td>@x.PackageName</td>
+                    <td>@x.DepartureDate.ToString("dd-MMM-yyyy")</td>
+                    <td>@(x.AvailableSeats ?? 0)</td>
+                    <td><span class="badge-gold">@(x.Status ?? "Scheduled")</span></td>
+                </tr>
+            }
+            @if (!Model.Any())
+            {
+                <tr><td colspan="4" class="empty-state">No upcoming departures.</td></tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

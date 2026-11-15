@@ -1,0 +1,31 @@
+## .NET
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+*.dbmdl
+*.jfm
+
+## Secrets / local overrides
+appsettings.Development.json
+appsettings.Local.json
+*.local.json
+secrets.json
+**/credentials.json
+.env
+.env.*
+!.env.example
+
+## Uploads
+wwwroot/uploads/
+
+## OS / IDE
+.DS_Store
+Thumbs.db
+*.swp
+
+## Backups
+*.bak

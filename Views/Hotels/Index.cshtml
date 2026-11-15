@@ -1,0 +1,30 @@
+@model HotelListViewModel
+@{ ViewData["Title"] = "Hotels"; }
+@await Html.PartialAsync("_Alerts")
+<div class="page-header">
+    <div><h2>Hotels</h2></div>
+    <a class="btn btn-sm btn-accent" asp-action="Create"><i class="fa-solid fa-plus"></i> Add</a>
+</div>
+<div class="card-panel">
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead><tr><th>Name</th><th>City</th><th>Stars</th><th>Haram KM</th><th>Nabawi KM</th><th>Active</th><th></th></tr></thead>
+            <tbody>
+            @foreach (var item in Model.Hotels)
+            {
+                <tr>
+                    <td>@item.HotelName</td>
+                    <td>@item.City?.CityName</td>
+                    <td>@item.StarRating</td>
+                    <td>@item.DistanceFromHaramKm</td>
+                    <td>@item.DistanceFromNabawiKm</td>
+                    <td>@(item.IsActive == true ? "Yes" : "No")</td>
+                    <td class="text-end">
+                        <a class="btn btn-sm btn-outline-primary" asp-action="Edit" asp-route-id="@item.HotelId"><i class="fa-solid fa-pen"></i></a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

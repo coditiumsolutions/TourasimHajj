@@ -1,0 +1,61 @@
+@using Microsoft.AspNetCore.Identity
+@using TourismHajj.Models
+@inject UserManager<ApplicationUser> UserManager
+@{
+    var user = await UserManager.GetUserAsync(User);
+    var displayName = user?.FullName ?? user?.Email ?? "User";
+    var designation = user?.Designation ?? "Staff";
+    var initial = string.IsNullOrWhiteSpace(displayName) ? "U" : displayName.Trim()[0].ToString().ToUpperInvariant();
+}
+
+<header class="admin-topbar no-print">
+    <div class="topbar-left">
+        <button type="button" class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+        <partial name="_Breadcrumb" />
+    </div>
+
+    <div class="topbar-right">
+        <form class="topbar-search d-none d-lg-flex" method="get" asp-controller="Customers" asp-action="Index">
+            <div class="input-group input-group-sm">
+                <input type="search" name="q" class="form-control" placeholder="Search customers..." aria-label="Search customers" />
+                <button class="btn btn-outline-secondary" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+        </form>
+
+        <div class="dropdown">
+            <a class="icon-btn" href="#" data-bs-toggle="dropdown" aria-expanded="false" title="Notifications">
+                <i class="fa-regular fa-bell"></i>
+                <span class="badge-dot"></span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end shadow" style="min-width: 280px;">
+                <li class="dropdown-header fw-bold text-navy">Notifications</li>
+                <li><hr class="dropdown-divider" /></li>
+                <li><a class="dropdown-item" asp-controller="Travelers" asp-action="PassportAlerts"><i class="fa-solid fa-id-card me-2 text-warning"></i>Passport expiry alerts</a></li>
+                <li><a class="dropdown-item" asp-controller="VisaApplications" asp-action="Index"><i class="fa-solid fa-passport me-2 text-primary"></i>Pending visa applications</a></li>
+                <li><a class="dropdown-item" asp-controller="Payments" asp-action="Index"><i class="fa-solid fa-coins me-2 text-success"></i>Outstanding payments</a></li>
+            </ul>
+        </div>
+
+        <div class="dropdown">
+            <a class="user-chip text-decoration-none dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="user-avatar">@initial</span>
+                <span class="user-meta">
+                    <strong>@displayName</strong>
+                    <small>@designation</small>
+                </span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end shadow">
+                <li><a class="dropdown-item" href="/Identity/Account/Manage"><i class="fa-solid fa-user me-2"></i>My Profile</a></li>
+                <li><a class="dropdown-item" href="/Identity/Account/Manage/ChangePassword"><i class="fa-solid fa-key me-2"></i>Change Password</a></li>
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                    <form method="post" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="/Identity/Account/Login">
+                        <button type="submit" class="dropdown-item"><i class="fa-solid fa-right-from-bracket me-2"></i>Logout</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+</header>

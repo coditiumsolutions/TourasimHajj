@@ -1,0 +1,6 @@
+﻿@model ReportFilterViewModel
+@{ ViewData["Title"] = Model.ReportTitle; ViewData["ReportTitle"] = Model.ReportTitle; ViewBag.ShowStatus = true; }
+<partial name="_ReportCompanyHeader" />
+<partial name="_DateFilter" model="Model" />
+<p class="text-muted">Run the report with filters above. Results render when data is returned for <strong>VisaStatus</strong>.</p>
+<a asp-action="Index" class="btn btn-link d-print-none">All reports</a>

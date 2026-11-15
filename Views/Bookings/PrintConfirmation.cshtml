@@ -1,0 +1,17 @@
+@model TourismHajj.ViewModels.BookingDetailsViewModel
+@{ Layout = "_Layout"; ViewData["Title"] = "Booking Confirmation"; var b = Model.Booking; }
+<div class="card-panel">
+<div class="card-panel-body">
+<div class="d-flex justify-content-between align-items-start mb-4">
+<div><h3 class="mb-1">Tourism Hajj</h3><div class="text-muted">Travel & Pilgrimage Management</div><div>admin@tourismhajj.com</div></div>
+<div class="text-end"><h4>Booking Confirmation</h4><div>@b.BookingNo</div><div>@b.BookingDate?.ToString("dd-MMM-yyyy")</div></div>
+</div>
+<p><strong>Customer:</strong> @b.Customer?.CustomerName<br /><strong>Package:</strong> @b.Package?.PackageName<br /><strong>Departure:</strong> @b.Departure?.DepartureDate</p>
+<table class="table"><thead><tr><th>Traveler</th><th>Category</th><th>Amount</th></tr></thead>
+<tbody>@foreach (var t in Model.Travelers){<tr><td>@t.Traveler?.FullName</td><td>@t.TravelerCategory</td><td>@((t.NetAmount??0).ToString("N2"))</td></tr>}</tbody>
+<tfoot><tr><th colspan="2">Net Amount</th><th>@((b.NetAmount??0).ToString("N2"))</th></tr>
+<tr><th colspan="2">Paid</th><th>@((b.PaidAmount??0).ToString("N2"))</th></tr>
+<tr><th colspan="2">Balance</th><th>@((b.BalanceAmount??0).ToString("N2"))</th></tr></tfoot>
+</table>
+<button class="btn btn-primary no-print" onclick="window.print()">Print</button>
+</div></div>

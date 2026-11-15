@@ -1,0 +1,9 @@
+@model Service
+@{ ViewData["Title"] = "Delete Service"; }
+<h1 class="h3 text-danger">Delete Service</h1>
+<p>Soft-delete <strong>@Model.ServiceName</strong>?</p>
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="ServiceId" />
+    <button type="submit" class="btn btn-danger">Deactivate</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

@@ -1,0 +1,32 @@
+@model RoomAllocationListViewModel
+@{
+    ViewData["Title"] = "Room Allocations";
+}
+<div class="page-header d-flex justify-content-between align-items-center">
+    <h1 class="h3 mb-0">Room Allocations</h1>
+    <a class="btn btn-primary" asp-action="CreateRoom">Assign Room</a>
+</div>
+<partial name="_AlertMessages" />
+<a asp-action="Index" class="btn btn-link mb-3">← Visa applications</a>
+<div class="card-panel">
+    <div class="card-panel-body p-0">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr><th>Traveler</th><th>Hotel</th><th>Room</th><th>Type</th><th>Check-In</th><th>Check-Out</th></tr>
+            </thead>
+            <tbody>
+            @foreach (var a in Model.Allocations)
+            {
+                <tr>
+                    <td>@a.BookingTraveler?.Traveler?.FullName</td>
+                    <td>@a.Hotel?.HotelName</td>
+                    <td>@a.RoomNumber</td>
+                    <td>@a.RoomType</td>
+                    <td>@a.CheckInDate?.ToString("dd-MMM-yyyy")</td>
+                    <td>@a.CheckOutDate?.ToString("dd-MMM-yyyy")</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

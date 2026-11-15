@@ -1,0 +1,9 @@
+@model Employee
+@{ ViewData["Title"] = "Delete Employee"; }
+<h1 class="h3 text-danger">Delete Employee</h1>
+<p>Soft-delete <strong>@Model.EmployeeName</strong>?</p>
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="EmployeeId" />
+    <button type="submit" class="btn btn-danger">Deactivate</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

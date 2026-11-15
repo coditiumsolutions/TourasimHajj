@@ -1,0 +1,37 @@
+@model IEnumerable<TourismHajj.ViewModels.PassportAlertItem>
+<div class="card-panel">
+    <div class="card-panel-header">
+        <h5><i class="fa-solid fa-id-card me-2 text-warning"></i>Passport Expiry Alerts</h5>
+        <a class="btn btn-sm btn-outline-primary" asp-controller="Travelers" asp-action="PassportAlerts">Manage</a>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Traveler</th>
+                    <th>Passport</th>
+                    <th>Expiry</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var x in Model)
+            {
+                var expired = x.ExpiryDate.HasValue && x.ExpiryDate.Value <= DateOnly.FromDateTime(DateTime.Today);
+                <tr>
+                    <td><a asp-controller="Travelers" asp-action="Details" asp-route-id="@x.TravelerId">@x.FullName</a></td>
+                    <td>@(x.PassportNo ?? "-")</td>
+                    <td>
+                        <span class="@(expired ? "badge-danger-soft" : "badge-gold")">
+                            @(x.ExpiryDate?.ToString("dd-MMM-yyyy") ?? "-")
+                        </span>
+                    </td>
+                </tr>
+            }
+            @if (!Model.Any())
+            {
+                <tr><td colspan="3" class="empty-state">No passport expiry alerts in the next 90 days.</td></tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

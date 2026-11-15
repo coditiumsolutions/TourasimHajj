@@ -1,0 +1,16 @@
+@model TourismHajj.Models.Entities.Refund
+@{ ViewData["Title"] = "New Refund"; }
+@await Html.PartialAsync("_Alerts")
+<div class="page-header"><h2>New Refund</h2></div>
+<div class="card-panel"><div class="card-panel-body">
+<form asp-action="Create" method="post">@Html.AntiForgeryToken()
+<div class="row g-3">
+<div class="col-md-6"><label class="form-label">Booking</label><select asp-for="BookingId" class="form-select" asp-items="ViewBag.Bookings"></select></div>
+<div class="col-md-3"><label class="form-label">Amount</label><input asp-for="RefundAmount" class="form-control" /></div>
+<div class="col-md-3"><label class="form-label">Date</label><input asp-for="RefundDate" type="date" class="form-control" /></div>
+<div class="col-md-4"><label class="form-label">Method</label><input asp-for="PaymentMethod" class="form-control" /></div>
+<div class="col-md-4"><label class="form-label">Status</label><input asp-for="RefundStatus" class="form-control" /></div>
+<div class="col-md-12"><label class="form-label">Reason</label><textarea asp-for="RefundReason" class="form-control"></textarea></div>
+</div>
+<button class="btn btn-primary mt-3" type="submit">Save Refund</button>
+</form></div></div>

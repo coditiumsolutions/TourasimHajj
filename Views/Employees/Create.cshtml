@@ -1,0 +1,14 @@
+@model TourismHajj.Models.Entities.Employee
+@{ ViewData["Title"] = "New Employee"; }
+<div class="page-header"><h2>@ViewData["Title"]</h2></div>
+<div class="card-panel"><div class="card-panel-body">
+<form asp-action="Create" method="post">@Html.AntiForgeryToken()
+<div class="row g-3"><div class="col-md-4"><label class="form-label">Name</label><input asp-for="EmployeeName" class="form-control" /></div>
+<div class="col-md-4"><label class="form-label">Designation</label><input asp-for="Designation" class="form-control" /></div>
+<div class="col-md-4"><label class="form-label">Mobile</label><input asp-for="MobileNo" class="form-control" /></div>
+<div class="col-md-4"><label class="form-label">Email</label><input asp-for="Email" class="form-control" /></div>
+<div class="col-md-3"><label class="form-label">Joining</label><input asp-for="JoiningDate" class="form-control" type="date" /></div>
+<div class="col-md-4"><label class="form-label">Salary</label><input asp-for="Salary" class="form-control" /></div>
+<div class="col-md-3 form-check mt-4"><input asp-for="IsActive" class="form-check-input" /><label asp-for="IsActive" class="form-check-label">Active</label></div></div>
+<div class="mt-3"><button class="btn btn-primary" type="submit">Save</button> <a class="btn btn-outline-secondary" asp-action="Index">Cancel</a></div>
+</form></div></div>

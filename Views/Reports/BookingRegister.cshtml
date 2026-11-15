@@ -1,0 +1,13 @@
+@model ReportFilterViewModel
+@{ ViewData["Title"] = Model.ReportTitle; ViewData["ReportTitle"] = Model.ReportTitle; ViewBag.ShowStatus = true; }
+<partial name="_ReportCompanyHeader" />
+<partial name="_DateFilter" model="Model" />
+@if (ViewBag.Rows is IReadOnlyList<BookingRegisterRow> rows && rows.Count > 0)
+{
+    <table class="table table-bordered table-sm">
+        <thead class="table-light"><tr><th>Booking</th><th>Customer</th><th>Package</th><th>Date</th><th>Status</th><th class="text-end">Net</th><th class="text-end">Paid</th><th class="text-end">Balance</th></tr></thead>
+        <tbody>@foreach (var r in rows){<tr><td>@r.BookingNo</td><td>@r.CustomerName</td><td>@r.PackageName</td><td>@r.BookingDate?.ToString("dd-MMM-yyyy")</td><td>@r.BookingStatus / @r.PaymentStatus</td><td class="text-end">@r.NetAmount</td><td class="text-end">@r.PaidAmount</td><td class="text-end">@r.BalanceAmount</td></tr>}</tbody>
+    </table>
+}
+else { <p class="text-muted">Run the report to see results.</p> }
+<a asp-action="Index" class="btn btn-link d-print-none">All reports</a>

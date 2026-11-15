@@ -1,0 +1,14 @@
+@model ReportIndexViewModel
+@{ ViewData["Title"] = "Reports"; }
+<div class="page-header"><h2>Reports Center</h2></div>
+<div class="row g-3">
+@foreach (var r in Model.Reports)
+{
+    <div class="col-md-4 col-xl-3">
+        <a class="stat-card text-decoration-none d-block" asp-action="@r.Action">
+            <div class="value" style="font-size:1rem">@r.Title</div>
+            <div class="label">@r.Description</div>
+        </a>
+    </div>
+}
+</div>

@@ -1,0 +1,35 @@
+@model TourismHajj.ViewModels.BookingDetailsViewModel
+@{ ViewData["Title"] = "Booking Details"; var b = Model.Booking; }
+@await Html.PartialAsync("_Alerts")
+<div class="page-header">
+<div><h2>@b.BookingNo</h2><p class="text-muted mb-0">@b.Customer?.CustomerName · @b.Package?.PackageName</p></div>
+<div class="d-flex gap-2">
+<a class="btn btn-sm btn-outline-primary" asp-action="PrintConfirmation" asp-route-id="@b.BookingId" target="_blank"><i class="fa-solid fa-print"></i> Print</a>
+<a class="btn btn-sm btn-accent" asp-controller="Payments" asp-action="Create" asp-route-bookingId="@b.BookingId">Add Payment</a>
+@if (b.BookingStatus != "Cancelled") {
+<form asp-action="Cancel" method="post">@Html.AntiForgeryToken()<input type="hidden" name="id" value="@b.BookingId" />
+<button class="btn btn-sm btn-outline-danger" data-confirm="Cancel this booking?" type="submit">Cancel Booking</button></form>}
+</div></div>
+<div class="row g-3">
+<div class="col-lg-4"><div class="card-panel"><div class="card-panel-body">
+<dl class="row mb-0">
+<dt class="col-5">Date</dt><dd class="col-7">@b.BookingDate?.ToString("dd-MMM-yyyy")</dd>
+<dt class="col-5">Departure</dt><dd class="col-7">@b.Departure?.DepartureDate</dd>
+<dt class="col-5">Pax</dt><dd class="col-7">A:@b.TotalAdults C:@b.TotalChildren I:@b.TotalInfants</dd>
+<dt class="col-5">Total</dt><dd class="col-7">@((b.TotalAmount??0).ToString("N2"))</dd>
+<dt class="col-5">Discount</dt><dd class="col-7">@((b.DiscountAmount??0).ToString("N2"))</dd>
+<dt class="col-5">Tax</dt><dd class="col-7">@((b.TaxAmount??0).ToString("N2"))</dd>
+<dt class="col-5">Net</dt><dd class="col-7 fw-bold">@((b.NetAmount??0).ToString("N2"))</dd>
+<dt class="col-5">Paid</dt><dd class="col-7 text-success">@((b.PaidAmount??0).ToString("N2"))</dd>
+<dt class="col-5">Balance</dt><dd class="col-7 text-danger">@((b.BalanceAmount??0).ToString("N2"))</dd>
+<dt class="col-5">Status</dt><dd class="col-7">@b.BookingStatus / @b.PaymentStatus</dd>
+</dl></div></div></div>
+<div class="col-lg-8">
+<div class="card-panel mb-3"><div class="card-panel-header"><h5>Travelers</h5></div>
+<table class="table table-sm mb-0"><thead><tr><th>Name</th><th>Category</th><th>Price</th><th>Net</th></tr></thead>
+<tbody>@foreach (var t in Model.Travelers){<tr><td>@t.Traveler?.FullName</td><td>@t.TravelerCategory</td><td>@t.PackagePrice</td><td>@t.NetAmount</td></tr>}</tbody></table></div>
+<div class="card-panel"><div class="card-panel-header"><h5>Payments</h5></div>
+<table class="table table-sm mb-0"><thead><tr><th>Date</th><th>Amount</th><th>Method</th><th>Type</th></tr></thead>
+<tbody>@foreach (var p in Model.Payments){<tr><td>@p.PaymentDate?.ToString("dd-MMM-yyyy")</td><td>@p.Amount.ToString("N2")</td><td>@p.PaymentMethod</td><td>@p.PaymentType</td></tr>}
+@if(!Model.Payments.Any()){<tr><td colspan="4" class="text-muted text-center">No payments</td></tr>}</tbody></table></div>
+</div></div>

@@ -1,0 +1,13 @@
+﻿@model VisaApplication
+@{
+    ViewData["Title"] = "Delete Visa Application";
+}
+<div class="page-header"><h1 class="h3 text-danger mb-0">Delete Visa Application</h1></div>
+<div class="card-panel p-4">
+    <p>Delete visa application for <strong>@Model.BookingTraveler?.Traveler?.FullName</strong> (@Model.VisaType)?</p>
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="VisaApplicationId" />
+        <button type="submit" class="btn btn-danger" data-confirm="Delete this visa application?">Confirm</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+    </form>
+</div>

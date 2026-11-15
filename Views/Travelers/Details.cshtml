@@ -1,0 +1,17 @@
+@model TourismHajj.Models.Entities.Traveler
+@{ ViewData["Title"] = "Traveler Details"; }
+<div class="page-header"><h2>@Model.FullName</h2><a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@Model.TravelerId">Edit</a></div>
+<div class="card-panel"><div class="card-panel-body">
+<dl class="row">
+<dt class="col-sm-3">Customer</dt><dd class="col-sm-9">@Model.Customer?.CustomerName</dd>
+<dt class="col-sm-3">Gender / DOB</dt><dd class="col-sm-9">@Model.Gender / @Model.DateOfBirth</dd>
+<dt class="col-sm-3">Passport</dt><dd class="col-sm-9">@Model.PassportNo (@Model.PassportIssueDate — @Model.PassportExpiryDate)</dd>
+<dt class="col-sm-3">CNIC</dt><dd class="col-sm-9">@Model.Cnic</dd>
+<dt class="col-sm-3">Mobile</dt><dd class="col-sm-9">@Model.MobileNo</dd>
+<dt class="col-sm-3">Relationship</dt><dd class="col-sm-9">@Model.Relationship</dd>
+</dl>
+<h5>Documents</h5>
+<table class="table table-sm"><thead><tr><th>Type</th><th>Number</th><th>Expiry</th><th>File</th></tr></thead>
+<tbody>@foreach (var d in Model.TravelerDocuments){<tr><td>@d.DocumentType</td><td>@d.DocumentNumber</td><td>@d.ExpiryDate</td><td>@d.FilePath</td></tr>}
+@if(!Model.TravelerDocuments.Any()){<tr><td colspan="4" class="text-muted">No documents uploaded</td></tr>}</tbody></table>
+</div></div>

@@ -1,0 +1,17 @@
+@model ReportFilterViewModel
+@{ ViewData["Title"] = Model.ReportTitle; ViewData["ReportTitle"] = Model.ReportTitle; }
+<partial name="_ReportCompanyHeader" />
+<partial name="_DateFilter" model="Model" />
+@if (ViewBag.Summary is ProfitLossSummaryViewModel s)
+{
+    <div class="row g-3">
+        <div class="col-md-4"><div class="card p-3"><div class="text-muted small">Collections</div><div class="h4">@s.TotalCollections.ToString("N2")</div></div></div>
+        <div class="col-md-4"><div class="card p-3"><div class="text-muted small">Refunds</div><div class="h4">@s.TotalRefunds.ToString("N2")</div></div></div>
+        <div class="col-md-4"><div class="card p-3"><div class="text-muted small">Net Revenue</div><div class="h4">@s.NetRevenue.ToString("N2")</div></div></div>
+        <div class="col-md-4"><div class="card p-3"><div class="text-muted small">Expenses</div><div class="h4">@s.TotalExpenses.ToString("N2")</div></div></div>
+        <div class="col-md-4"><div class="card p-3"><div class="text-muted small">Supplier Payments</div><div class="h4">@s.TotalSupplierPayments.ToString("N2")</div></div></div>
+        <div class="col-md-4"><div class="card p-3 border-primary"><div class="text-muted small">Gross Profit</div><div class="h4 text-primary">@s.GrossProfit.ToString("N2")</div></div></div>
+    </div>
+}
+else { <p class="text-muted">Run the report to calculate P&amp;L.</p> }
+<a asp-action="Index" class="btn btn-link d-print-none">All reports</a>

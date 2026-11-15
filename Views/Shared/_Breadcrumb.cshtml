@@ -1,0 +1,34 @@
+@{
+    var title = ViewData["Title"]?.ToString() ?? "Page";
+    var controller = ViewContext.RouteData.Values["controller"]?.ToString() ?? "Dashboard";
+    var crumbs = ViewData["Breadcrumbs"] as IEnumerable<(string Text, string? Url)>;
+}
+<nav aria-label="breadcrumb" class="d-none d-md-block">
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item">
+            <a asp-controller="Dashboard" asp-action="Index">Home</a>
+        </li>
+        @if (crumbs != null)
+        {
+            foreach (var crumb in crumbs)
+            {
+                if (!string.IsNullOrWhiteSpace(crumb.Url))
+                {
+                    <li class="breadcrumb-item"><a href="@crumb.Url">@crumb.Text</a></li>
+                }
+                else
+                {
+                    <li class="breadcrumb-item active" aria-current="page">@crumb.Text</li>
+                }
+            }
+        }
+        else if (!string.Equals(controller, "Dashboard", StringComparison.OrdinalIgnoreCase))
+        {
+            <li class="breadcrumb-item active" aria-current="page">@title</li>
+        }
+        else
+        {
+            <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+        }
+    </ol>
+</nav>

@@ -1,0 +1,4 @@
+@model TourismHajj.Models.Entities.Employee
+@{ ViewData["Title"] = "Employees Details"; }
+<div class="page-header"><h2>Employees Details</h2><a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@Model.EmployeeId">Edit</a></div>
+<div class="card-panel"><div class="card-panel-body"><dl class="row mb-0"><dt class="col-sm-3">Name</dt><dd class="col-sm-9">@Model.EmployeeName</dd><dt class="col-sm-3">Designation</dt><dd class="col-sm-9">@Model.Designation</dd><dt class="col-sm-3">Mobile</dt><dd class="col-sm-9">@Model.MobileNo</dd><dt class="col-sm-3">Email</dt><dd class="col-sm-9">@Model.Email</dd><dt class="col-sm-3">Joining</dt><dd class="col-sm-9">@Model.JoiningDate</dd><dt class="col-sm-3">Salary</dt><dd class="col-sm-9">@Model.Salary</dd><dt class="col-sm-3">Active</dt><dd class="col-sm-9">@Model.IsActive</dd></dl></div></div>

@@ -1,0 +1,9 @@
+@model TourismHajj.Models.Entities.Supplier
+@{ ViewData["Title"] = "Supplier Details"; }
+<div class="page-header"><h2>@Model.SupplierName</h2><a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@Model.SupplierId">Edit</a></div>
+<div class="card-panel"><div class="card-panel-body"><dl class="row mb-0">
+<dt class="col-sm-3">Type</dt><dd class="col-sm-9">@Model.SupplierType</dd>
+<dt class="col-sm-3">Contact</dt><dd class="col-sm-9">@Model.ContactPerson · @Model.MobileNo</dd>
+<dt class="col-sm-3">Email</dt><dd class="col-sm-9">@Model.Email</dd>
+<dt class="col-sm-3">Address</dt><dd class="col-sm-9">@Model.Address</dd>
+</dl></div></div>

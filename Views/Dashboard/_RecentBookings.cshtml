@@ -1,0 +1,38 @@
+@model IEnumerable<TourismHajj.ViewModels.RecentBookingItem>
+<div class="card-panel">
+    <div class="card-panel-header">
+        <h5><i class="fa-solid fa-bookmark me-2 text-primary"></i>Recent Bookings</h5>
+        <a class="btn btn-sm btn-outline-primary" asp-controller="Bookings" asp-action="Index">View all</a>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Booking</th>
+                    <th>Customer</th>
+                    <th>Package</th>
+                    <th>Date</th>
+                    <th class="text-end">Amount</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var x in Model)
+            {
+                <tr>
+                    <td><a asp-controller="Bookings" asp-action="Details" asp-route-id="@x.BookingId">@x.BookingNo</a></td>
+                    <td>@x.CustomerName</td>
+                    <td>@x.PackageName</td>
+                    <td>@x.BookingDate?.ToString("dd-MMM-yyyy")</td>
+                    <td class="text-end">@((x.NetAmount ?? 0).ToString("N2"))</td>
+                    <td><span class="badge-soft">@(x.Status ?? "N/A")</span></td>
+                </tr>
+            }
+            @if (!Model.Any())
+            {
+                <tr><td colspan="6" class="empty-state">No recent bookings found.</td></tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

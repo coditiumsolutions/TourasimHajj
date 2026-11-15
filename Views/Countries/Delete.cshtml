@@ -1,0 +1,9 @@
+@model Country
+@{ ViewData["Title"] = "Delete Country"; }
+<h1 class="h3 text-danger">Delete Country</h1>
+<p>Soft-delete (deactivate) <strong>@Model.CountryName</strong>?</p>
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="CountryId" />
+    <button type="submit" class="btn btn-danger">Deactivate</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

@@ -1,0 +1,21 @@
+@model TourismHajj.Models.Entities.Traveler
+@{ ViewData["Title"] = "Edit Traveler"; }
+<div class="page-header"><h2>Edit Traveler</h2></div>
+<div class="card-panel"><div class="card-panel-body">
+<form asp-action="Edit" method="post">@Html.AntiForgeryToken()<input type="hidden" asp-for="TravelerId" /><input type="hidden" asp-for="CreatedDate" />
+<div class="row g-3">
+<div class="col-md-6"><label class="form-label">Customer</label><select asp-for="CustomerId" class="form-select" asp-items="ViewBag.Customers"></select></div>
+<div class="col-md-6"><label class="form-label">Full Name</label><input asp-for="FullName" class="form-control" /></div>
+<div class="col-md-4"><label class="form-label">Father Name</label><input asp-for="FatherName" class="form-control" /></div>
+<div class="col-md-4"><label class="form-label">Gender</label><input asp-for="Gender" class="form-control" /></div>
+<div class="col-md-4"><label class="form-label">Date of Birth</label><input asp-for="DateOfBirth" type="date" class="form-control" /></div>
+<div class="col-md-4"><label class="form-label">Nationality</label><select asp-for="NationalityCountryId" class="form-select" asp-items="ViewBag.Countries"><option value="">--</option></select></div>
+<div class="col-md-4"><label class="form-label">CNIC</label><input asp-for="Cnic" class="form-control" /></div>
+<div class="col-md-4"><label class="form-label">Mobile</label><input asp-for="MobileNo" class="form-control" /></div>
+<div class="col-md-4"><label class="form-label">Passport No</label><input asp-for="PassportNo" class="form-control" /></div>
+<div class="col-md-4"><label class="form-label">Issue Date</label><input asp-for="PassportIssueDate" type="date" class="form-control" /></div>
+<div class="col-md-4"><label class="form-label">Expiry Date</label><input asp-for="PassportExpiryDate" type="date" class="form-control" /></div>
+<div class="col-md-4"><label class="form-label">Relationship</label><input asp-for="Relationship" class="form-control" /></div>
+</div>
+<div class="mt-3"><button class="btn btn-primary" type="submit">Update</button> <a class="btn btn-outline-secondary" asp-action="Index">Cancel</a></div>
+</form></div></div>

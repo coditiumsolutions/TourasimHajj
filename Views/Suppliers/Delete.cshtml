@@ -1,0 +1,13 @@
+@model Supplier
+@{
+    ViewData["Title"] = "Delete Supplier";
+}
+<div class="page-header"><h1 class="h3 text-danger mb-0">Deactivate Supplier</h1></div>
+<div class="card-panel p-4">
+    <p>Deactivate supplier <strong>@Model.SupplierName</strong> (@Model.SupplierType)?</p>
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="SupplierId" />
+        <button type="submit" class="btn btn-danger" data-confirm="Deactivate this supplier?">Confirm</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+    </form>
+</div>

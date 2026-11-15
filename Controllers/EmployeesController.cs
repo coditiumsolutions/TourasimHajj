@@ -1,0 +1,79 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using TourismHajj.Interfaces;
+using TourismHajj.Models.Entities;
+using TourismHajj.ViewModels;
+
+namespace TourismHajj.Controllers;
+
+[Authorize]
+public class EmployeesController : Controller
+{
+    private readonly IMasterDataService _service;
+    public EmployeesController(IMasterDataService service) => _service = service;
+
+    public async Task<IActionResult> Index(string? search, int page = 1, CancellationToken cancellationToken = default)
+    {
+        const int pageSize = 10;
+        var query = _service.GetEmployeesQuery(search);
+        var total = await query.CountAsync(cancellationToken);
+        var items = await query.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync(cancellationToken);
+        return View(new PagedResult<Employee>
+        {
+            Items = items,
+            PageIndex = page,
+            PageSize = pageSize,
+            TotalCount = total,
+            TotalPages = (int)Math.Ceiling(total / (double)pageSize),
+            Search = search
+        });
+    }
+
+    public IActionResult Create() => View(new Employee { IsActive = true });
+
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(Employee model, CancellationToken cancellationToken)
+    {
+        if (!ModelState.IsValid) return View(model);
+        await _service.CreateEmployeeAsync(model, cancellationToken);
+        TempData["Success"] = "Employee saved.";
+        return RedirectToAction(nameof(Index));
+    }
+
+    public async Task<IActionResult> Edit(int id, CancellationToken cancellationToken)
+    {
+        var model = await _service.GetEmployeeByIdAsync(id, cancellationToken);
+        return model == null ? NotFound() : View(model);
+    }
+
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(int id, Employee model, CancellationToken cancellationToken)
+    {
+        if (id != model.EmployeeId) return BadRequest();
+        if (!ModelState.IsValid) return View(model);
+        await _service.UpdateEmployeeAsync(model, cancellationToken);
+        TempData["Success"] = "Employee updated.";
+        return RedirectToAction(nameof(Index));
+    }
+
+    public async Task<IActionResult> Details(int id, CancellationToken cancellationToken)
+    {
+        var model = await _service.GetEmployeeByIdAsync(id, cancellationToken);
+        return model == null ? NotFound() : View(model);
+    }
+
+    public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
+    {
+        var model = await _service.GetEmployeeByIdAsync(id, cancellationToken);
+        return model == null ? NotFound() : View(model);
+    }
+
+    [HttpPost, ActionName("Delete"), ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(int id, CancellationToken cancellationToken)
+    {
+        await _service.SoftDeleteEmployeeAsync(id, cancellationToken);
+        TempData["Success"] = "Employee deactivated.";
+        return RedirectToAction(nameof(Index));
+    }
+}

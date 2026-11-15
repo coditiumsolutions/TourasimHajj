@@ -1,0 +1,13 @@
+@model (string Label, string Value, string Icon, string Tone)
+@{
+    var tone = string.IsNullOrWhiteSpace(Model.Tone) ? "" : Model.Tone;
+}
+<div class="stat-card @tone">
+    <div class="d-flex justify-content-between align-items-start gap-2">
+        <div>
+            <div class="label">@Model.Label</div>
+            <div class="value">@Model.Value</div>
+        </div>
+        <div class="icon"><i class="fa-solid @Model.Icon"></i></div>
+    </div>
+</div>

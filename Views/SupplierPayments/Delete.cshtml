@@ -1,0 +1,13 @@
+@model SupplierPayment
+@{
+    ViewData["Title"] = "Delete Supplier Payment";
+}
+<div class="page-header"><h1 class="h3 text-danger mb-0">Delete Supplier Payment</h1></div>
+<div class="card-panel p-4">
+    <p>Remove payment of <strong>@Model.Amount.ToString("N2")</strong> to @Model.Supplier?.SupplierName on @Model.PaymentDate.ToString("dd-MMM-yyyy")?</p>
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="SupplierPaymentId" />
+        <button type="submit" class="btn btn-danger" data-confirm="Remove this supplier payment?">Confirm</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+    </form>
+</div>

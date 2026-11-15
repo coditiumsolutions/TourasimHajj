@@ -1,0 +1,16 @@
+﻿@model PaymentInputModel
+@{ ViewData["Title"] = "Payment"; }
+<h1 class="h3 mb-3">@(Model.PaymentId > 0 ? "Edit" : "New") Payment</h1>
+<form method="post" class="card p-4 shadow-sm">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="mb-3"><label asp-for="BookingId" class="form-label"></label><select asp-for="BookingId" class="form-select" asp-items="@(new SelectList(Model.BookingOptions, nameof(Booking.BookingId), nameof(Booking.BookingNo)))"></select></div>
+    <div class="row g-2">
+        <div class="col-md-4"><label asp-for="PaymentDate" class="form-label"></label><input asp-for="PaymentDate" type="datetime-local" class="form-control" /></div>
+        <div class="col-md-4"><label asp-for="Amount" class="form-label"></label><input asp-for="Amount" class="form-control" /></div>
+        <div class="col-md-4"><label asp-for="PaymentMethod" class="form-label"></label><input asp-for="PaymentMethod" class="form-control" /></div>
+    </div>
+    <div class="mt-3"><label asp-for="ReferenceNo" class="form-label"></label><input asp-for="ReferenceNo" class="form-control" /></div>
+    <button type="submit" class="btn btn-primary mt-3">Save</button>
+    <a asp-action="Index" class="btn btn-link">Cancel</a>
+</form>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

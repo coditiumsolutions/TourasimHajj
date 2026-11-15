@@ -1,0 +1,14 @@
+@model TourismHajj.Models.Entities.Hotel
+@{ ViewData["Title"] = "Hotel Details"; }
+<div class="page-header">
+    <h2>@Model.HotelName</h2>
+    <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@Model.HotelId">Edit</a>
+</div>
+<div class="card-panel"><div class="card-panel-body">
+    <dl class="row mb-0">
+        <dt class="col-sm-3">City</dt><dd class="col-sm-9">@Model.City?.CityName</dd>
+        <dt class="col-sm-3">Stars</dt><dd class="col-sm-9">@Model.StarRating</dd>
+        <dt class="col-sm-3">Haram / Nabawi</dt><dd class="col-sm-9">@Model.DistanceFromHaramKm km / @Model.DistanceFromNabawiKm km</dd>
+        <dt class="col-sm-3">Address</dt><dd class="col-sm-9">@Model.Address</dd>
+    </dl>
+</div></div>

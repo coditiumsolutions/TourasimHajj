@@ -1,0 +1,13 @@
+@model Expense
+@{
+    ViewData["Title"] = "Delete Expense";
+}
+<div class="page-header"><h1 class="h3 text-danger mb-0">Delete Expense</h1></div>
+<div class="card-panel p-4">
+    <p>Remove expense <strong>@Model.ExpenseCategory</strong> (@Model.ExpenseDate.ToString("dd-MMM-yyyy")) — @Model.Amount.ToString("N2")?</p>
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="ExpenseId" />
+        <button type="submit" class="btn btn-danger" data-confirm="Remove this expense record?">Confirm</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+    </form>
+</div>

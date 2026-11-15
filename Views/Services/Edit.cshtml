@@ -1,0 +1,11 @@
+@model TourismHajj.Models.Entities.Service
+@{ ViewData["Title"] = "Edit Service"; }
+<div class="page-header"><h2>@ViewData["Title"]</h2></div>
+<div class="card-panel"><div class="card-panel-body">
+<form asp-action="Edit" method="post">@Html.AntiForgeryToken()<input type="hidden" asp-for="ServiceId" />
+<div class="row g-3"><div class="col-md-4"><label class="form-label">Name</label><input asp-for="ServiceName" class="form-control" /></div>
+<div class="col-md-4"><label class="form-label">Category</label><input asp-for="ServiceCategory" class="form-control" /></div>
+<div class="col-md-3 form-check mt-4"><input asp-for="IsActive" class="form-check-input" /><label asp-for="IsActive" class="form-check-label">Active</label></div>
+<div class="col-md-12"><label class="form-label">Description</label><textarea asp-for="Description" class="form-control" rows="3"></textarea></div></div>
+<div class="mt-3"><button class="btn btn-primary" type="submit">Update</button> <a class="btn btn-outline-secondary" asp-action="Index">Cancel</a></div>
+</form></div></div>

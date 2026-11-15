@@ -1,0 +1,9 @@
+@model Destination
+@{ ViewData["Title"] = "Delete Destination"; }
+<h1 class="h3 text-danger">Delete Destination</h1>
+<p>Soft-delete <strong>@Model.DestinationName</strong>?</p>
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="DestinationId" />
+    <button type="submit" class="btn btn-danger">Deactivate</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

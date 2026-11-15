@@ -1,0 +1,17 @@
+@model TourismHajj.Models.Entities.VisaApplication
+@{ ViewData["Title"] = "Visa Details"; }
+@await Html.PartialAsync("_Alerts")
+<div class="page-header"><h2>Visa — @Model.BookingTraveler?.Traveler?.FullName</h2>
+<a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@Model.VisaApplicationId">Edit</a></div>
+<div class="card-panel"><div class="card-panel-body">
+<p>Type: @Model.VisaType · Country: @Model.Country?.CountryName · Status: <strong>@Model.VisaStatus</strong></p>
+<p>App No: @Model.ApplicationNumber · Visa No: @Model.VisaNumber</p>
+<form asp-action="UpdateStatus" method="post" class="row g-2 mt-3">@Html.AntiForgeryToken()
+<input type="hidden" name="id" value="@Model.VisaApplicationId" />
+<div class="col-md-4"><select name="status" class="form-select">
+<option>Pending</option><option>Documents Required</option><option>Submitted</option><option>Under Process</option><option>Approved</option><option>Rejected</option><option>Expired</option>
+</select></div>
+<div class="col-md-6"><input name="remarks" class="form-control" placeholder="Remarks" /></div>
+<div class="col-md-2"><button class="btn btn-primary w-100" type="submit">Update Status</button></div>
+</form>
+</div></div>

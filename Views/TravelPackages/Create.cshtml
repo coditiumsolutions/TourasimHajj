@@ -1,0 +1,24 @@
+@model TourismHajj.Models.Entities.TravelPackage
+@{ ViewData["Title"] = "New Package"; }
+<div class="page-header"><h2>New Travel Package</h2></div>
+<div class="card-panel"><div class="card-panel-body">
+<form asp-action="Create" method="post">@Html.AntiForgeryToken()
+<div class="row g-3">
+<div class="col-md-3"><label class="form-label">Code</label><input asp-for="PackageCode" class="form-control" /></div>
+<div class="col-md-5"><label class="form-label">Name</label><input asp-for="PackageName" class="form-control" /></div>
+<div class="col-md-4"><label class="form-label">Type</label>
+<select asp-for="PackageType" class="form-select"><option>Tourism</option><option>Domestic</option><option>International</option><option>Hajj</option><option>Umrah</option></select></div>
+<div class="col-md-12"><label class="form-label">Description</label><textarea asp-for="Description" class="form-control" rows="3"></textarea></div>
+<div class="col-md-2"><label class="form-label">Days</label><input asp-for="DurationDays" class="form-control" /></div>
+<div class="col-md-2"><label class="form-label">Nights</label><input asp-for="DurationNights" class="form-control" /></div>
+<div class="col-md-2"><label class="form-label">Adult</label><input asp-for="AdultPrice" class="form-control" /></div>
+<div class="col-md-2"><label class="form-label">Child</label><input asp-for="ChildPrice" class="form-control" /></div>
+<div class="col-md-2"><label class="form-label">Infant</label><input asp-for="InfantPrice" class="form-control" /></div>
+<div class="col-md-2"><label class="form-label">Currency</label><input asp-for="CurrencyCode" class="form-control" /></div>
+<div class="col-md-2"><label class="form-label">Min Persons</label><input asp-for="MinimumPersons" class="form-control" /></div>
+<div class="col-md-2"><label class="form-label">Max Persons</label><input asp-for="MaximumPersons" class="form-control" /></div>
+<div class="col-md-2 form-check mt-4"><input asp-for="IsFeatured" class="form-check-input" /><label class="form-check-label">Featured</label></div>
+<div class="col-md-2 form-check mt-4"><input asp-for="IsActive" class="form-check-input" /><label class="form-check-label">Active</label></div>
+</div>
+<div class="mt-3"><button class="btn btn-primary" type="submit">Save & Continue</button></div>
+</form></div></div>

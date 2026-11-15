@@ -1,0 +1,57 @@
+@model ReportFilterViewModel
+<form method="post" class="row g-2 mb-4 d-print-none">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="ReportTitle" />
+    <input type="hidden" asp-for="ReportAction" />
+    <div class="col-md-3">
+        <label asp-for="FromDate" class="form-label"></label>
+        <input asp-for="FromDate" type="date" class="form-control" />
+    </div>
+    <div class="col-md-3">
+        <label asp-for="ToDate" class="form-label"></label>
+        <input asp-for="ToDate" type="date" class="form-control" />
+    </div>
+    @if (ViewBag.ShowStatus == true)
+    {
+        <div class="col-md-3">
+            <label asp-for="Status" class="form-label"></label>
+            <input asp-for="Status" class="form-control" placeholder="Status" />
+        </div>
+    }
+    @if (ViewBag.Customers != null)
+    {
+        <div class="col-md-4">
+            <label asp-for="CustomerId" class="form-label">Customer</label>
+            <select asp-for="CustomerId" asp-items="ViewBag.Customers" class="form-select">
+                <option value="">-- All --</option>
+            </select>
+        </div>
+    }
+    @if (ViewBag.Suppliers != null)
+    {
+        <div class="col-md-4">
+            <label asp-for="SupplierId" class="form-label">Supplier</label>
+            <select asp-for="SupplierId" asp-items="ViewBag.Suppliers" class="form-select">
+                <option value="">-- All --</option>
+            </select>
+        </div>
+    }
+    @if (ViewBag.ShowPackageType == true)
+    {
+        <div class="col-md-3">
+            <label asp-for="PackageType" class="form-label"></label>
+            <input asp-for="PackageType" class="form-control" placeholder="Hajj / Umrah" />
+        </div>
+    }
+    @if (ViewBag.ShowPassportDays == true)
+    {
+        <div class="col-md-3">
+            <label asp-for="PassportExpiryDays" class="form-label"></label>
+            <input asp-for="PassportExpiryDays" class="form-control" />
+        </div>
+    }
+    <div class="col-md-2 d-flex align-items-end gap-2">
+        <button type="submit" class="btn btn-primary w-100">Run</button>
+        <button type="button" class="btn btn-outline-secondary w-100" onclick="window.print()">Print</button>
+    </div>
+</form>

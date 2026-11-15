@@ -1,0 +1,17 @@
+@{
+    int page = (int)(ViewBag.Page ?? 1);
+    int pageSize = (int)(ViewBag.PageSize ?? 10);
+    int total = (int)(ViewBag.Total ?? 0);
+    int pages = pageSize == 0 ? 1 : (int)Math.Ceiling(total / (double)pageSize);
+}
+@if (pages > 1)
+{
+<nav class="mt-3">
+<ul class="pagination pagination-sm">
+@for (int i = 1; i <= pages; i++)
+{
+<li class="page-item @(i==page?"active":"")"><a class="page-link" href="?page=@i&q=@ViewBag.Q">@i</a></li>
+}
+</ul>
+</nav>
+}

@@ -1,0 +1,528 @@
+TravelManagementDB Schema Documentation
+========================================
+Version: 1.0
+UpdatedAt: 2026-11-15
+Database: TravelManagementDB
+Server: (connection details stored in appsettings / User Secrets — not documented here)
+Approach: Database First (Entity Framework Core 8)
+Do NOT store credentials in this file.
+
+SUMMARY
+-------
+Tables: 30
+Foreign Keys: 48
+
+================================================================================
+TABLE: AuditLogs
+================================================================================
+Purpose: Application audit trail for sensitive operations
+Columns:
+  AuditLogID          bigint        NOT NULL  PK
+  UserID              nvarchar(450) NULL
+  ModuleName          nvarchar(100) NULL
+  TableName           nvarchar(100) NULL
+  RecordID            nvarchar(100) NULL
+  ActionType          nvarchar(50)  NULL
+  OldValues           nvarchar(max) NULL
+  NewValues           nvarchar(max) NULL
+  ActionDate          datetime2     NULL
+  IPAddress           nvarchar(50)  NULL
+
+================================================================================
+TABLE: Bookings
+================================================================================
+Purpose: Customer package bookings / reservations
+Columns:
+  BookingID           int           NOT NULL  PK
+  BookingNo           nvarchar(30)  NOT NULL
+  CustomerID          int           NOT NULL  FK -> Customers.CustomerID
+  PackageID           int           NOT NULL  FK -> TravelPackages.PackageID
+  DepartureID         int           NULL      FK -> PackageDepartures.DepartureID
+  BookingDate         datetime2     NULL
+  BookingType         nvarchar(30)  NULL
+  TotalAdults         int           NULL
+  TotalChildren       int           NULL
+  TotalInfants        int           NULL
+  TotalAmount         decimal(18,2) NULL
+  DiscountAmount      decimal(18,2) NULL
+  TaxAmount           decimal(18,2) NULL
+  NetAmount           decimal(18,2) NULL
+  PaidAmount          decimal(18,2) NULL
+  BalanceAmount       decimal(18,2) NULL
+  BookingStatus       nvarchar(30)  NULL
+  PaymentStatus       nvarchar(30)  NULL
+  Remarks             nvarchar(500) NULL
+
+================================================================================
+TABLE: BookingTravelers
+================================================================================
+Purpose: Travelers linked to a booking with per-person pricing
+Columns:
+  BookingTravelerID   int           NOT NULL  PK
+  BookingID           int           NOT NULL  FK -> Bookings.BookingID
+  TravelerID          int           NOT NULL  FK -> Travelers.TravelerID
+  TravelerCategory    nvarchar(20)  NULL
+  PackagePrice        decimal(18,2) NULL
+  DiscountAmount      decimal(18,2) NULL
+  NetAmount           decimal(18,2) NULL
+  Remarks             nvarchar(300) NULL
+
+================================================================================
+TABLE: Cities
+================================================================================
+Purpose: City master
+Columns:
+  CityID              int           NOT NULL  PK
+  CountryID           int           NOT NULL  FK -> Countries.CountryID
+  CityName            nvarchar(100) NOT NULL
+  IsActive            bit           NULL
+
+================================================================================
+TABLE: Countries
+================================================================================
+Purpose: Country master
+Columns:
+  CountryID           int           NOT NULL  PK
+  CountryName         nvarchar(100) NOT NULL
+  CountryCode         nvarchar(10)  NULL
+  IsActive            bit           NULL
+
+================================================================================
+TABLE: Customers
+================================================================================
+Purpose: Customer / agency client master
+Columns:
+  CustomerID          int           NOT NULL  PK
+  CustomerName        nvarchar(150) NOT NULL
+  FatherName          nvarchar(150) NULL
+  MobileNo            nvarchar(30)  NULL
+  WhatsAppNo          nvarchar(30)  NULL
+  Email               nvarchar(150) NULL
+  CNIC                nvarchar(30)  NULL
+  Address             nvarchar(500) NULL
+  CityID              int           NULL      FK -> Cities.CityID
+  CustomerType        nvarchar(30)  NULL
+  CreatedDate         datetime2     NULL
+  IsActive            bit           NULL
+
+================================================================================
+TABLE: DepartureFlights
+================================================================================
+Purpose: Flight legs linked to package departures
+Columns:
+  DepartureFlightID   int           NOT NULL  PK
+  DepartureID         int           NOT NULL  FK -> PackageDepartures.DepartureID
+  SupplierID          int           NULL      FK -> Suppliers.SupplierID
+  AirlineName         nvarchar(150) NULL
+  FlightNumber        nvarchar(50)  NULL
+  FromCityID          int           NULL      FK -> Cities.CityID
+  ToCityID            int           NULL      FK -> Cities.CityID
+  DepartureDateTime   datetime2     NULL
+  ArrivalDateTime     datetime2     NULL
+  FlightType          nvarchar(30)  NULL
+
+================================================================================
+TABLE: Destinations
+================================================================================
+Purpose: Tourism / pilgrimage destinations
+Columns:
+  DestinationID       int           NOT NULL  PK
+  CityID              int           NOT NULL  FK -> Cities.CityID
+  DestinationName     nvarchar(150) NOT NULL
+  Description         nvarchar(max) NULL
+  ImageURL            nvarchar(500) NULL
+  IsFeatured          bit           NULL
+  IsActive            bit           NULL
+
+================================================================================
+TABLE: Employees
+================================================================================
+Purpose: Staff / employee master
+Columns:
+  EmployeeID          int           NOT NULL  PK
+  EmployeeName        nvarchar(150) NOT NULL
+  Designation         nvarchar(100) NULL
+  MobileNo            nvarchar(30)  NULL
+  Email               nvarchar(150) NULL
+  JoiningDate         date          NULL
+  Salary              decimal(18,2) NULL
+  IsActive            bit           NULL
+
+================================================================================
+TABLE: Expenses
+================================================================================
+Purpose: Operational / booking-related expenses
+Columns:
+  ExpenseID           int           NOT NULL  PK
+  BookingID           int           NULL      FK -> Bookings.BookingID
+  SupplierID          int           NULL      FK -> Suppliers.SupplierID
+  ExpenseDate         date          NOT NULL
+  ExpenseCategory     nvarchar(100) NULL
+  Description         nvarchar(500) NULL
+  Amount              decimal(18,2) NOT NULL
+  PaymentMethod       nvarchar(30)  NULL
+  ReferenceNo         nvarchar(100) NULL
+  Remarks             nvarchar(500) NULL
+
+================================================================================
+TABLE: HajjSeasons
+================================================================================
+Purpose: Hajj season / year configuration
+Columns:
+  HajjSeasonID            int           NOT NULL  PK
+  SeasonName              nvarchar(100) NOT NULL
+  HajjYear                int           NOT NULL
+  RegistrationStartDate   date          NULL
+  RegistrationEndDate     date          NULL
+  DepartureStartDate      date          NULL
+  DepartureEndDate        date          NULL
+  Notes                   nvarchar(500) NULL
+  IsActive                bit           NULL
+
+================================================================================
+TABLE: Hotels
+================================================================================
+Purpose: Hotel inventory (incl. Makkah / Madinah distances)
+Columns:
+  HotelID                 int           NOT NULL  PK
+  SupplierID              int           NULL      FK -> Suppliers.SupplierID
+  CityID                  int           NOT NULL  FK -> Cities.CityID
+  HotelName               nvarchar(150) NOT NULL
+  StarRating              int           NULL
+  Address                 nvarchar(500) NULL
+  DistanceFromHaramKM     decimal(10,2) NULL
+  DistanceFromNabawiKM    decimal(10,2) NULL
+  ContactNo               nvarchar(30)  NULL
+  IsActive                bit           NULL
+
+================================================================================
+TABLE: PackageDepartures
+================================================================================
+Purpose: Departure dates and seat inventory per package
+Columns:
+  DepartureID         int           NOT NULL  PK
+  PackageID           int           NOT NULL  FK -> TravelPackages.PackageID
+  DepartureDate       date          NOT NULL
+  ReturnDate          date          NOT NULL
+  TotalSeats          int           NULL
+  AvailableSeats      int           NULL
+  AdultPrice          decimal(18,2) NULL
+  ChildPrice          decimal(18,2) NULL
+  CurrencyCode        nvarchar(10)  NULL
+  DepartureStatus     nvarchar(30)  NULL
+
+================================================================================
+TABLE: PackageDestinations
+================================================================================
+Purpose: Destinations included in a package (ordered)
+Columns:
+  PackageDestinationID int          NOT NULL  PK
+  PackageID            int          NOT NULL  FK -> TravelPackages.PackageID
+  DestinationID        int          NOT NULL  FK -> Destinations.DestinationID
+  SequenceNo           int          NULL
+  NumberOfDays         int          NULL
+
+================================================================================
+TABLE: PackageItineraries
+================================================================================
+Purpose: Day-wise package itinerary
+Columns:
+  ItineraryID         int           NOT NULL  PK
+  PackageID           int           NOT NULL  FK -> TravelPackages.PackageID
+  DayNumber           int           NOT NULL
+  Title               nvarchar(200) NULL
+  Description         nvarchar(max) NULL
+  DestinationID       int           NULL      FK -> Destinations.DestinationID
+
+================================================================================
+TABLE: PackageServices
+================================================================================
+Purpose: Included / optional services for a package
+Columns:
+  PackageServiceID    int           NOT NULL  PK
+  PackageID           int           NOT NULL  FK -> TravelPackages.PackageID
+  ServiceID           int           NOT NULL  FK -> Services.ServiceID
+  IsIncluded          bit           NULL
+  AdditionalPrice     decimal(18,2) NULL
+  Remarks             nvarchar(300) NULL
+
+================================================================================
+TABLE: Payments
+================================================================================
+Purpose: Customer payment receipts against bookings
+Columns:
+  PaymentID           int           NOT NULL  PK
+  BookingID           int           NOT NULL  FK -> Bookings.BookingID
+  PaymentDate         datetime2     NULL
+  PaymentType         nvarchar(30)  NULL
+  PaymentMethod       nvarchar(30)  NULL
+  ReferenceNo         nvarchar(100) NULL
+  Amount              decimal(18,2) NOT NULL
+  CurrencyCode        nvarchar(10)  NULL
+  ReceivedBy          nvarchar(100) NULL
+  Remarks             nvarchar(500) NULL
+
+================================================================================
+TABLE: PilgrimGroupMembers
+================================================================================
+Purpose: Members of a Hajj/Umrah pilgrim group
+Columns:
+  PilgrimGroupMemberID int          NOT NULL  PK
+  PilgrimGroupID       int          NOT NULL  FK -> PilgrimGroups.PilgrimGroupID
+  BookingTravelerID    int          NOT NULL  FK -> BookingTravelers.BookingTravelerID
+  IsGroupLeader        bit          NULL
+  RoomGroup            nvarchar(50) NULL
+  TransportGroup       nvarchar(50) NULL
+  Remarks              nvarchar(300) NULL
+
+================================================================================
+TABLE: PilgrimGroups
+================================================================================
+Purpose: Hajj/Umrah operational pilgrim groups
+Columns:
+  PilgrimGroupID      int           NOT NULL  PK
+  HajjSeasonID        int           NOT NULL  FK -> HajjSeasons.HajjSeasonID
+  DepartureID         int           NULL      FK -> PackageDepartures.DepartureID
+  GroupCode           nvarchar(30)  NOT NULL
+  GroupName           nvarchar(150) NULL
+  GroupLeaderName     nvarchar(150) NULL
+  GroupLeaderMobile   nvarchar(30)  NULL
+  TotalPilgrims       int           NULL
+  GroupStatus         nvarchar(30)  NULL
+  Remarks             nvarchar(500) NULL
+
+================================================================================
+TABLE: Refunds
+================================================================================
+Purpose: Customer refunds against bookings/payments
+Columns:
+  RefundID            int           NOT NULL  PK
+  BookingID           int           NOT NULL  FK -> Bookings.BookingID
+  PaymentID           int           NULL      FK -> Payments.PaymentID
+  RefundDate          date          NULL
+  RefundAmount        decimal(18,2) NOT NULL
+  RefundReason        nvarchar(500) NULL
+  RefundStatus        nvarchar(30)  NULL
+  PaymentMethod       nvarchar(30)  NULL
+
+================================================================================
+TABLE: RoomAllocations
+================================================================================
+Purpose: Hotel room allocation for booking travelers
+Columns:
+  RoomAllocationID    int           NOT NULL  PK
+  BookingTravelerID   int           NOT NULL  FK -> BookingTravelers.BookingTravelerID
+  HotelID             int           NOT NULL  FK -> Hotels.HotelID
+  RoomNumber          nvarchar(50)  NULL
+  RoomType            nvarchar(50)  NULL
+  CheckInDate         date          NULL
+  CheckOutDate        date          NULL
+  SharingType         nvarchar(30)  NULL
+  Remarks             nvarchar(300) NULL
+
+================================================================================
+TABLE: ServiceAssignments
+================================================================================
+Purpose: Operational service assignment per booking
+Columns:
+  AssignmentID          int           NOT NULL  PK
+  BookingID             int           NOT NULL  FK -> Bookings.BookingID
+  ServiceID             int           NOT NULL  FK -> Services.ServiceID
+  SupplierID            int           NULL      FK -> Suppliers.SupplierID
+  HotelID               int           NULL      FK -> Hotels.HotelID
+  TransportProviderID   int           NULL      FK -> TransportProviders.TransportProviderID
+  ServiceDate           date          NULL
+  ServiceStatus         nvarchar(30)  NULL
+  CostAmount            decimal(18,2) NULL
+  Remarks               nvarchar(500) NULL
+
+================================================================================
+TABLE: Services
+================================================================================
+Purpose: Service catalog (visa, transport, meals, etc.)
+Columns:
+  ServiceID           int           NOT NULL  PK
+  ServiceName         nvarchar(150) NOT NULL
+  ServiceCategory     nvarchar(50)  NULL
+  Description         nvarchar(500) NULL
+  IsActive            bit           NULL
+
+================================================================================
+TABLE: SupplierPayments
+================================================================================
+Purpose: Payments made to suppliers
+Columns:
+  SupplierPaymentID   int           NOT NULL  PK
+  SupplierID          int           NOT NULL  FK -> Suppliers.SupplierID
+  BookingID           int           NULL      FK -> Bookings.BookingID
+  PaymentDate         date          NOT NULL
+  PaymentMethod       nvarchar(30)  NULL
+  ReferenceNo         nvarchar(100) NULL
+  Amount              decimal(18,2) NOT NULL
+  Remarks             nvarchar(500) NULL
+
+================================================================================
+TABLE: Suppliers
+================================================================================
+Purpose: Supplier master (hotels, airlines, visa agents, etc.)
+Columns:
+  SupplierID          int           NOT NULL  PK
+  SupplierName        nvarchar(150) NOT NULL
+  SupplierType        nvarchar(50)  NOT NULL
+  ContactPerson       nvarchar(150) NULL
+  MobileNo            nvarchar(30)  NULL
+  Email               nvarchar(150) NULL
+  CountryID           int           NULL      FK -> Countries.CountryID
+  CityID              int           NULL      FK -> Cities.CityID
+  Address             nvarchar(500) NULL
+  IsActive            bit           NULL
+
+================================================================================
+TABLE: TransportProviders
+================================================================================
+Purpose: Transport provider / vehicle details
+Columns:
+  TransportProviderID int           NOT NULL  PK
+  SupplierID          int           NULL      FK -> Suppliers.SupplierID
+  ProviderName        nvarchar(150) NOT NULL
+  VehicleType         nvarchar(100) NULL
+  VehicleCapacity     int           NULL
+  ContactNo           nvarchar(30)  NULL
+  IsActive            bit           NULL
+
+================================================================================
+TABLE: TravelerDocuments
+================================================================================
+Purpose: Passport scans, photos, supporting documents
+Columns:
+  DocumentID          int           NOT NULL  PK
+  TravelerID          int           NOT NULL  FK -> Travelers.TravelerID
+  DocumentType        nvarchar(50)  NOT NULL
+  DocumentNumber      nvarchar(100) NULL
+  FilePath            nvarchar(500) NULL
+  IssueDate           date          NULL
+  ExpiryDate          date          NULL
+  UploadedDate        datetime2     NULL
+  Remarks             nvarchar(500) NULL
+
+================================================================================
+TABLE: Travelers
+================================================================================
+Purpose: Individual travelers / family members under a customer
+Columns:
+  TravelerID              int           NOT NULL  PK
+  CustomerID              int           NOT NULL  FK -> Customers.CustomerID
+  FullName                nvarchar(150) NOT NULL
+  FatherName              nvarchar(150) NULL
+  Gender                  nvarchar(20)  NULL
+  DateOfBirth             date          NULL
+  NationalityCountryID    int           NULL      FK -> Countries.CountryID
+  CNIC                    nvarchar(30)  NULL
+  PassportNo              nvarchar(50)  NULL
+  PassportIssueDate       date          NULL
+  PassportExpiryDate      date          NULL
+  MobileNo                nvarchar(30)  NULL
+  Relationship            nvarchar(50)  NULL
+  CreatedDate             datetime2     NULL
+
+================================================================================
+TABLE: TravelPackages
+================================================================================
+Purpose: Tourism / Hajj / Umrah package master
+Columns:
+  PackageID           int           NOT NULL  PK
+  PackageCode         nvarchar(30)  NOT NULL
+  PackageName         nvarchar(200) NOT NULL
+  PackageType         nvarchar(30)  NOT NULL   -- Tourism, Domestic, International, Hajj, Umrah
+  Description         nvarchar(max) NULL
+  DurationDays        int           NULL
+  DurationNights      int           NULL
+  AdultPrice          decimal(18,2) NULL
+  ChildPrice          decimal(18,2) NULL
+  InfantPrice         decimal(18,2) NULL
+  CurrencyCode        nvarchar(10)  NULL
+  MinimumPersons      int           NULL
+  MaximumPersons      int           NULL
+  IsFeatured          bit           NULL
+  IsActive            bit           NULL
+  CreatedDate         datetime2     NULL
+
+================================================================================
+TABLE: VisaApplications
+================================================================================
+Purpose: Visa application tracking per booking traveler
+Columns:
+  VisaApplicationID   int           NOT NULL  PK
+  BookingTravelerID   int           NOT NULL  FK -> BookingTravelers.BookingTravelerID
+  VisaType            nvarchar(30)  NOT NULL
+  CountryID           int           NOT NULL  FK -> Countries.CountryID
+  ApplicationDate     date          NULL
+  ApplicationNumber   nvarchar(100) NULL
+  VisaNumber          nvarchar(100) NULL
+  SubmissionDate      date          NULL
+  ApprovalDate        date          NULL
+  VisaIssueDate       date          NULL
+  VisaExpiryDate      date          NULL
+  VisaStatus          nvarchar(30)  NULL   -- Pending, Documents Required, Submitted, Under Process, Approved, Rejected, Expired
+  SupplierID          int           NULL      FK -> Suppliers.SupplierID
+  Remarks             nvarchar(500) NULL
+
+================================================================================
+FOREIGN KEY RELATIONSHIPS
+================================================================================
+Bookings.CustomerID                 -> Customers.CustomerID
+Bookings.PackageID                  -> TravelPackages.PackageID
+Bookings.DepartureID                -> PackageDepartures.DepartureID
+BookingTravelers.BookingID          -> Bookings.BookingID
+BookingTravelers.TravelerID         -> Travelers.TravelerID
+Cities.CountryID                    -> Countries.CountryID
+Customers.CityID                    -> Cities.CityID
+DepartureFlights.DepartureID        -> PackageDepartures.DepartureID
+DepartureFlights.SupplierID         -> Suppliers.SupplierID
+DepartureFlights.FromCityID         -> Cities.CityID
+DepartureFlights.ToCityID           -> Cities.CityID
+Destinations.CityID                 -> Cities.CityID
+Expenses.BookingID                  -> Bookings.BookingID
+Expenses.SupplierID                 -> Suppliers.SupplierID
+Hotels.SupplierID                   -> Suppliers.SupplierID
+Hotels.CityID                       -> Cities.CityID
+PackageDepartures.PackageID         -> TravelPackages.PackageID
+PackageDestinations.PackageID       -> TravelPackages.PackageID
+PackageDestinations.DestinationID   -> Destinations.DestinationID
+PackageItineraries.PackageID        -> TravelPackages.PackageID
+PackageItineraries.DestinationID    -> Destinations.DestinationID
+PackageServices.PackageID           -> TravelPackages.PackageID
+PackageServices.ServiceID           -> Services.ServiceID
+Payments.BookingID                  -> Bookings.BookingID
+PilgrimGroupMembers.PilgrimGroupID  -> PilgrimGroups.PilgrimGroupID
+PilgrimGroupMembers.BookingTravelerID -> BookingTravelers.BookingTravelerID
+PilgrimGroups.HajjSeasonID          -> HajjSeasons.HajjSeasonID
+PilgrimGroups.DepartureID           -> PackageDepartures.DepartureID
+Refunds.BookingID                   -> Bookings.BookingID
+Refunds.PaymentID                   -> Payments.PaymentID
+RoomAllocations.BookingTravelerID   -> BookingTravelers.BookingTravelerID
+RoomAllocations.HotelID             -> Hotels.HotelID
+ServiceAssignments.BookingID        -> Bookings.BookingID
+ServiceAssignments.ServiceID        -> Services.ServiceID
+ServiceAssignments.SupplierID       -> Suppliers.SupplierID
+ServiceAssignments.HotelID          -> Hotels.HotelID
+ServiceAssignments.TransportProviderID -> TransportProviders.TransportProviderID
+SupplierPayments.SupplierID         -> Suppliers.SupplierID
+SupplierPayments.BookingID          -> Bookings.BookingID
+Suppliers.CountryID                 -> Countries.CountryID
+Suppliers.CityID                    -> Cities.CityID
+TransportProviders.SupplierID       -> Suppliers.SupplierID
+TravelerDocuments.TravelerID        -> Travelers.TravelerID
+Travelers.CustomerID                -> Customers.CustomerID
+Travelers.NationalityCountryID      -> Countries.CountryID
+VisaApplications.BookingTravelerID  -> BookingTravelers.BookingTravelerID
+VisaApplications.CountryID          -> Countries.CountryID
+VisaApplications.SupplierID         -> Suppliers.SupplierID
+
+================================================================================
+NOTES
+================================================================================
+- Soft-delete masters via IsActive where available; never hard-delete confirmed bookings/payments.
+- Identity (AspNet*) tables are separate and may be added later without altering these business tables.
+- PackageType values: Tourism, Domestic, International, Hajj, Umrah.
+- VisaStatus values: Pending, Documents Required, Submitted, Under Process, Approved, Rejected, Expired.

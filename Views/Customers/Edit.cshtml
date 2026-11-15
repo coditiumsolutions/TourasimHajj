@@ -1,0 +1,19 @@
+@model TourismHajj.Models.Entities.Customer
+@{ ViewData["Title"] = "Edit Customer"; }
+<div class="page-header"><h2>Edit Customer</h2></div>
+<div class="card-panel"><div class="card-panel-body">
+<form asp-action="Edit" method="post">@Html.AntiForgeryToken()<input type="hidden" asp-for="CustomerId" /><input type="hidden" asp-for="CreatedDate" />
+<div class="row g-3">
+<div class="col-md-6"><label class="form-label">Customer Name</label><input asp-for="CustomerName" class="form-control" /></div>
+<div class="col-md-6"><label class="form-label">Father Name</label><input asp-for="FatherName" class="form-control" /></div>
+<div class="col-md-4"><label class="form-label">Mobile</label><input asp-for="MobileNo" class="form-control" /></div>
+<div class="col-md-4"><label class="form-label">WhatsApp</label><input asp-for="WhatsAppNo" class="form-control" /></div>
+<div class="col-md-4"><label class="form-label">Email</label><input asp-for="Email" class="form-control" /></div>
+<div class="col-md-4"><label class="form-label">CNIC</label><input asp-for="Cnic" class="form-control" /></div>
+<div class="col-md-4"><label class="form-label">City</label><select asp-for="CityId" class="form-select" asp-items="ViewBag.Cities"><option value="">--</option></select></div>
+<div class="col-md-4"><label class="form-label">Customer Type</label><input asp-for="CustomerType" class="form-control" /></div>
+<div class="col-md-12"><label class="form-label">Address</label><textarea asp-for="Address" class="form-control" rows="2"></textarea></div>
+<div class="col-md-3 form-check mt-4"><input asp-for="IsActive" class="form-check-input" /><label class="form-check-label">Active</label></div>
+</div>
+<div class="mt-3"><button class="btn btn-primary" type="submit">Update</button> <a class="btn btn-outline-secondary" asp-action="Index">Cancel</a></div>
+</form></div></div>

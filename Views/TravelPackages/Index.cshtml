@@ -1,0 +1,19 @@
+@model IEnumerable<TourismHajj.Models.Entities.TravelPackage>
+@{ ViewData["Title"] = ViewData["Title"] ?? "Travel Packages"; }
+@await Html.PartialAsync("_Alerts")
+<div class="page-header"><div><h2>@ViewData["Title"]</h2></div>
+<div class="d-flex gap-2">
+<form method="get" class="d-flex gap-2">
+<input type="hidden" name="type" value="@ViewBag.Type" />
+<input class="form-control form-control-sm" name="q" value="@ViewBag.Q" placeholder="Search..." />
+<button class="btn btn-sm btn-outline-secondary">Search</button></form>
+<a class="btn btn-sm btn-accent" asp-action="Create"><i class="fa-solid fa-plus"></i> New Package</a></div></div>
+<div class="card-panel"><div class="table-responsive"><table class="table table-hover mb-0">
+<thead><tr><th>Code</th><th>Name</th><th>Type</th><th>Days</th><th>Adult</th><th>Featured</th><th>Active</th><th></th></tr></thead>
+<tbody>@foreach (var p in Model){<tr>
+<td>@p.PackageCode</td><td>@p.PackageName</td><td><span class="badge badge-soft">@p.PackageType</span></td>
+<td>@p.DurationDays / @p.DurationNights</td><td>@((p.AdultPrice??0).ToString("N2")) @p.CurrencyCode</td>
+<td>@(p.IsFeatured==true?"Yes":"No")</td><td>@(p.IsActive==true?"Yes":"No")</td>
+<td class="text-end"><a class="btn btn-sm btn-outline-primary" asp-action="Edit" asp-route-id="@p.PackageId"><i class="fa-solid fa-pen"></i></a>
+<a class="btn btn-sm btn-outline-secondary" asp-action="Details" asp-route-id="@p.PackageId"><i class="fa-solid fa-eye"></i></a></td></tr>}
+</tbody></table></div>@await Html.PartialAsync("_Pager")</div>
