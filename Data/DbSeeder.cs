@@ -102,6 +102,36 @@ public static class DbSeeder
             if (!await userManager.IsInRoleAsync(owner, AppRoles.Admin))
                 await userManager.AddToRoleAsync(owner, AppRoles.Admin);
         }
+
+        if (!await db.GalleryItems.AnyAsync())
+        {
+            var samples = new (string Title, string Description, string ImageUrl, int SortOrder)[]
+            {
+                ("Hunza Valley", "Emerald terraces and snow peaks of Hunza.", "/images/gallery/hunza-valley.jpg", 1),
+                ("Mountain Lake Views", "Crystal waters framed by towering northern ranges.", "/images/gallery/attabad-lake.jpg", 2),
+                ("Karakoram Peaks", "Rugged high-altitude peaks of Northern Pakistan.", "/images/gallery/karakoram-peaks.jpg", 3),
+                ("Alpine Meadows", "Open meadows and ridgelines near Naran & Kaghan.", "/images/gallery/naran-kaghan.jpg", 4),
+                ("Fairy Meadows Trail", "Pine forests and glacier views on the Fairy Meadows approach.", "/images/gallery/fairy-meadows.jpg", 5),
+                ("Skardu Highlands", "Dramatic highland landscape of the Skardu region.", "/images/gallery/skardu-scape.jpg", 6),
+                ("Northern Pass Sunrise", "Sunrise light over mountain passes in the north.", "/images/gallery/northern-pass.jpg", 7),
+                ("Gilgit Vista", "Wide valley vistas from the Gilgit-Baltistan region.", "/images/gallery/gilgit-vista.jpg", 8)
+            };
+
+            foreach (var s in samples)
+            {
+                db.GalleryItems.Add(new Models.Entities.GalleryItem
+                {
+                    Title = s.Title,
+                    Description = s.Description,
+                    ImageUrl = s.ImageUrl,
+                    SortOrder = s.SortOrder,
+                    IsActive = true,
+                    CreatedDate = DateTime.Now
+                });
+            }
+
+            await db.SaveChangesAsync();
+        }
     }
 }
 

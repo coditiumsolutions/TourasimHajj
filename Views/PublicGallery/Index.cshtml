@@ -3,11 +3,18 @@
     Layout = "_PublicLayout";
     ViewData["Title"] = "Gallery";
 }
-<section class="packages-hero packages-theme-all">
-    <div class="container-xl packages-hero-inner">
-        <h1 class="packages-hero-title">Gallery</h1>
-        <div class="packages-hero-pills">
-            <span><i class="fa-regular fa-images"></i> @Model.Count photo@(Model.Count == 1 ? "" : "s")</span>
+<section class="hajj-component packages-theme-all gallery-hero-component">
+    <div class="hajj-component-media" aria-hidden="true">
+        <img src="/images/valley.jpeg?v=1" alt="" />
+    </div>
+    <div class="hajj-component-shade" aria-hidden="true"></div>
+    <div class="container-xl hajj-component-inner">
+        <div class="hajj-component-copy">
+            <h1 class="packages-hero-title">Gallery</h1>
+            <p class="packages-hero-subtitle">Northern Pakistan landscapes and travel moments from our journeys.</p>
+            <div class="packages-hero-pills">
+                <span><i class="fa-regular fa-images"></i> @Model.Count photo@(Model.Count == 1 ? "" : "s")</span>
+            </div>
         </div>
     </div>
 </section>
