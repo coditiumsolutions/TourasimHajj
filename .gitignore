@@ -2,6 +2,7 @@
 bin/
 obj/
 live_tourism/
+live_tourism_*/
 live_tourism.rar
 *.user
 *.suo

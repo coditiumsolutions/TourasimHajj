@@ -1,0 +1,135 @@
+name: CI CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  DOTNET_VERSION: "8.0.x"
+  PROJECT: TourismHajj.csproj
+  PUBLISH_DIR: live_tourism
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore
+        run: dotnet restore ${{ env.PROJECT }}
+
+      - name: Build
+        run: dotnet build ${{ env.PROJECT }} -c Release --no-restore
+
+  publish:
+    name: Publish
+    needs: build
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Publish Release
+        run: dotnet publish ${{ env.PROJECT }} -c Release -o ${{ env.PUBLISH_DIR }} --nologo
+
+      - name: Apply production settings
+        shell: pwsh
+        env:
+          SQL_CONNECTION_STRING: ${{ secrets.SQL_CONNECTION_STRING }}
+        run: |
+          $publishDir = "${{ env.PUBLISH_DIR }}"
+          $appSettingsPath = Join-Path $publishDir "appsettings.json"
+
+          if ([string]::IsNullOrWhiteSpace($env:SQL_CONNECTION_STRING)) {
+            Write-Warning "Secret SQL_CONNECTION_STRING is not set. Published appsettings.json will keep placeholders."
+          }
+          else {
+            $json = Get-Content $appSettingsPath -Raw | ConvertFrom-Json
+            $json.ConnectionStrings.DefaultConnection = $env:SQL_CONNECTION_STRING
+            $json | ConvertTo-Json -Depth 10 | Set-Content $appSettingsPath -Encoding utf8
+            Write-Host "Production connection string applied."
+          }
+
+          New-Item -ItemType Directory -Force -Path (Join-Path $publishDir "logs") | Out-Null
+
+          $webConfig = @'
+          <?xml version="1.0" encoding="utf-8"?>
+          <configuration>
+            <location path="." inheritInChildApplications="false">
+              <system.webServer>
+                <handlers>
+                  <add name="aspNetCore" path="*" verb="*" modules="AspNetCoreModuleV2" resourceType="Unspecified" />
+                </handlers>
+                <aspNetCore processPath="dotnet" arguments=".\TourismHajj.dll" stdoutLogEnabled="true" stdoutLogFile=".\logs\stdout" hostingModel="inprocess">
+                  <environmentVariables>
+                    <environmentVariable name="ASPNETCORE_ENVIRONMENT" value="Production" />
+                  </environmentVariables>
+                </aspNetCore>
+              </system.webServer>
+            </location>
+          </configuration>
+          '@
+          # Remove accidental leading indentation from the here-string.
+          $webConfig = ($webConfig -split "`n" | ForEach-Object { $_ -replace '^\s{10}', '' }) -join "`n"
+          Set-Content (Join-Path $publishDir "web.config") -Value $webConfig.Trim() -Encoding utf8
+
+      - name: Upload live_tourism artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: live_tourism
+          path: ${{ env.PUBLISH_DIR }}/
+          if-no-files-found: error
+          retention-days: 14
+
+  deploy:
+    name: Deploy FTP
+    needs: publish
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download live_tourism artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: live_tourism
+          path: live_tourism
+
+      - name: Check FTP secrets
+        id: ftp
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          if [ -z "$FTP_SERVER" ] || [ -z "$FTP_USERNAME" ] || [ -z "$FTP_PASSWORD" ]; then
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "FTP secrets not configured; skipping deploy."
+          else
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Deploy to hosting via FTP
+        if: steps.ftp.outputs.configured == 'true'
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./live_tourism/
+          server-dir: ${{ secrets.FTP_REMOTE_DIR || './' }}
+          dangerous-clean-slate: false
