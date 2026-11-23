@@ -1,30 +1,76 @@
 @model List<PublicPackageCardViewModel>
-<div class="row g-4">
+<div class="row g-4 packages-grid">
 @if (Model == null || Model.Count == 0)
 {
-    <div class="col-12"><div class="alert alert-light border mb-0">No packages available in this category yet.</div></div>
+    <div class="col-12">
+        <div class="packages-empty">
+            <i class="fa-solid fa-suitcase-rolling"></i>
+            <h3>No packages found</h3>
+            <p>Try another package type or clear the filters to see more options.</p>
+        </div>
+    </div>
 }
 else
 {
     foreach (var p in Model)
     {
-        <div class="col-md-6 col-xl-4">
-            <article class="package-card">
-                <img src="@p.CoverImageUrl" alt="@p.PackageName" loading="lazy" />
-                <div class="body">
-                    <span class="badge-type">@p.PackageType</span>
-                    <h5 class="mt-2 mb-1">@p.PackageName</h5>
-                    <div class="text-muted small mb-2">
-                        <i class="fa-solid fa-location-dot me-1"></i>@(p.DestinationName ?? "Multiple destinations")
-                        · @(p.DurationDays ?? 0)D / @(p.DurationNights ?? 0)N
-                    </div>
+        var typeSlug = (p.PackageType ?? "").Trim().ToLowerInvariant();
+        var currency = p.CurrencyCode ?? "PKR";
+        <div class="col-sm-6 col-xl-4">
+            <article class="package-card package-card-rich type-@typeSlug">
+                <div class="package-card-media">
+                    <img src="@p.CoverImageUrl" alt="@p.PackageName" loading="lazy" />
+                    <span class="badge-type badge-type-@typeSlug">@p.PackageType</span>
                     @if (p.NextDepartureDate.HasValue)
                     {
-                        <div class="small text-muted mb-2">Departure: @p.NextDepartureDate.Value.ToString("dd MMM yyyy")</div>
+                        <span class="package-depart-chip">
+                            <i class="fa-regular fa-calendar"></i>
+                            @p.NextDepartureDate.Value.ToString("dd MMM yyyy")
+                        </span>
                     }
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="price">@(p.CurrencyCode ?? "PKR") @((p.AdultPrice ?? 0).ToString("N0"))</div>
-                        <a class="btn btn-sm btn-navy" asp-controller="Packages" asp-action="Details" asp-route-id="@p.PackageId">View Details</a>
+                </div>
+                <div class="body">
+                    <h5>@p.PackageName</h5>
+                    <table class="package-detail-table">
+                        <tbody>
+                            <tr>
+                                <th>Name</th>
+                                <td>@p.PackageName</td>
+                                <th>Type</th>
+                                <td>@p.PackageType</td>
+                            </tr>
+                            <tr>
+                                <th>Days</th>
+                                <td>@(p.DurationDays?.ToString() ?? "—")</td>
+                                <th>Nights</th>
+                                <td>@(p.DurationNights?.ToString() ?? "—")</td>
+                            </tr>
+                            <tr>
+                                <th>Description</th>
+                                <td colspan="3">@(string.IsNullOrWhiteSpace(p.Description) ? "—" : p.Description)</td>
+                            </tr>
+                            <tr>
+                                <th>Adult</th>
+                                <td>@((p.AdultPrice ?? 0).ToString("N2"))</td>
+                                <th>Child</th>
+                                <td>@((p.ChildPrice ?? 0).ToString("N2"))</td>
+                            </tr>
+                            <tr>
+                                <th>Infant</th>
+                                <td>@((p.InfantPrice ?? 0).ToString("N2"))</td>
+                                <th>Currency</th>
+                                <td>@currency</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="package-card-footer">
+                        <div>
+                            <div class="price-label">Adult from</div>
+                            <div class="price">@currency @((p.AdultPrice ?? 0).ToString("N0"))</div>
+                        </div>
+                        <a class="btn btn-package-cta" asp-controller="Packages" asp-action="Details" asp-route-id="@p.PackageId">
+                            View Details <i class="fa-solid fa-arrow-right"></i>
+                        </a>
                     </div>
                 </div>
             </article>

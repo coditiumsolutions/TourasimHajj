@@ -17,7 +17,7 @@
         GroupOpen("Bookings") ? "booking" :
         GroupOpen("Payments", "SupplierPayments", "Expenses", "Refunds") ? "accounts" :
         GroupOpen("Reports") ? "reports" :
-        GroupOpen("Employees", "Countries", "Cities") ? "administration" :
+        GroupOpen("Employees", "Countries", "Cities", "Gallery") ? "administration" :
         "travel";
 }
 
@@ -30,16 +30,34 @@
                 <span class="menu-label">Dashboard</span>
             </a>
         </div>
+        <div class="menu-item">
+            <a class="menu-link @Active("TravelPackages")" asp-controller="TravelPackages" asp-action="Index">
+                <i class="fa-solid fa-suitcase-rolling menu-icon"></i>
+                <span class="menu-label">Travel Packages</span>
+            </a>
+        </div>
+        <div class="menu-item">
+            <a class="menu-link @Active("Hotels")" asp-controller="Hotels" asp-action="Index">
+                <i class="fa-solid fa-hotel menu-icon"></i>
+                <span class="menu-label">Hotels</span>
+            </a>
+        </div>
+        <div class="menu-item">
+            <a class="menu-link @Active("Gallery")" asp-controller="Gallery" asp-action="Index">
+                <i class="fa-regular fa-images menu-icon"></i>
+                <span class="menu-label">Gallery</span>
+            </a>
+        </div>
 
         <div class="module-panel @(activeModule == "travel" ? "active" : "")" data-module-panel="travel">
             <div class="nav-section-label">Travel</div>
             <div class="module-links">
-                <a class="menu-link @Active("TravelPackages")" asp-controller="TravelPackages" asp-action="Index"><i class="fa-solid fa-circle menu-dot"></i><span class="menu-label">Travel Packages</span></a>
                 <a class="menu-link" asp-controller="TravelPackages" asp-action="Index" asp-route-type="Domestic"><i class="fa-solid fa-circle menu-dot"></i><span class="menu-label">Domestic Packages</span></a>
                 <a class="menu-link" asp-controller="TravelPackages" asp-action="Index" asp-route-type="International"><i class="fa-solid fa-circle menu-dot"></i><span class="menu-label">International Packages</span></a>
+                <a class="menu-link" asp-controller="TravelPackages" asp-action="Index" asp-route-type="Hajj"><i class="fa-solid fa-circle menu-dot"></i><span class="menu-label">Hajj Packages</span></a>
+                <a class="menu-link" asp-controller="TravelPackages" asp-action="Index" asp-route-type="Umrah"><i class="fa-solid fa-circle menu-dot"></i><span class="menu-label">Umrah Packages</span></a>
                 <a class="menu-link @Active("Destinations")" asp-controller="Destinations" asp-action="Index"><i class="fa-solid fa-circle menu-dot"></i><span class="menu-label">Destinations</span></a>
                 <a class="menu-link @Active("Services")" asp-controller="Services" asp-action="Index"><i class="fa-solid fa-circle menu-dot"></i><span class="menu-label">Package Services</span></a>
-                <a class="menu-link" asp-controller="TravelPackages" asp-action="Index"><i class="fa-solid fa-circle menu-dot"></i><span class="menu-label">Package Departures</span></a>
                 <a class="menu-link" asp-controller="TravelPackages" asp-action="Index"><i class="fa-solid fa-circle menu-dot"></i><span class="menu-label">Flight Management</span></a>
             </div>
         </div>
@@ -132,6 +150,7 @@
             <div class="nav-section-label">Administration</div>
             <div class="module-links">
                 <a class="menu-link @Active("Employees")" asp-controller="Employees" asp-action="Index"><i class="fa-solid fa-circle menu-dot"></i><span class="menu-label">Employees</span></a>
+                <a class="menu-link @Active("Gallery")" asp-controller="Gallery" asp-action="Index"><i class="fa-solid fa-circle menu-dot"></i><span class="menu-label">Gallery</span></a>
                 <a class="menu-link @Active("Countries")" asp-controller="Countries" asp-action="Index"><i class="fa-solid fa-circle menu-dot"></i><span class="menu-label">Countries</span></a>
                 <a class="menu-link @Active("Cities")" asp-controller="Cities" asp-action="Index"><i class="fa-solid fa-circle menu-dot"></i><span class="menu-label">Cities</span></a>
                 <a class="menu-link" href="/Identity/Account/Manage"><i class="fa-solid fa-circle menu-dot"></i><span class="menu-label">Users / Profile</span></a>

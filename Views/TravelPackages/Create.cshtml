@@ -1,19 +1,23 @@
 @model TourismHajj.Models.Entities.TravelPackage
 @{ ViewData["Title"] = "New Package"; }
 <div class="page-header"><h2>New Travel Package</h2></div>
+@await Html.PartialAsync("_AlertMessages")
 <div class="card-panel">
     <div class="card-panel-body">
-        <form asp-action="Create" method="post" class="form-4col">
+        <form asp-action="Create" method="post" enctype="multipart/form-data" class="form-4col" novalidate>
             @Html.AntiForgeryToken()
+            <div asp-validation-summary="All" class="alert alert-danger @(ViewData.ModelState.IsValid ? "d-none" : null)" role="alert"></div>
 
             <div class="form-4col-row">
                 <label class="form-4col-label" asp-for="PackageCode">Code</label>
                 <div class="form-4col-field">
                     <input asp-for="PackageCode" class="form-control" />
+                    <span asp-validation-for="PackageCode" class="text-danger"></span>
                 </div>
                 <label class="form-4col-label" asp-for="PackageName">Name</label>
                 <div class="form-4col-field">
                     <input asp-for="PackageName" class="form-control" />
+                    <span asp-validation-for="PackageName" class="text-danger"></span>
                 </div>
             </div>
 
@@ -26,11 +30,14 @@
                         <option>International</option>
                         <option>Hajj</option>
                         <option>Umrah</option>
+                        <option>Ziarat</option>
                     </select>
+                    <span asp-validation-for="PackageType" class="text-danger"></span>
                 </div>
                 <label class="form-4col-label" asp-for="DurationDays">Days</label>
                 <div class="form-4col-field">
                     <input asp-for="DurationDays" class="form-control" />
+                    <span asp-validation-for="DurationDays" class="text-danger"></span>
                 </div>
             </div>
 
@@ -38,10 +45,12 @@
                 <label class="form-4col-label" asp-for="Description">Description</label>
                 <div class="form-4col-field">
                     <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
                 <label class="form-4col-label" asp-for="DurationNights">Nights</label>
                 <div class="form-4col-field">
                     <input asp-for="DurationNights" class="form-control" />
+                    <span asp-validation-for="DurationNights" class="text-danger"></span>
                 </div>
             </div>
 
@@ -49,10 +58,12 @@
                 <label class="form-4col-label" asp-for="AdultPrice">Adult</label>
                 <div class="form-4col-field">
                     <input asp-for="AdultPrice" class="form-control" />
+                    <span asp-validation-for="AdultPrice" class="text-danger"></span>
                 </div>
                 <label class="form-4col-label" asp-for="ChildPrice">Child</label>
                 <div class="form-4col-field">
                     <input asp-for="ChildPrice" class="form-control" />
+                    <span asp-validation-for="ChildPrice" class="text-danger"></span>
                 </div>
             </div>
 
@@ -60,10 +71,12 @@
                 <label class="form-4col-label" asp-for="InfantPrice">Infant</label>
                 <div class="form-4col-field">
                     <input asp-for="InfantPrice" class="form-control" />
+                    <span asp-validation-for="InfantPrice" class="text-danger"></span>
                 </div>
                 <label class="form-4col-label" asp-for="CurrencyCode">Currency</label>
                 <div class="form-4col-field">
                     <input asp-for="CurrencyCode" class="form-control" />
+                    <span asp-validation-for="CurrencyCode" class="text-danger"></span>
                 </div>
             </div>
 
@@ -71,10 +84,12 @@
                 <label class="form-4col-label" asp-for="MinimumPersons">Min Persons</label>
                 <div class="form-4col-field">
                     <input asp-for="MinimumPersons" class="form-control" />
+                    <span asp-validation-for="MinimumPersons" class="text-danger"></span>
                 </div>
                 <label class="form-4col-label" asp-for="MaximumPersons">Max Persons</label>
                 <div class="form-4col-field">
                     <input asp-for="MaximumPersons" class="form-control" />
+                    <span asp-validation-for="MaximumPersons" class="text-danger"></span>
                 </div>
             </div>
 
@@ -89,9 +104,26 @@
                 </div>
             </div>
 
+            <div class="form-4col-row">
+                <label class="form-4col-label" for="coverImage">Package Image</label>
+                <div class="form-4col-field">
+                    <input type="file" class="form-control" id="coverImage" name="coverImage" accept="image/jpeg,image/png,image/webp,image/gif" />
+                    <div class="form-text">JPG, PNG, WEBP or GIF up to 5 MB.</div>
+                </div>
+                <label class="form-4col-label" asp-for="CoverImageUrl">Or Image URL</label>
+                <div class="form-4col-field">
+                    <input asp-for="CoverImageUrl" class="form-control" placeholder="https://..." />
+                    <span asp-validation-for="CoverImageUrl" class="text-danger"></span>
+                </div>
+            </div>
+
             <div class="form-4col-actions">
                 <button class="btn btn-primary" type="submit">Save & Continue</button>
             </div>
         </form>
     </div>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -10,7 +10,25 @@
 
 <section class="hero-swiper swiper">
     <div class="swiper-wrapper">
-        <div class="swiper-slide hero-slide" style="background-image:url('https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1920&q=80');">
+        <div class="swiper-slide hero-slide" style="background-image:url('https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=1920&q=80');">
+            <div class="container-xl">
+                <div class="hero-content">
+                    <h1>Your Spiritual Journey Begins Here</h1>
+                    <p>Experience a comfortable and well-organized Hajj journey at Masjid al-Haram.</p>
+                    <a class="btn-gold" asp-controller="Home" asp-action="Search" asp-route-PackageType="Hajj">Explore Hajj Packages</a>
+                </div>
+            </div>
+        </div>
+        <div class="swiper-slide hero-slide" style="background-image:url('https://images.unsplash.com/photo-1542816417-0983c9c9ad53?auto=format&fit=crop&w=1920&q=80');">
+            <div class="container-xl">
+                <div class="hero-content">
+                    <h1>Visit Masjid an-Nabawi</h1>
+                    <p>Peaceful Madinah journeys with trusted Umrah and pilgrimage arrangements.</p>
+                    <a class="btn-gold" asp-controller="Home" asp-action="Search" asp-route-PackageType="Umrah">Explore Umrah Packages</a>
+                </div>
+            </div>
+        </div>
+        <div class="swiper-slide hero-slide" style="background-image:url('/images/valley.jpeg');">
             <div class="container-xl">
                 <div class="hero-content">
                     <h1>Explore The World With Us</h1>
@@ -19,30 +37,12 @@
                 </div>
             </div>
         </div>
-        <div class="swiper-slide hero-slide" style="background-image:url('https://images.unsplash.com/photo-1564769625905-50e93615e769?auto=format&fit=crop&w=1920&q=80');">
+        <div class="swiper-slide hero-slide" style="background-image:url('/images/kabba01.jpg?v=2');">
             <div class="container-xl">
                 <div class="hero-content">
-                    <h1>Your Spiritual Journey Begins Here</h1>
-                    <p>Experience a comfortable and well-organized Hajj journey.</p>
+                    <h1>Blessed Moments at the Kaaba</h1>
+                    <p>Another view of Khana Kaaba for your sacred pilgrimage journey.</p>
                     <a class="btn-gold" asp-controller="Home" asp-action="Search" asp-route-PackageType="Hajj">Explore Hajj Packages</a>
-                </div>
-            </div>
-        </div>
-        <div class="swiper-slide hero-slide" style="background-image:url('https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=1920&q=80');">
-            <div class="container-xl">
-                <div class="hero-content">
-                    <h1>Make Your Umrah Journey Memorable</h1>
-                    <p>Complete Umrah travel arrangements with care and comfort.</p>
-                    <a class="btn-gold" asp-controller="Home" asp-action="Search" asp-route-PackageType="Umrah">Explore Umrah Packages</a>
-                </div>
-            </div>
-        </div>
-        <div class="swiper-slide hero-slide" style="background-image:url('https://images.unsplash.com/photo-1589802829985-817e51171b92?auto=format&fit=crop&w=1920&q=80');">
-            <div class="container-xl">
-                <div class="hero-content">
-                    <h1>Discover The Beauty Of Pakistan</h1>
-                    <p>Explore breathtaking mountains, lakes and valleys.</p>
-                    <a class="btn-gold" asp-controller="Home" asp-action="Search" asp-route-PackageType="Domestic">Explore Pakistan Tours</a>
                 </div>
             </div>
         </div>
@@ -63,6 +63,7 @@
                     <option value="International">International</option>
                     <option value="Hajj">Hajj</option>
                     <option value="Umrah">Umrah</option>
+                    <option value="Ziarat">Ziarat</option>
                 </select>
             </div>
             <div class="col-md-3">
@@ -87,30 +88,6 @@
                 <button class="btn btn-navy w-100" type="submit"><i class="fa-solid fa-magnifying-glass me-1"></i> Search</button>
             </div>
         </form>
-    </div>
-</section>
-
-<section class="section-pad" id="featured">
-    <div class="container-xl">
-        <h2 class="section-title">Featured Packages</h2>
-        <p class="section-sub">Handpicked journeys from our live package catalog.</p>
-        <partial name="_PackageCards" model="Model.FeaturedPackages" />
-    </div>
-</section>
-
-<section class="section-pad hajj-band" id="hajj">
-    <div class="container-xl">
-        <h2 class="section-title">Hajj Packages</h2>
-        <p class="section-sub">Premium spiritual travel with carefully planned logistics.</p>
-        <partial name="_PackageCards" model="Model.HajjPackages" />
-    </div>
-</section>
-
-<section class="section-pad umrah-band" id="umrah">
-    <div class="container-xl">
-        <h2 class="section-title">Umrah Packages</h2>
-        <p class="section-sub">Comfortable Umrah arrangements for every budget.</p>
-        <partial name="_PackageCards" model="Model.UmrahPackages" />
     </div>
 </section>
 

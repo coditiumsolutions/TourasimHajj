@@ -434,7 +434,7 @@ Columns:
   PackageID           int           NOT NULL  PK
   PackageCode         nvarchar(30)  NOT NULL
   PackageName         nvarchar(200) NOT NULL
-  PackageType         nvarchar(30)  NOT NULL   -- Tourism, Domestic, International, Hajj, Umrah
+  PackageType         nvarchar(30)  NOT NULL   -- Tourism, Domestic, International, Hajj, Umrah, Ziarat
   Description         nvarchar(max) NULL
   DurationDays        int           NULL
   DurationNights      int           NULL
@@ -540,5 +540,5 @@ NOTES
 ================================================================================
 - Soft-delete masters via IsActive where available; never hard-delete confirmed bookings/payments.
 - Identity (AspNet*) tables are separate and may be added later without altering these business tables.
-- PackageType values: Tourism, Domestic, International, Hajj, Umrah.
+- PackageType values: Tourism, Domestic, International, Hajj, Umrah, Ziarat.
 - VisaStatus values: Pending, Documents Required, Submitted, Under Process, Approved, Rejected, Expired.

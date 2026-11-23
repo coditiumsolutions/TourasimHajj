@@ -27,10 +27,13 @@ public class PublicPackageCardViewModel
     public int PackageId { get; set; }
     public string PackageName { get; set; } = string.Empty;
     public string PackageType { get; set; } = string.Empty;
+    public string? Description { get; set; }
     public string? DestinationName { get; set; }
     public int? DurationDays { get; set; }
     public int? DurationNights { get; set; }
     public decimal? AdultPrice { get; set; }
+    public decimal? ChildPrice { get; set; }
+    public decimal? InfantPrice { get; set; }
     public string? CurrencyCode { get; set; }
     public string? CoverImageUrl { get; set; }
     public DateOnly? NextDepartureDate { get; set; }

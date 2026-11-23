@@ -1,8 +1,17 @@
-@if (TempData["Success"] != null)
-{
-<script>toastr.success("@TempData["Success"]");</script>
+@using System.Text.Json
+@{
+    var success = TempData["Success"] as string;
+    var error = TempData["Error"] as string;
 }
-@if (TempData["Error"] != null)
+@if (!string.IsNullOrWhiteSpace(success))
 {
-<script>toastr.error("@TempData["Error"]");</script>
+<script>
+    toastr.success(@Html.Raw(JsonSerializer.Serialize(success)));
+</script>
+}
+@if (!string.IsNullOrWhiteSpace(error))
+{
+<script>
+    toastr.error(@Html.Raw(JsonSerializer.Serialize(error)));
+</script>
 }

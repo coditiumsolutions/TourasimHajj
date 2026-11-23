@@ -3,7 +3,7 @@
     ViewData["Title"] = "Edit Package";
     var p = Model.Basic;
 }
-@await Html.PartialAsync("_Alerts")
+@await Html.PartialAsync("_AlertMessages")
 <div class="page-header"><h2>@p.PackageName <small class="text-muted">(@p.PackageCode)</small></h2></div>
 <ul class="nav nav-tabs mb-3" role="tablist">
     <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#basic" type="button">Basic</button></li>
@@ -14,7 +14,7 @@
 <div class="tab-content">
     <div class="tab-pane fade show active" id="basic">
         <div class="card-panel"><div class="card-panel-body">
-            <form asp-action="EditBasic" method="post" class="form-4col">
+            <form asp-action="EditBasic" method="post" enctype="multipart/form-data" class="form-4col">
                 @Html.AntiForgeryToken()
                 <input type="hidden" name="Package.PackageId" value="@p.PackageId" />
 
@@ -81,6 +81,24 @@
                     <label class="form-4col-label" for="Package_IsActive">Active</label>
                     <div class="form-4col-field form-4col-check">
                         <input name="Package.IsActive" type="checkbox" value="true" id="Package_IsActive" class="form-check-input" @(p.IsActive == true ? "checked" : null) />
+                    </div>
+                </div>
+
+                <div class="form-4col-row">
+                    <label class="form-4col-label" for="coverImage">Package Image</label>
+                    <div class="form-4col-field">
+                        <input type="file" class="form-control" id="coverImage" name="coverImage" accept="image/jpeg,image/png,image/webp,image/gif" />
+                        <div class="form-text">Upload a new image to replace the current one (JPG/PNG/WEBP/GIF, max 5 MB).</div>
+                        @if (!string.IsNullOrWhiteSpace(p.CoverImageUrl))
+                        {
+                            <div class="mt-2">
+                                <img src="@p.CoverImageUrl" alt="@p.PackageName" style="max-width: 220px; max-height: 140px; object-fit: cover; border-radius: 10px; border: 1px solid #dee2e6;" />
+                            </div>
+                        }
+                    </div>
+                    <label class="form-4col-label" for="Package_CoverImageUrl">Or Image URL</label>
+                    <div class="form-4col-field">
+                        <input name="Package.CoverImageUrl" id="Package_CoverImageUrl" value="@p.CoverImageUrl" class="form-control" placeholder="https://... or /uploads/packages/..." />
                     </div>
                 </div>
 

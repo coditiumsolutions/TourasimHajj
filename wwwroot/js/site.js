@@ -118,7 +118,8 @@
   const savedModule = localStorage.getItem(moduleStorageKey);
   const path = (location.pathname || '').toLowerCase();
   const onDashboard = path === '/dashboard' || path.endsWith('/dashboard/index') || path.endsWith('/dashboard');
-  setActiveModule(onDashboard ? (savedModule || 'travel') : (serverModule || savedModule || 'travel'));
+  // Dashboard always shows Travel links (including packages). Elsewhere prefer route/server module.
+  setActiveModule(onDashboard ? 'travel' : (serverModule || savedModule || 'travel'));
 
   if (window.toastr) {
     toastr.options = {

@@ -7,7 +7,7 @@ public class PackageListViewModel
 {
     public IReadOnlyList<TravelPackage> Packages { get; set; } = Array.Empty<TravelPackage>();
     public string? PackageTypeFilter { get; set; }
-    public static readonly string[] PackageTypes = { "Hajj", "Umrah", "Tour", "Custom" };
+    public static readonly string[] PackageTypes = { "Hajj", "Umrah", "Ziarat", "Tour", "Custom" };
 }
 
 public class PackageBasicInputModel
@@ -58,6 +58,10 @@ public class PackageBasicInputModel
 
     [Display(Name = "Active")]
     public bool IsActive { get; set; } = true;
+
+    [StringLength(500)]
+    [Display(Name = "Cover Image")]
+    public string? CoverImageUrl { get; set; }
 }
 
 public class PackageEditViewModel

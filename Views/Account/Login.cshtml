@@ -1,13 +1,17 @@
 @model AdminLoginViewModel
+@using Microsoft.Extensions.Options
+@using TourismHajj.Helpers
+@inject IOptions<CompanyProfileOptions> CompanyOptions
 @{
     Layout = "_PublicLayout";
     ViewData["Title"] = "Admin Login";
+    var companyName = CompanyOptions.Value.CompanyName;
 }
 
 <section class="auth-shell">
     <div class="auth-card">
         <div class="text-center mb-3">
-            <a class="auth-brand d-inline-block mb-1" asp-controller="Home" asp-action="Index">Tourism</a>
+            <a class="auth-brand d-inline-block mb-1" asp-controller="Home" asp-action="Index">@companyName</a>
             <h1 class="h4 mt-1 mb-1" style="color: var(--navy);">Admin Login</h1>
             <p class="text-muted small mb-0">Sign in to the management portal</p>
         </div>

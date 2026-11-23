@@ -10,4 +10,6 @@ public interface IPublicSiteService
     Task<PublicPackageDetailsViewModel?> GetPackageDetailsAsync(int packageId, CancellationToken cancellationToken = default);
     Task SubmitContactAsync(ContactFormViewModel model, CancellationToken cancellationToken = default);
     Task<List<Destination>> GetActiveDestinationsAsync(CancellationToken cancellationToken = default);
+    Task<List<PublicHotelCardViewModel>> GetPublicHotelsAsync(CancellationToken cancellationToken = default);
+    Task<List<PublicGalleryCardViewModel>> GetPublicGalleryAsync(CancellationToken cancellationToken = default);
 }

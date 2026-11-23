@@ -4,7 +4,7 @@ public class CompanyProfileOptions
 {
     public const string SectionName = "CompanyProfile";
 
-    public string CompanyName { get; set; } = "Tourasin";
+    public string CompanyName { get; set; } = "Al-Haram Travel";
     public string Tagline { get; set; } = "Travel & Pilgrimage ERP";
     public string Phone { get; set; } = "+92 300 XXXXXXX";
     public string WhatsApp { get; set; } = "+923000000000";

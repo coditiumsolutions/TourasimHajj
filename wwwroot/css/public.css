@@ -33,7 +33,7 @@ a:hover { color: var(--navy); }
 .public-topbar {
   background: linear-gradient(90deg, var(--navy-deep), var(--navy));
   color: rgba(255,255,255,.88);
-  font-size: 0.75rem;
+  font-size: 0.86rem;
 }
 
 .public-topbar-inner {
@@ -45,7 +45,8 @@ a:hover { color: var(--navy); }
   width: 100%;
   max-width: none;
   margin: 0;
-  padding: 0.35rem 0.5rem;
+  padding: 0.65rem 0.85rem;
+  min-height: 3rem;
 }
 
 .public-topbar a { color: rgba(255,255,255,.88); }
@@ -57,7 +58,7 @@ a:hover { color: var(--navy); }
 
 .topbar-brand {
   font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: 1.05rem;
+  font-size: 1.18rem;
   font-weight: 700;
   color: #fff !important;
   letter-spacing: 0.02em;
@@ -70,12 +71,12 @@ a:hover { color: var(--navy); }
 .topbar-socials a {
   display: inline-grid;
   place-items: center;
-  width: 22px;
-  height: 22px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   background: rgba(255,255,255,.08);
   margin-left: 0.15rem;
-  font-size: 0.7rem;
+  font-size: 0.78rem;
 }
 
 .btn-customer-login {
@@ -83,10 +84,10 @@ a:hover { color: var(--navy); }
   color: var(--navy) !important;
   border: none;
   font-weight: 700;
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   line-height: 1.2;
   border-radius: 999px;
-  padding: 0.2rem 0.55rem;
+  padding: 0.35rem 0.8rem;
 }
 
 .btn-admin-login {
@@ -94,10 +95,10 @@ a:hover { color: var(--navy); }
   color: #fff !important;
   border: 1px solid rgba(255,255,255,.35);
   font-weight: 600;
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   line-height: 1.2;
   border-radius: 999px;
-  padding: 0.2rem 0.55rem;
+  padding: 0.35rem 0.8rem;
 }
 
 .btn-admin-login:hover { background: rgba(255,255,255,.08); color: #fff !important; }
@@ -107,17 +108,34 @@ a:hover { color: var(--navy); }
   display: block;
   background: #fff;
   box-shadow: 0 8px 24px rgba(11,31,58,.06);
-  padding: 0.3rem 0;
+  padding: 0.55rem 0;
+  min-height: 4rem;
 }
 
 .public-mainnav-inner {
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  gap: 0.85rem;
   width: 100%;
   max-width: none;
   margin: 0;
-  padding: 0 0.5rem;
+  padding: 0 0.75rem;
+}
+
+.public-nav-logo {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  line-height: 0;
+}
+
+.public-nav-logo img {
+  height: 64px;
+  width: auto;
+  max-width: 260px;
+  object-fit: contain;
+  display: block;
 }
 
 .public-mainnav .public-nav-links {
@@ -130,19 +148,57 @@ a:hover { color: var(--navy); }
   width: auto;
   margin: 0;
   padding: 0;
-  gap: 0.1rem;
+  gap: 0;
+  flex: 1 1 auto;
+}
+
+.btn-nav-whatsapp {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  background: #fff;
+  color: var(--navy) !important;
+  border: 2px solid var(--gold);
+  font-weight: 700;
+  font-size: 0.8rem;
+  line-height: 1.2;
+  border-radius: 8px;
+  padding: 0.62rem 1rem;
+  min-width: 158px;
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+  box-shadow: 0 6px 16px rgba(212, 160, 23, 0.18);
+}
+
+.btn-nav-whatsapp i {
+  color: #25d366;
+  font-size: 1.05rem;
+}
+
+.btn-nav-whatsapp:hover {
+  color: var(--navy) !important;
+  background: #fffdf6;
+  border-color: var(--gold-bright);
 }
 
 .public-mainnav .public-nav-links .nav-item {
   flex: 0 0 auto;
   white-space: nowrap;
+  border-right: 1px solid rgba(0, 0, 0, 0.18);
+}
+
+.public-mainnav .public-nav-links .nav-item:last-child {
+  border-right: 0;
 }
 
 .public-mainnav .nav-link {
-  color: #5a189a !important;
+  color: #000 !important;
   font-weight: 500;
-  font-size: 0.9rem;
-  padding: 0.4rem 0.65rem !important;
+  font-size: 1.05rem;
+  padding: 0.55rem 0.95rem !important;
   border-radius: 8px;
   display: block;
   text-align: left;
@@ -154,13 +210,19 @@ a:hover { color: var(--navy); }
 
 .public-mainnav .dropdown-item {
   font-size: 0.8rem;
-  color: #5a189a;
+  color: #000;
 }
 
 .public-mainnav .nav-link:hover,
 .public-mainnav .nav-link.active {
-  background: rgba(90,24,154,.08);
-  color: #5a189a !important;
+  background: rgba(0,0,0,.06);
+  color: #000 !important;
+}
+
+.public-mainnav .dropdown-item:hover,
+.public-mainnav .dropdown-item:focus {
+  color: #000;
+  background: rgba(0,0,0,.06);
 }
 
 /* Hero */
@@ -252,7 +314,8 @@ a:hover { color: var(--navy); }
 .section-sub { color: var(--muted); margin-bottom: 2rem; max-width: 40rem; }
 
 .search-panel {
-  margin-top: -3.5rem;
+  margin-top: 1.75rem;
+  margin-bottom: 0.5rem;
   position: relative;
   z-index: 5;
   background: #fff;
@@ -298,6 +361,439 @@ a:hover { color: var(--navy); }
   color: var(--navy);
   font-weight: 800;
   font-size: 1.15rem;
+}
+
+/* Packages search page */
+.packages-hero {
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+  height: 560px;
+  max-height: 560px;
+  display: flex;
+  align-items: center;
+  padding: 2.6rem 0;
+  background: #0b1f3a;
+}
+
+.packages-hero-inner { position: relative; z-index: 1; width: 100%; }
+
+.packages-hero-title {
+  font-size: clamp(2.1rem, 4vw, 3.2rem);
+  font-weight: 700;
+  margin: 0 0 1rem;
+  color: #fff;
+}
+
+.packages-hero-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .55rem;
+}
+
+.packages-hero-pills span {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .4rem .85rem;
+  border-radius: 999px;
+  background: rgba(255,255,255,.16);
+  backdrop-filter: blur(4px);
+  font-size: .86rem;
+  font-weight: 600;
+}
+
+.packages-theme-hajj.packages-hero:not(.packages-hero-pilgrimage),
+.packages-theme-umrah.packages-hero:not(.packages-hero-pilgrimage),
+.packages-theme-ziarat.packages-hero:not(.packages-hero-pilgrimage),
+.packages-theme-domestic.packages-hero,
+.packages-theme-international.packages-hero,
+.packages-theme-all.packages-hero {
+  background: #0b1f3a;
+}
+
+.packages-hero-subtitle {
+  max-width: 34rem;
+  margin: 0 0 1.5rem;
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  line-height: 1.55;
+  color: rgba(255, 255, 255, .92);
+}
+
+.packages-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .85rem;
+}
+
+.btn-hero-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.8rem 1.4rem;
+  border-radius: 999px;
+  border: 2px solid rgba(255, 255, 255, .85);
+  color: #fff;
+  font-weight: 800;
+  background: rgba(255, 255, 255, .08);
+  backdrop-filter: blur(4px);
+  text-decoration: none;
+  transition: background .2s ease, border-color .2s ease, color .2s ease;
+}
+
+.btn-hero-outline:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, .18);
+  border-color: #fff;
+}
+
+.hajj-component {
+  position: relative;
+  width: 100%;
+  height: 560px;
+  max-height: 560px;
+  overflow: hidden;
+  color: #fff;
+  isolation: isolate;
+}
+
+.hajj-component-media,
+.hajj-component-shade {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hajj-component-media img,
+.hajj-component-media .hajj-component-video-el {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 40%;
+  display: block;
+}
+
+.hajj-component-video-el {
+  pointer-events: none;
+}
+
+.hajj-component-shade {
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(6, 16, 32, .35) 0%, rgba(6, 16, 32, .22) 45%, rgba(6, 16, 32, .55) 100%);
+}
+
+.hajj-component-inner {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2rem 0;
+}
+
+.hajj-component-copy {
+  max-width: 38rem;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, .35);
+}
+
+.hajj-component .packages-hero-title {
+  margin-bottom: .65rem;
+  font-size: clamp(1.9rem, 3.4vw, 2.7rem);
+}
+
+.hajj-component .packages-hero-subtitle {
+  margin-bottom: 1.1rem;
+}
+
+.package-search-component {
+  position: relative;
+  z-index: 2;
+  padding: 1.25rem 0 0;
+  background: transparent;
+}
+
+.package-search-form {
+  margin-top: 0 !important;
+  margin-bottom: 0;
+}
+
+.packages-page .packages-results-head {
+  margin-top: 1.75rem;
+}
+
+@media (max-width: 767.98px) {
+  .hajj-component {
+    height: 420px;
+    max-height: 420px;
+  }
+
+  .hajj-component-inner {
+    padding: 1.25rem 0;
+  }
+
+  .hajj-component .packages-hero-subtitle {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+.packages-page {
+  padding: 0 0 4rem;
+  background:
+    radial-gradient(circle at top left, rgba(47,128,196,.10), transparent 32%),
+    radial-gradient(circle at 85% 18%, rgba(212,160,23,.12), transparent 28%),
+    linear-gradient(180deg, #eef5fb 0%, #f7fafc 40%, #f4f7fb 100%);
+}
+
+.packages-theme-hajj.packages-page {
+  background:
+    radial-gradient(circle at top left, rgba(31,107,79,.14), transparent 34%),
+    radial-gradient(circle at 90% 10%, rgba(201,162,39,.16), transparent 30%),
+    linear-gradient(180deg, #eef8f2 0%, #f8faf7 45%, #f4f7fb 100%);
+}
+
+.packages-theme-umrah.packages-page {
+  background:
+    radial-gradient(circle at top left, rgba(53,88,137,.14), transparent 34%),
+    radial-gradient(circle at 90% 10%, rgba(212,160,23,.14), transparent 30%),
+    linear-gradient(180deg, #eef2f9 0%, #f7f9fc 45%, #f4f7fb 100%);
+}
+
+.packages-theme-ziarat.packages-page {
+  background:
+    radial-gradient(circle at top left, rgba(122, 63, 32, .12), transparent 34%),
+    radial-gradient(circle at 90% 10%, rgba(201,162,39,.16), transparent 30%),
+    linear-gradient(180deg, #f8f3ee 0%, #faf8f5 45%, #f4f7fb 100%);
+}
+
+.packages-filter-panel {
+  margin-top: -2rem;
+  position: relative;
+  z-index: 3;
+  background: #fff;
+  border-radius: 22px;
+  box-shadow: 0 18px 42px rgba(11,31,58,.12);
+  padding: 1.35rem 1.4rem;
+  border: 1px solid rgba(47,128,196,.12);
+}
+
+.packages-filter-panel .form-label {
+  font-weight: 700;
+  color: var(--navy);
+  font-size: .84rem;
+}
+
+.btn-packages-search {
+  background: linear-gradient(135deg, var(--navy), #1d4f82);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  font-weight: 700;
+  padding: 0.75rem 1.2rem;
+}
+
+.btn-packages-search:hover { color: #fff; filter: brightness(1.08); }
+
+.packages-results-head {
+  margin: 2.25rem 0 1.25rem;
+}
+
+.packages-results-head h2 {
+  margin: 0 0 .25rem;
+  color: var(--navy);
+  font-size: clamp(1.7rem, 2.6vw, 2.3rem);
+}
+
+.packages-results-head p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.package-card-rich {
+  border: 1px solid rgba(11,31,58,.06);
+  background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+}
+
+.package-card-rich .package-card-media {
+  position: relative;
+  overflow: hidden;
+}
+
+.package-card-rich .package-card-media::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 45%;
+  background: linear-gradient(180deg, transparent, rgba(7,21,38,.55));
+  pointer-events: none;
+}
+
+.package-card-rich img {
+  height: 140px;
+  transition: transform .45s ease;
+}
+
+.package-card-rich:hover img {
+  transform: scale(1.06);
+}
+
+.package-card-rich .badge-type {
+  position: absolute;
+  top: .9rem;
+  left: .9rem;
+  z-index: 2;
+  box-shadow: 0 8px 18px rgba(0,0,0,.18);
+}
+
+.package-depart-chip {
+  position: absolute;
+  right: .9rem;
+  bottom: .9rem;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  padding: .3rem .65rem;
+  border-radius: 999px;
+  background: rgba(255,255,255,.92);
+  color: var(--navy);
+  font-size: .72rem;
+  font-weight: 700;
+}
+
+.package-card-rich .body h5 {
+  margin: 0 0 .65rem;
+  color: var(--navy);
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 1.45rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.package-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .55rem .9rem;
+  margin-bottom: 1rem;
+  color: var(--muted);
+  font-size: .86rem;
+}
+
+.package-meta i { margin-right: .3rem; color: var(--sky); }
+
+.package-detail-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 1rem;
+  table-layout: fixed;
+}
+
+.package-detail-table th,
+.package-detail-table td {
+  padding: .45rem .35rem;
+  vertical-align: top;
+  border-bottom: 1px solid rgba(11, 31, 58, 0.16);
+  word-break: break-word;
+}
+
+.package-detail-table th {
+  width: 22%;
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: left;
+}
+
+.package-detail-table td {
+  width: 28%;
+  font-size: .9rem;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.package-card-footer {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: .75rem;
+  padding-top: .85rem;
+  border-top: 1px dashed rgba(11,31,58,.12);
+}
+
+.price-label {
+  font-size: .72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--muted);
+}
+
+.btn-package-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  background: linear-gradient(135deg, var(--gold), var(--gold-bright));
+  color: var(--navy) !important;
+  border: none;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: .82rem;
+  padding: .55rem .95rem;
+  white-space: nowrap;
+}
+
+.btn-package-cta:hover { filter: brightness(1.05); color: var(--navy) !important; }
+
+.badge-type-hajj { background: rgba(31,107,79,.16); color: #1f6b4f; }
+.badge-type-umrah { background: rgba(53,88,137,.16); color: #355889; }
+.badge-type-ziarat { background: rgba(122,63,32,.16); color: #7a3f20; }
+.badge-type-domestic { background: rgba(47,125,74,.16); color: #2f7d4a; }
+.badge-type-international { background: rgba(47,128,196,.16); color: #1d6aa5; }
+.badge-type-tourism { background: rgba(212,160,23,.18); color: #9a7410; }
+
+.package-card-rich.type-hajj { box-shadow: 0 14px 32px rgba(31,107,79,.12); }
+.package-card-rich.type-umrah { box-shadow: 0 14px 32px rgba(53,88,137,.12); }
+.package-card-rich.type-domestic { box-shadow: 0 14px 32px rgba(47,125,74,.12); }
+.package-card-rich.type-international { box-shadow: 0 14px 32px rgba(47,128,196,.12); }
+
+.packages-empty {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  border-radius: 22px;
+  background: rgba(255,255,255,.85);
+  border: 1px dashed rgba(11,31,58,.18);
+}
+
+.packages-empty i {
+  font-size: 2rem;
+  color: var(--gold);
+  margin-bottom: .75rem;
+}
+
+.packages-empty h3 {
+  margin: 0 0 .35rem;
+  color: var(--navy);
+}
+
+.packages-empty p {
+  margin: 0;
+  color: var(--muted);
+}
+
+@media (max-width: 767.98px) {
+  .packages-hero {
+    height: 420px;
+    max-height: 420px;
+    padding: 1.75rem 0;
+  }
+  .packages-filter-panel { margin-top: -1.4rem; }
+  .package-card-footer { flex-direction: column; align-items: stretch; }
+  .btn-package-cta { justify-content: center; }
 }
 
 .hajj-band, .umrah-band {

@@ -145,7 +145,7 @@ public class ReportResultViewModel
     public ReportFilterViewModel Filter { get; set; } = new();
     public List<string> Headers { get; set; } = new();
     public List<List<string>> Rows { get; set; } = new();
-    public string CompanyName { get; set; } = "Tourism Hajj";
+    public string CompanyName { get; set; } = "Al-Haram Travel";
     public string CompanyAddress { get; set; } = "Travel & Pilgrimage Management";
     public string CompanyContact { get; set; } = "admin@tourismhajj.com";
 }

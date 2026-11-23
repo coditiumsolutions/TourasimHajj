@@ -1,0 +1,50 @@
+@model List<PublicGalleryCardViewModel>
+@{
+    Layout = "_PublicLayout";
+    ViewData["Title"] = "Gallery";
+}
+<section class="packages-hero packages-theme-all">
+    <div class="container-xl packages-hero-inner">
+        <h1 class="packages-hero-title">Gallery</h1>
+        <div class="packages-hero-pills">
+            <span><i class="fa-regular fa-images"></i> @Model.Count photo@(Model.Count == 1 ? "" : "s")</span>
+        </div>
+    </div>
+</section>
+
+<section class="packages-page packages-theme-all">
+    <div class="container-xl py-4">
+        <div class="row g-4">
+            @if (!Model.Any())
+            {
+                <div class="col-12">
+                    <div class="packages-empty">
+                        <i class="fa-regular fa-images"></i>
+                        <h3>Gallery is empty</h3>
+                        <p>Photos will appear here after they are uploaded from the management portal.</p>
+                    </div>
+                </div>
+            }
+            else
+            {
+                foreach (var g in Model)
+                {
+                    <div class="col-sm-6 col-lg-4">
+                        <article class="package-card package-card-rich">
+                            <div class="package-card-media">
+                                <img src="@g.ImageUrl" alt="@g.Title" loading="lazy" />
+                            </div>
+                            <div class="body">
+                                <h5>@g.Title</h5>
+                                @if (!string.IsNullOrWhiteSpace(g.Description))
+                                {
+                                    <p class="text-muted mb-0">@g.Description</p>
+                                }
+                            </div>
+                        </article>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</section>

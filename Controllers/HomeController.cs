@@ -28,8 +28,18 @@ public class HomeController : Controller
         ViewData["Title"] = "Search Packages";
         ViewData["MetaDescription"] = "Search domestic, international, Hajj and Umrah travel packages.";
         search.DestinationOptions = await _publicSite.GetActiveDestinationsAsync(cancellationToken);
-        var results = await _publicSite.SearchPackagesAsync(search, cancellationToken);
-        ViewBag.Results = results;
+
+        var hasCriteria =
+            (!string.IsNullOrWhiteSpace(search.PackageType) &&
+             !string.Equals(search.PackageType, "All", StringComparison.OrdinalIgnoreCase)) ||
+            search.DestinationId.HasValue ||
+            search.DepartureDate.HasValue;
+
+        ViewBag.HasSearchCriteria = hasCriteria;
+        ViewBag.Results = hasCriteria
+            ? await _publicSite.SearchPackagesAsync(search, cancellationToken)
+            : new List<PublicPackageCardViewModel>();
+
         return View(search);
     }
 
@@ -48,7 +58,7 @@ public class HomeController : Controller
     public IActionResult About()
     {
         ViewData["Title"] = "About Us";
-        ViewData["MetaDescription"] = "Learn about Tourism Hajj — trusted travel and pilgrimage specialists.";
+        ViewData["MetaDescription"] = "Learn about Al-Haram Travel — trusted travel and pilgrimage specialists.";
         return View();
     }
 

@@ -13,28 +13,37 @@
         ModuleActive("Bookings") == "active" ? "booking" :
         ModuleActive("Payments", "SupplierPayments", "Expenses", "Refunds") == "active" ? "accounts" :
         ModuleActive("Reports") == "active" ? "reports" :
-        ModuleActive("Employees", "Countries", "Cities") == "active" ? "administration" :
+        ModuleActive("Employees", "Countries", "Cities", "Gallery") == "active" ? "administration" :
         "travel";
 
     var modulesGroupActive = activeModule is "hajj" or "umrah" or "supplier" or "accounts";
 }
 <nav class="admin-mainnav no-print" data-active-module="@activeModule">
     <div class="admin-mainnav-inner">
-        <button type="button" class="admin-module-link @(activeModule == "travel" ? "active" : "")" data-module="travel">Travel</button>
-        <button type="button" class="admin-module-link @(activeModule == "customer" ? "active" : "")" data-module="customer">Customer</button>
-        <button type="button" class="admin-module-link @(activeModule == "booking" ? "active" : "")" data-module="booking">Booking</button>
-        <button type="button" class="admin-module-link @(activeModule == "reports" ? "active" : "")" data-module="reports">Reports</button>
-        <button type="button" class="admin-module-link @(activeModule == "administration" ? "active" : "")" data-module="administration">Administration</button>
+        <a class="admin-nav-logo" asp-controller="Dashboard" asp-action="Index" aria-label="Al-Haram Travel home">
+            <img src="~/images/Logo_2.png" alt="Al-Haram Travel" />
+        </a>
 
-        <div class="admin-module-group @(modulesGroupActive ? "active" : "")" data-module-group="modules">
-            <button type="button" class="admin-module-link admin-module-group-toggle" data-module-group-toggle>
-                Modules <i class="fa-solid fa-chevron-down"></i>
-            </button>
-            <div class="admin-module-group-menu">
-                <button type="button" class="admin-module-link @(activeModule == "hajj" ? "active" : "")" data-module="hajj">Hajj</button>
-                <button type="button" class="admin-module-link @(activeModule == "umrah" ? "active" : "")" data-module="umrah">Umrah</button>
-                <button type="button" class="admin-module-link @(activeModule == "supplier" ? "active" : "")" data-module="supplier">Supplier</button>
-                <button type="button" class="admin-module-link @(activeModule == "accounts" ? "active" : "")" data-module="accounts">Accounts</button>
+        <div class="admin-mainnav-links">
+            <button type="button" class="admin-module-link @(activeModule == "travel" ? "active" : "")" data-module="travel">Travel</button>
+            <button type="button" class="admin-module-link @(activeModule == "customer" ? "active" : "")" data-module="customer">Customer</button>
+            <button type="button" class="admin-module-link @(activeModule == "booking" ? "active" : "")" data-module="booking">Booking</button>
+            <button type="button" class="admin-module-link @(activeModule == "reports" ? "active" : "")" data-module="reports">Reports</button>
+            <button type="button" class="admin-module-link @(activeModule == "administration" ? "active" : "")" data-module="administration">Administration</button>
+
+            <a class="admin-module-link @(ModuleActive("Hotels") == "active" ? "active" : "")" asp-controller="Hotels" asp-action="Index">Hotels</a>
+            <a class="admin-module-link @(ModuleActive("Gallery") == "active" ? "active" : "")" asp-controller="Gallery" asp-action="Index">Gallery</a>
+
+            <div class="admin-module-group @(modulesGroupActive ? "active" : "")" data-module-group="modules">
+                <button type="button" class="admin-module-link admin-module-group-toggle" data-module-group-toggle>
+                    Modules <i class="fa-solid fa-chevron-down"></i>
+                </button>
+                <div class="admin-module-group-menu">
+                    <button type="button" class="admin-module-link @(activeModule == "hajj" ? "active" : "")" data-module="hajj">Hajj</button>
+                    <button type="button" class="admin-module-link @(activeModule == "umrah" ? "active" : "")" data-module="umrah">Umrah</button>
+                    <button type="button" class="admin-module-link @(activeModule == "supplier" ? "active" : "")" data-module="supplier">Supplier</button>
+                    <button type="button" class="admin-module-link @(activeModule == "accounts" ? "active" : "")" data-module="accounts">Accounts</button>
+                </div>
             </div>
         </div>
     </div>

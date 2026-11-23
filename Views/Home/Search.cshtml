@@ -2,46 +2,249 @@
 @{
     Layout = "_PublicLayout";
     var results = ViewBag.Results as List<PublicPackageCardViewModel> ?? new();
+    var hasCriteria = ViewBag.HasSearchCriteria as bool? == true;
+    var type = string.IsNullOrWhiteSpace(Model.PackageType) || Model.PackageType == "All"
+        ? "All"
+        : Model.PackageType;
+    var themeClass = type.ToLowerInvariant() switch
+    {
+        "hajj" => "packages-theme-hajj",
+        "umrah" => "packages-theme-umrah",
+        "ziarat" => "packages-theme-ziarat",
+        "domestic" => "packages-theme-domestic",
+        "international" => "packages-theme-international",
+        _ => "packages-theme-all"
+    };
+    var pageTitle = type switch
+    {
+        "Hajj" => "Hajj Packages",
+        "Umrah" => "Umrah Packages",
+        "Ziarat" => "Ziarat Packages",
+        "Domestic" => "Domestic Tours",
+        "International" => "International Tours",
+        _ => "Explore Packages"
+    };
+    var isPilgrimage = type is "Hajj" or "Umrah" or "Ziarat";
+    var pilgrimageSubtitle = type switch
+    {
+        "Hajj" => "Begin your sacred journey to Masjid al-Haram with trusted guidance and care.",
+        "Umrah" => "Experience peaceful Umrah in Madinah and Makkah with complete arrangements.",
+        "Ziarat" => "Visit blessed shrines and sacred sites with complete Ziarat arrangements.",
+        _ => ""
+    };
+    var pilgrimagePackagesLabel = type switch
+    {
+        "Hajj" => "Hajj Packages",
+        "Umrah" => "Umrah Packages",
+        "Ziarat" => "Ziarat Packages",
+        _ => "Packages"
+    };
+    var pilgrimageImage = type switch
+    {
+        "Hajj" => "/images/kabaslider01.jpg?v=1",
+        "Umrah" => "/images/madina.jpg?v=3",
+        "Ziarat" => "/images/ziarat.jpg?v=1",
+        _ => ""
+    };
+    var tourismHeroImage = type switch
+    {
+        "Domestic" => "/images/valley.jpeg?v=1",
+        "International" => "/images/international01.jpg?v=1",
+        "Tourism" => "/images/international01.jpg?v=1",
+        _ => "/images/valley.jpeg?v=1"
+    };
+    var useVideoBackground = type is "Umrah" or "Ziarat";
+    var pilgrimageVideo = type switch
+    {
+        "Umrah" => "/movies/moviemadina.mp4",
+        "Ziarat" => "/movies/karbala01.mp4",
+        _ => ""
+    };
 }
-<section class="section-pad">
-    <div class="container-xl">
-        <h2 class="section-title">Search Packages</h2>
-        <p class="section-sub">Filter live packages from TravelManagementDB.</p>
-        <form method="get" class="search-panel mb-4">
-            <div class="row g-3 align-items-end">
-                <div class="col-md-3">
-                    <label class="form-label">Package Type</label>
-                    <select class="form-select" name="PackageType" asp-for="PackageType">
-                        <option value="All">All</option>
-                        <option value="Domestic">Domestic</option>
-                        <option value="International">International</option>
-                        <option value="Hajj">Hajj</option>
-                        <option value="Umrah">Umrah</option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Destination</label>
-                    <select class="form-select" name="DestinationId" asp-for="DestinationId">
-                        <option value="">Any destination</option>
-                        @foreach (var d in Model.DestinationOptions)
-                        {
-                            <option value="@d.DestinationId">@d.DestinationName</option>
-                        }
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <label class="form-label">Departure</label>
-                    <input class="form-control" type="date" name="DepartureDate" value="@Model.DepartureDate?.ToString("yyyy-MM-dd")" />
-                </div>
-                <div class="col-md-2">
-                    <label class="form-label">Travelers</label>
-                    <input class="form-control" type="number" min="1" name="Travelers" value="@Model.Travelers" />
-                </div>
-                <div class="col-md-2">
-                    <button class="btn btn-navy w-100" type="submit">Search</button>
+
+@if (isPilgrimage)
+{
+    <section class="hajj-component @themeClass @(useVideoBackground ? "hajj-component-video" : null)">
+        <div class="hajj-component-media" aria-hidden="true">
+            @if (useVideoBackground)
+            {
+                <video class="hajj-component-video-el"
+                       autoplay
+                       muted
+                       loop
+                       playsinline
+                       preload="auto"
+                       poster="@pilgrimageImage">
+                    <source src="@pilgrimageVideo" type="video/mp4" />
+                </video>
+            }
+            else
+            {
+                <img src="@pilgrimageImage" alt="" />
+            }
+        </div>
+        <div class="hajj-component-shade" aria-hidden="true"></div>
+        <div class="container-xl hajj-component-inner">
+            <div class="hajj-component-copy">
+                <h1 class="packages-hero-title">@pageTitle</h1>
+                <p class="packages-hero-subtitle">@pilgrimageSubtitle</p>
+                <div class="packages-hero-actions">
+                    <a class="btn-gold" asp-controller="CustomerAccount" asp-action="Register">Register Now</a>
+                    <a class="btn-hero-outline" href="#packages-results">@pilgrimagePackagesLabel</a>
                 </div>
             </div>
-        </form>
-        <partial name="_PackageCards" model="results" />
-    </div>
-</section>
+        </div>
+    </section>
+
+    <section class="package-search-component @themeClass">
+        <div class="container-xl">
+            <form method="get" class="packages-filter-panel package-search-form">
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-3">
+                        <label class="form-label">Package Type</label>
+                        <select class="form-select" name="PackageType" asp-for="PackageType">
+                            <option value="All">All</option>
+                            <option value="Domestic">Domestic</option>
+                            <option value="International">International</option>
+                            <option value="Hajj">Hajj</option>
+                            <option value="Umrah">Umrah</option>
+                            <option value="Ziarat">Ziarat</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Destination</label>
+                        <select class="form-select" name="DestinationId" asp-for="DestinationId">
+                            <option value="">Any destination</option>
+                            @foreach (var d in Model.DestinationOptions)
+                            {
+                                <option value="@d.DestinationId">@d.DestinationName</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Departure</label>
+                        <input class="form-control" type="date" name="DepartureDate" value="@Model.DepartureDate?.ToString("yyyy-MM-dd")" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Travelers</label>
+                        <input class="form-control" type="number" min="1" name="Travelers" value="@Model.Travelers" />
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-packages-search w-100" type="submit">
+                            <i class="fa-solid fa-magnifying-glass me-1"></i> Search
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <section class="packages-page @themeClass">
+        <div class="container-xl">
+            <div class="packages-results-head" id="packages-results">
+                <h2>Available Packages</h2>
+                <p>@(hasCriteria
+                    ? "Choose a card to view itinerary, pricing, and departure options."
+                    : "Enter search parameters above (package type, destination, or departure date), then click Search.")</p>
+            </div>
+
+            @if (hasCriteria)
+            {
+                <partial name="_PackageCards" model="results" />
+            }
+            else
+            {
+                <div class="packages-empty">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <h3>No packages loaded</h3>
+                    <p>Packages are shown only after you enter search parameters.</p>
+                </div>
+            }
+        </div>
+    </section>
+}
+else
+{
+    <section class="hajj-component @themeClass">
+        <div class="hajj-component-media" aria-hidden="true">
+            <img src="@tourismHeroImage" alt="" />
+        </div>
+        <div class="hajj-component-shade" aria-hidden="true"></div>
+        <div class="container-xl hajj-component-inner">
+            <div class="hajj-component-copy">
+                <h1 class="packages-hero-title">@pageTitle</h1>
+                <div class="packages-hero-pills">
+                    <span><i class="fa-solid fa-box-open"></i> @results.Count package@(results.Count == 1 ? "" : "s")</span>
+                    <span><i class="fa-solid fa-filter"></i> @type</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="package-search-component @themeClass">
+        <div class="container-xl">
+            <form method="get" class="packages-filter-panel package-search-form">
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-3">
+                        <label class="form-label">Package Type</label>
+                        <select class="form-select" name="PackageType" asp-for="PackageType">
+                            <option value="All">All</option>
+                            <option value="Domestic">Domestic</option>
+                            <option value="International">International</option>
+                            <option value="Hajj">Hajj</option>
+                            <option value="Umrah">Umrah</option>
+                            <option value="Ziarat">Ziarat</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Destination</label>
+                        <select class="form-select" name="DestinationId" asp-for="DestinationId">
+                            <option value="">Any destination</option>
+                            @foreach (var d in Model.DestinationOptions)
+                            {
+                                <option value="@d.DestinationId">@d.DestinationName</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Departure</label>
+                        <input class="form-control" type="date" name="DepartureDate" value="@Model.DepartureDate?.ToString("yyyy-MM-dd")" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Travelers</label>
+                        <input class="form-control" type="number" min="1" name="Travelers" value="@Model.Travelers" />
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-packages-search w-100" type="submit">
+                            <i class="fa-solid fa-magnifying-glass me-1"></i> Search
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <section class="packages-page @themeClass">
+        <div class="container-xl">
+            <div class="packages-results-head" id="packages-results">
+                <h2>Available Packages</h2>
+                <p>@(hasCriteria
+                    ? "Choose a card to view itinerary, pricing, and departure options."
+                    : "Enter search parameters above (package type, destination, or departure date), then click Search.")</p>
+            </div>
+
+            @if (hasCriteria)
+            {
+                <partial name="_PackageCards" model="results" />
+            }
+            else
+            {
+                <div class="packages-empty">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <h3>No packages loaded</h3>
+                    <p>Packages are shown only after you enter search parameters.</p>
+                </div>
+            }
+        </div>
+    </section>
+}

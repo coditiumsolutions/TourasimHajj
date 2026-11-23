@@ -36,6 +36,8 @@ public partial class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 
     public virtual DbSet<Expense> Expenses { get; set; }
 
+    public virtual DbSet<GalleryItem> GalleryItems { get; set; }
+
     public virtual DbSet<HajjSeason> HajjSeasons { get; set; }
 
     public virtual DbSet<Hotel> Hotels { get; set; }

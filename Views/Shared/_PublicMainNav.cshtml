@@ -1,7 +1,20 @@
+@using Microsoft.Extensions.Options
+@using TourismHajj.Helpers
+@inject IOptions<CompanyProfileOptions> CompanyOptions
+@{
+    var c = CompanyOptions.Value;
+    var whatsapp = (c.WhatsApp ?? "").Trim().TrimStart('+');
+}
 <nav class="public-mainnav sticky-top">
     <div class="public-mainnav-inner">
+        <a class="public-nav-logo" asp-controller="Home" asp-action="Index" aria-label="Al-Haram Travel home">
+            <img src="~/images/Logo_2.png" alt="Al-Haram Travel" />
+        </a>
         <ul class="public-nav-links">
-            <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index">Home</a></li>
+            <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Search" asp-route-PackageType="Hajj">Hajj</a></li>
+            <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Search" asp-route-PackageType="Umrah">Umrah</a></li>
+            <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Search" asp-route-PackageType="Ziarat">Ziarat</a></li>
+            <li class="nav-item"><a class="nav-link" asp-controller="PublicGallery" asp-action="Index">Gallery</a></li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Tourism</a>
                 <ul class="dropdown-menu">
@@ -10,11 +23,10 @@
                     <li><a class="dropdown-item" asp-controller="Home" asp-action="Search" asp-route-PackageType="Tourism">All Tourism</a></li>
                 </ul>
             </li>
-            <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Search" asp-route-PackageType="Hajj">Hajj</a></li>
-            <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Search" asp-route-PackageType="Umrah">Umrah</a></li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Modules</a>
                 <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" asp-controller="PublicHotels" asp-action="Index">Hotels</a></li>
                     <li><a class="dropdown-item" asp-controller="Home" asp-action="Search" asp-route-PackageType="Domestic">Domestic</a></li>
                     <li><a class="dropdown-item" asp-controller="Home" asp-action="Search" asp-route-PackageType="International">International</a></li>
                     <li><a class="dropdown-item" href="/#destinations">Destinations</a></li>
@@ -23,5 +35,9 @@
                 </ul>
             </li>
         </ul>
+        <a class="btn-nav-whatsapp" href="https://wa.me/@whatsapp" target="_blank" rel="noopener">
+            <i class="fa-brands fa-whatsapp"></i>
+            <span>WhatsApp Inquiry</span>
+        </a>
     </div>
 </nav>

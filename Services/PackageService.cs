@@ -54,7 +54,8 @@ public class PackageService : IPackageService
                 MinimumPersons = package.MinimumPersons,
                 MaximumPersons = package.MaximumPersons,
                 IsFeatured = package.IsFeatured == true,
-                IsActive = package.IsActive != false
+                IsActive = package.IsActive != false,
+                CoverImageUrl = package.CoverImageUrl
             },
             Destinations = destinationRows.Select(d => new PackageDestinationInputModel
             {
@@ -106,10 +107,32 @@ public class PackageService : IPackageService
             entity.CreatedDate = DateTime.Now;
             entity.IsActive ??= true;
             _db.TravelPackages.Add(entity);
+            await _db.SaveChangesAsync();
+            return entity;
         }
-        else _db.TravelPackages.Update(entity);
+
+        var existing = await _db.TravelPackages.FirstOrDefaultAsync(p => p.PackageId == entity.PackageId)
+            ?? throw new InvalidOperationException($"Package {entity.PackageId} was not found.");
+
+        existing.PackageCode = entity.PackageCode;
+        existing.PackageName = entity.PackageName;
+        existing.PackageType = entity.PackageType;
+        existing.Description = entity.Description;
+        existing.DurationDays = entity.DurationDays;
+        existing.DurationNights = entity.DurationNights;
+        existing.AdultPrice = entity.AdultPrice;
+        existing.ChildPrice = entity.ChildPrice;
+        existing.InfantPrice = entity.InfantPrice;
+        existing.CurrencyCode = entity.CurrencyCode;
+        existing.MinimumPersons = entity.MinimumPersons;
+        existing.MaximumPersons = entity.MaximumPersons;
+        existing.IsFeatured = entity.IsFeatured;
+        existing.IsActive = entity.IsActive;
+        if (!string.IsNullOrWhiteSpace(entity.CoverImageUrl))
+            existing.CoverImageUrl = entity.CoverImageUrl;
+
         await _db.SaveChangesAsync();
-        return entity;
+        return existing;
     }
 
     public async Task SoftDeleteAsync(int id)

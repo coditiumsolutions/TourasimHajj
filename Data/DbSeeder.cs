@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using TourismHajj.Helpers;
 using TourismHajj.Models;
 
@@ -11,6 +12,22 @@ public static class DbSeeder
         using var scope = services.CreateScope();
         var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
         var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+        var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+        await db.Database.ExecuteSqlRawAsync("""
+            IF OBJECT_ID(N'[dbo].[GalleryItems]', N'U') IS NULL
+            BEGIN
+                CREATE TABLE [dbo].[GalleryItems](
+                    [GalleryItemId] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+                    [Title] NVARCHAR(200) NOT NULL,
+                    [Description] NVARCHAR(1000) NULL,
+                    [ImageUrl] NVARCHAR(500) NOT NULL,
+                    [SortOrder] INT NOT NULL CONSTRAINT DF_GalleryItems_SortOrder DEFAULT(0),
+                    [IsActive] BIT NOT NULL CONSTRAINT DF_GalleryItems_IsActive DEFAULT(1),
+                    [CreatedDate] DATETIME2 NULL
+                );
+            END
+            """);
 
         foreach (var role in AppRoles.All)
         {

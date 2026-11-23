@@ -1,6 +1,8 @@
 ## .NET
 bin/
 obj/
+live_tourism/
+live_tourism.rar
 *.user
 *.suo
 *.userosscache

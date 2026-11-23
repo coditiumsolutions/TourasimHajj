@@ -7,10 +7,8 @@
 <div class="public-topbar">
     <div class="public-topbar-inner">
         <div class="d-flex flex-wrap align-items-center gap-2 topbar-left">
-            <a class="topbar-brand" asp-controller="Home" asp-action="Index">Tourism</a>
             <a href="tel:@c.Phone.Replace(" ", "")"><i class="fa-solid fa-phone"></i> @c.Phone</a>
             <a href="mailto:@c.Email"><i class="fa-solid fa-envelope"></i> @c.Email</a>
-            <a href="https://wa.me/@c.WhatsApp.TrimStart('+')" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
             <span class="topbar-socials">
                 <a href="@c.FacebookUrl" target="_blank" rel="noopener" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
                 <a href="@c.InstagramUrl" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>

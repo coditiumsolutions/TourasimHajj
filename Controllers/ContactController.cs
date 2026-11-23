@@ -16,7 +16,7 @@ public class ContactController : Controller
     public IActionResult Index()
     {
         ViewData["Title"] = "Contact Us";
-        ViewData["MetaDescription"] = "Contact Tourism Hajj for tourism, Hajj and Umrah travel assistance.";
+        ViewData["MetaDescription"] = "Contact Al-Haram Travel for tourism, Hajj and Umrah travel assistance.";
         return View(new ContactFormViewModel());
     }
 

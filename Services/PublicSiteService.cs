@@ -22,6 +22,9 @@ public class PublicSiteService : IPublicSiteService
     private static readonly string HajjCover =
         "https://images.unsplash.com/photo-1564769625905-50e93615e769?auto=format&fit=crop&w=1200&q=80";
 
+    private static readonly string ZiaratCover =
+        "https://images.unsplash.com/photo-1564760055775-d63b17a55c44?auto=format&fit=crop&w=1200&q=80";
+
     private static readonly string PakistanCover =
         "https://images.unsplash.com/photo-1589802829985-817e51171b92?auto=format&fit=crop&w=1200&q=80";
 
@@ -44,6 +47,7 @@ public class PublicSiteService : IPublicSiteService
         {
             "Hajj" => HajjCover,
             "Umrah" => UmrahCover,
+            "Ziarat" => ZiaratCover,
             "Domestic" => PakistanCover,
             "International" => DubaiCover,
             _ => DefaultCover
@@ -180,6 +184,43 @@ public class PublicSiteService : IPublicSiteService
             .OrderBy(d => d.DestinationName)
             .ToListAsync(cancellationToken);
 
+    public async Task<List<PublicHotelCardViewModel>> GetPublicHotelsAsync(CancellationToken cancellationToken = default)
+    {
+        return await _db.Hotels.AsNoTracking()
+            .Include(h => h.City)
+            .Where(h => h.IsActive != false)
+            .OrderByDescending(h => h.StarRating)
+            .ThenBy(h => h.HotelName)
+            .Select(h => new PublicHotelCardViewModel
+            {
+                HotelId = h.HotelId,
+                HotelName = h.HotelName,
+                CityName = h.City.CityName,
+                StarRating = h.StarRating,
+                Address = h.Address,
+                DistanceFromHaramKm = h.DistanceFromHaramKm,
+                DistanceFromNabawiKm = h.DistanceFromNabawiKm,
+                ContactNo = h.ContactNo
+            })
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<List<PublicGalleryCardViewModel>> GetPublicGalleryAsync(CancellationToken cancellationToken = default)
+    {
+        return await _db.GalleryItems.AsNoTracking()
+            .Where(g => g.IsActive)
+            .OrderBy(g => g.SortOrder)
+            .ThenByDescending(g => g.GalleryItemId)
+            .Select(g => new PublicGalleryCardViewModel
+            {
+                GalleryItemId = g.GalleryItemId,
+                Title = g.Title,
+                Description = g.Description,
+                ImageUrl = g.ImageUrl
+            })
+            .ToListAsync(cancellationToken);
+    }
+
     private IQueryable<TravelPackage> QueryPackages() =>
         _db.TravelPackages
             .Include(p => p.PackageDestinations).ThenInclude(pd => pd.Destination)
@@ -208,10 +249,13 @@ public class PublicSiteService : IPublicSiteService
                 PackageId = p.PackageId,
                 PackageName = p.PackageName,
                 PackageType = p.PackageType,
+                Description = p.Description,
                 DestinationName = dest?.DestinationName,
                 DurationDays = p.DurationDays,
                 DurationNights = p.DurationNights,
                 AdultPrice = p.AdultPrice,
+                ChildPrice = p.ChildPrice,
+                InfantPrice = p.InfantPrice,
                 CurrencyCode = p.CurrencyCode ?? "PKR",
                 CoverImageUrl = ResolveCoverImage(p, dest?.ImageUrl),
                 NextDepartureDate = nextDep?.DepartureDate,

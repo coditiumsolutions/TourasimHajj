@@ -1,0 +1,52 @@
+@model GalleryItemInputModel
+@{
+    ViewData["Title"] = "Edit Gallery Image";
+}
+<div class="page-header"><h2>Edit Gallery Image</h2></div>
+<div class="card-panel"><div class="card-panel-body">
+<form asp-action="Edit" method="post" enctype="multipart/form-data" class="form-4col">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="GalleryItemId" />
+    <div asp-validation-summary="All" class="text-danger mb-2"></div>
+    <div class="form-4col-row">
+        <label class="form-4col-label" asp-for="Title">Title</label>
+        <div class="form-4col-field">
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+        <label class="form-4col-label" asp-for="SortOrder">Sort Order</label>
+        <div class="form-4col-field">
+            <input asp-for="SortOrder" class="form-control" />
+        </div>
+    </div>
+    <div class="form-4col-row">
+        <label class="form-4col-label" asp-for="Description">Description</label>
+        <div class="form-4col-field">
+            <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+        </div>
+        <label class="form-4col-label" for="IsActive">Active</label>
+        <div class="form-4col-field form-4col-check">
+            <input asp-for="IsActive" class="form-check-input" />
+        </div>
+    </div>
+    <div class="form-4col-row">
+        <label class="form-4col-label" for="imageFile">Replace Image</label>
+        <div class="form-4col-field">
+            <input type="file" id="imageFile" name="imageFile" class="form-control" accept="image/*" />
+            @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
+            {
+                <img src="@Model.ImageUrl" alt="@Model.Title" class="mt-2" style="max-width:180px;border-radius:8px;" />
+            }
+        </div>
+        <label class="form-4col-label" asp-for="ImageUrl">Image URL</label>
+        <div class="form-4col-field">
+            <input asp-for="ImageUrl" class="form-control" />
+            <span asp-validation-for="ImageUrl" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-4col-actions">
+        <button class="btn btn-primary" type="submit">Save</button>
+        <a class="btn btn-outline-secondary" asp-action="Index">Cancel</a>
+    </div>
+</form>
+</div></div>

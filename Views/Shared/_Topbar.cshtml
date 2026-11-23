@@ -1,9 +1,13 @@
 @using Microsoft.AspNetCore.Identity
+@using Microsoft.Extensions.Options
+@using TourismHajj.Helpers
 @using TourismHajj.Models
 @inject UserManager<ApplicationUser> UserManager
+@inject IOptions<CompanyProfileOptions> CompanyOptions
 @{
     var user = await UserManager.GetUserAsync(User);
     var displayEmail = user?.Email ?? user?.FullName ?? "User";
+    var companyName = CompanyOptions.Value.CompanyName;
 }
 
 <header class="admin-topbar admin-topbar-primary no-print">
@@ -11,7 +15,7 @@
         <button type="button" class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
             <i class="fa-solid fa-bars"></i>
         </button>
-        <a class="admin-topbar-brand" asp-controller="Dashboard" asp-action="Index">Tourism</a>
+        <a class="admin-topbar-brand" asp-controller="Dashboard" asp-action="Index">@companyName</a>
         <partial name="_Breadcrumb" />
     </div>
 
