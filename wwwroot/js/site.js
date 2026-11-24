@@ -69,7 +69,7 @@
 
   // Module top-nav: show matching sublinks in the side navbar
   const moduleStorageKey = 'tourismhajj.activeModule';
-  const nestedModules = ['hajj', 'umrah', 'supplier', 'accounts'];
+  const nestedModules = ['hajj', 'umrah', 'supplier', 'accounts', 'reports', 'administration'];
 
   function setActiveModule(module) {
     if (!module) return;

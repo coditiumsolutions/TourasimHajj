@@ -9,6 +9,30 @@ public class CustomerListViewModel
     public string? SearchTerm { get; set; }
 }
 
+public class CustomerGroupMemberInputModel
+{
+    public int TravelerId { get; set; }
+
+    [StringLength(150)]
+    [Display(Name = "Full Name")]
+    public string? FullName { get; set; }
+
+    [StringLength(50)]
+    [Display(Name = "Relationship")]
+    public string? Relationship { get; set; }
+
+    [StringLength(50)]
+    [Display(Name = "Passport Number")]
+    public string? PassportNo { get; set; }
+
+    [StringLength(30)]
+    [Display(Name = "Mobile")]
+    public string? MobileNo { get; set; }
+
+    [StringLength(20)]
+    public string? Gender { get; set; }
+}
+
 public class CustomerInputModel
 {
     public int CustomerId { get; set; }
@@ -46,8 +70,20 @@ public class CustomerInputModel
     [Display(Name = "Customer Type")]
     public string? CustomerType { get; set; } = "Individual";
 
+    [StringLength(30)]
+    [Display(Name = "Tracking No")]
+    public string? TrackingNo { get; set; }
+
+    [StringLength(30)]
+    [Display(Name = "Group Type")]
+    public string? GroupType { get; set; }
+
     [Display(Name = "Active")]
     public bool IsActive { get; set; } = true;
+
+    public DateTime? CreatedDate { get; set; }
+
+    public List<CustomerGroupMemberInputModel> Members { get; set; } = new();
 }
 
 public class CustomerDetailsViewModel

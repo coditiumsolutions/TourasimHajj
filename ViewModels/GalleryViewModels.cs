@@ -24,12 +24,18 @@ public class PublicHotelCardViewModel
 {
     public int HotelId { get; set; }
     public string HotelName { get; set; } = string.Empty;
+    public string? Description { get; set; }
     public string? CityName { get; set; }
     public int? StarRating { get; set; }
     public string? Address { get; set; }
     public decimal? DistanceFromHaramKm { get; set; }
     public decimal? DistanceFromNabawiKm { get; set; }
     public string? ContactNo { get; set; }
+    public string? CoverImageUrl { get; set; }
+    public decimal? PricePerNight { get; set; }
+    public string? CurrencyCode { get; set; }
+    public int? DurationNights { get; set; }
+    public bool IsFeatured { get; set; }
 }
 
 public class PublicGalleryCardViewModel

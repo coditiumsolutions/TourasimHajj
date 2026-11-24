@@ -58,6 +58,7 @@ builder.Services.AddScoped<IMasterDataService, MasterDataService>();
 builder.Services.AddScoped<IAuditService, AuditService>();
 builder.Services.AddScoped<IPublicSiteService, PublicSiteService>();
 builder.Services.AddScoped<ICustomerPortalService, CustomerPortalService>();
+builder.Services.AddScoped<IInterfaceThemeService, InterfaceThemeService>();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddControllersWithViews();

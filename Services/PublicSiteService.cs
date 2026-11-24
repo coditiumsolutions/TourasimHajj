@@ -186,6 +186,35 @@ public class PublicSiteService : IPublicSiteService
 
     public async Task<List<PublicHotelCardViewModel>> GetPublicHotelsAsync(CancellationToken cancellationToken = default)
     {
+        var packages = await _db.HotelPackages.AsNoTracking()
+            .Where(h => h.IsActive)
+            .OrderBy(h => h.SortOrder)
+            .ThenByDescending(h => h.IsFeatured)
+            .ThenByDescending(h => h.StarRating)
+            .ThenBy(h => h.HotelName)
+            .Select(h => new PublicHotelCardViewModel
+            {
+                HotelId = h.HotelPackageId,
+                HotelName = h.HotelName,
+                Description = h.Description,
+                CityName = h.CityName,
+                StarRating = h.StarRating,
+                Address = h.Address,
+                DistanceFromHaramKm = h.DistanceFromHaramKm,
+                DistanceFromNabawiKm = h.DistanceFromNabawiKm,
+                ContactNo = h.ContactNo,
+                CoverImageUrl = h.CoverImageUrl,
+                PricePerNight = h.PricePerNight,
+                CurrencyCode = h.CurrencyCode,
+                DurationNights = h.DurationNights,
+                IsFeatured = h.IsFeatured
+            })
+            .ToListAsync(cancellationToken);
+
+        if (packages.Count > 0)
+            return packages;
+
+        // Fallback to inventory hotels when no public hotel packages exist yet.
         return await _db.Hotels.AsNoTracking()
             .Include(h => h.City)
             .Where(h => h.IsActive != false)

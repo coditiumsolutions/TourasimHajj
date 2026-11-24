@@ -131,9 +131,9 @@ a:hover { color: var(--navy); }
 }
 
 .public-nav-logo img {
-  height: 64px;
+  height: 48px;
   width: auto;
-  max-width: 260px;
+  max-width: 195px;
   object-fit: contain;
   display: block;
 }
@@ -939,4 +939,61 @@ a:hover { color: var(--navy); }
   .hero-swiper { height: 62vh; }
   .search-panel { margin-top: 1.5rem; }
   .topbar-contacts { width: 100%; }
+}
+
+/* Hotels page: packages sit on the hotel background component */
+.hotels-packages-component.hajj-component {
+  height: auto;
+  max-height: none;
+  min-height: 560px;
+  padding-bottom: 2.5rem;
+}
+
+.hotels-packages-component .hajj-component-shade {
+  background: linear-gradient(180deg, rgba(6, 16, 32, .45) 0%, rgba(6, 16, 32, .35) 40%, rgba(6, 16, 32, .72) 100%);
+}
+
+.hotels-packages-inner {
+  justify-content: flex-start;
+  gap: 1.5rem;
+  padding-top: 2.5rem;
+  padding-bottom: 1rem;
+}
+
+.hotels-packages-copy {
+  max-width: 42rem;
+}
+
+.hotels-packages-on-hero {
+  width: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+.hotels-package-card-on-hero {
+  background: rgba(255, 255, 255, .94);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, .28);
+}
+
+.hotels-packages-empty-on-hero {
+  background: rgba(255, 255, 255, .92);
+  border-radius: 14px;
+  padding: 2rem 1.25rem;
+  color: #1b2b3f;
+}
+
+.hotels-packages-empty-on-hero h3,
+.hotels-packages-empty-on-hero p {
+  color: inherit;
+}
+
+@media (max-width: 767.98px) {
+  .hotels-packages-component.hajj-component {
+    min-height: 420px;
+  }
+
+  .hotels-packages-inner {
+    padding-top: 1.5rem;
+  }
 }

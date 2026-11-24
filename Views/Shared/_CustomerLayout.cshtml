@@ -13,13 +13,27 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" crossorigin="anonymous" />
     <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/public.css" asp-append-version="true" />
+    @{ ViewData["InterfaceThemeScope"] = "customer"; }
+    @await Html.PartialAsync("_InterfaceThemeStyles")
     <style>
         .customer-shell { display:flex; min-height:100vh; background:#eef2f6; }
-        .customer-sidebar { width:260px; background:linear-gradient(180deg,#0b1f3a,#071526); color:#fff; flex-shrink:0; }
+        .customer-sidebar {
+            width:260px;
+            background:linear-gradient(180deg, var(--portal-primary, #0b1f3a), var(--portal-primary, #071526));
+            color:#fff;
+            flex-shrink:0;
+        }
         .customer-sidebar a { color:rgba(255,255,255,.82); display:flex; gap:.7rem; align-items:center; padding:.7rem 1rem; border-radius:10px; text-decoration:none; }
         .customer-sidebar a:hover, .customer-sidebar a.active { background:rgba(255,255,255,.08); color:#fff; }
         .customer-main { flex:1; }
-        .customer-top { background:#fff; border-bottom:1px solid #e2e8f0; padding:1rem 1.25rem; display:flex; justify-content:space-between; align-items:center; }
+        .customer-top {
+            background: var(--portal-secondary, #fff);
+            border-bottom:1px solid rgba(0,0,0,.08);
+            padding:1rem 1.25rem;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        }
         .customer-content { padding:1.35rem; }
         @@media (max-width: 991.98px) {
             .customer-shell { flex-direction:column; }

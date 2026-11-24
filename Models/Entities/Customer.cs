@@ -43,6 +43,12 @@ public partial class Customer
     [StringLength(30)]
     public string? CustomerType { get; set; }
 
+    [StringLength(30)]
+    public string? TrackingNo { get; set; }
+
+    [StringLength(30)]
+    public string? GroupType { get; set; }
+
     public DateTime? CreatedDate { get; set; }
 
     public bool? IsActive { get; set; }

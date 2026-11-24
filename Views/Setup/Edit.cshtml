@@ -1,0 +1,7 @@
+@model AppConfigInputModel
+@{ ViewData["Title"] = "Edit Config"; }
+<div class="page-header"><h2>Edit Config</h2></div>
+<div class="card-panel"><div class="card-panel-body">
+    <partial name="_ConfigForm" model="Model" />
+</div></div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

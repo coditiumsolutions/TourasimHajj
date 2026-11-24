@@ -9,12 +9,12 @@ using TourismHajj.ViewModels;
 namespace TourismHajj.Controllers;
 
 [Authorize(Policy = AppRoles.AdminOnly)]
-public class GalleryController : Controller
+public class GalleryManagementController : Controller
 {
     private readonly ApplicationDbContext _db;
     private readonly IWebHostEnvironment _env;
 
-    public GalleryController(ApplicationDbContext db, IWebHostEnvironment env)
+    public GalleryManagementController(ApplicationDbContext db, IWebHostEnvironment env)
     {
         _db = db;
         _env = env;
@@ -22,7 +22,7 @@ public class GalleryController : Controller
 
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
-        ViewData["Title"] = "Gallery";
+        ViewData["Title"] = "Gallery Management";
         var items = await _db.GalleryItems
             .OrderBy(g => g.SortOrder)
             .ThenByDescending(g => g.GalleryItemId)

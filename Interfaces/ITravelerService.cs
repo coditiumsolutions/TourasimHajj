@@ -12,4 +12,6 @@ public interface ITravelerService
     Task<List<PassportAlertItem>> GetPassportAlertsAsync(int days = 90);
     Task<TravelerDocument> AddDocumentAsync(TravelerDocument doc);
     Task<List<TravelerDocument>> GetDocumentsAsync(int travelerId);
+    Task<TravelerDocumentsPageViewModel> GetDocumentsPageAsync(int? travelerId, string? search, CancellationToken cancellationToken = default);
+    Task DeleteDocumentAsync(int documentId, CancellationToken cancellationToken = default);
 }

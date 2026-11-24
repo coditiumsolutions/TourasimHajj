@@ -32,3 +32,10 @@ Thumbs.db
 
 ## Backups
 *.bak
+
+## Local server probe / credential scratch scripts
+Scripts/_winrm*
+Scripts/winrm*
+Scripts/_enable-winrm*
+Scripts/_run-winrm*
+Scripts/_fix-webdeploy.sql

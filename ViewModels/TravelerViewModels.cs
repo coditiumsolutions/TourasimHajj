@@ -72,3 +72,48 @@ public class PassportAlertViewModel
     public IReadOnlyList<Traveler> ExpiringTravelers { get; set; } = Array.Empty<Traveler>();
     public int WithinDays { get; set; }
 }
+
+public class TravelerDocumentInputModel
+{
+    [Required]
+    [Display(Name = "Traveler")]
+    public int TravelerId { get; set; }
+
+    [Required, StringLength(50)]
+    [Display(Name = "Document Type")]
+    public string DocumentType { get; set; } = "Passport";
+
+    [StringLength(100)]
+    [Display(Name = "Document Number")]
+    public string? DocumentNumber { get; set; }
+
+    [Display(Name = "Issue Date")]
+    [DataType(DataType.Date)]
+    public DateOnly? IssueDate { get; set; }
+
+    [Display(Name = "Expiry Date")]
+    [DataType(DataType.Date)]
+    public DateOnly? ExpiryDate { get; set; }
+
+    [StringLength(500)]
+    public string? Remarks { get; set; }
+}
+
+public class TravelerDocumentsPageViewModel
+{
+    public int? SelectedTravelerId { get; set; }
+    public string? Search { get; set; }
+    public IReadOnlyList<TravelerDocumentListItem> Travelers { get; set; } = Array.Empty<TravelerDocumentListItem>();
+    public Traveler? SelectedTraveler { get; set; }
+    public IReadOnlyList<TravelerDocument> Documents { get; set; } = Array.Empty<TravelerDocument>();
+    public TravelerDocumentInputModel Upload { get; set; } = new();
+}
+
+public class TravelerDocumentListItem
+{
+    public int TravelerId { get; set; }
+    public string FullName { get; set; } = string.Empty;
+    public string? CustomerName { get; set; }
+    public string? PassportNo { get; set; }
+    public int DocumentCount { get; set; }
+}

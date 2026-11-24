@@ -1,0 +1,109 @@
+@model HotelPackageInputModel
+<div class="card-panel">
+    <div class="card-panel-body">
+        <form asp-action="@(Model.HotelPackageId > 0 ? "Edit" : "Create")" asp-route-id="@(Model.HotelPackageId > 0 ? Model.HotelPackageId : null)" method="post" enctype="multipart/form-data" class="form-4col">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="HotelPackageId" />
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+            <div class="form-4col-row">
+                <label class="form-4col-label" asp-for="HotelName"></label>
+                <div class="form-4col-field">
+                    <input asp-for="HotelName" class="form-control" />
+                    <span asp-validation-for="HotelName" class="text-danger"></span>
+                </div>
+                <label class="form-4col-label" asp-for="CityName"></label>
+                <div class="form-4col-field">
+                    <input asp-for="CityName" class="form-control" placeholder="e.g. Makkah" />
+                </div>
+            </div>
+
+            <div class="form-4col-row">
+                <label class="form-4col-label" asp-for="StarRating"></label>
+                <div class="form-4col-field">
+                    <input asp-for="StarRating" class="form-control" type="number" min="1" max="7" />
+                </div>
+                <label class="form-4col-label" asp-for="ContactNo"></label>
+                <div class="form-4col-field">
+                    <input asp-for="ContactNo" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-4col-row">
+                <label class="form-4col-label" asp-for="DistanceFromHaramKm"></label>
+                <div class="form-4col-field">
+                    <input asp-for="DistanceFromHaramKm" class="form-control" />
+                </div>
+                <label class="form-4col-label" asp-for="DistanceFromNabawiKm"></label>
+                <div class="form-4col-field">
+                    <input asp-for="DistanceFromNabawiKm" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-4col-row">
+                <label class="form-4col-label" asp-for="PricePerNight"></label>
+                <div class="form-4col-field">
+                    <input asp-for="PricePerNight" class="form-control" />
+                </div>
+                <label class="form-4col-label" asp-for="CurrencyCode"></label>
+                <div class="form-4col-field">
+                    <input asp-for="CurrencyCode" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-4col-row">
+                <label class="form-4col-label" asp-for="DurationNights"></label>
+                <div class="form-4col-field">
+                    <input asp-for="DurationNights" class="form-control" type="number" min="1" />
+                </div>
+                <label class="form-4col-label" asp-for="SortOrder"></label>
+                <div class="form-4col-field">
+                    <input asp-for="SortOrder" class="form-control" type="number" />
+                </div>
+            </div>
+
+            <div class="form-4col-row">
+                <label class="form-4col-label" asp-for="Address"></label>
+                <div class="form-4col-field">
+                    <textarea asp-for="Address" class="form-control" rows="2"></textarea>
+                </div>
+                <label class="form-4col-label" asp-for="Description"></label>
+                <div class="form-4col-field">
+                    <textarea asp-for="Description" class="form-control" rows="2"></textarea>
+                </div>
+            </div>
+
+            <div class="form-4col-row">
+                <label class="form-4col-label" for="coverImage">Upload Cover Image</label>
+                <div class="form-4col-field">
+                    <input type="file" id="coverImage" name="coverImage" class="form-control" accept="image/*" />
+                </div>
+                <label class="form-4col-label" asp-for="CoverImageUrl"></label>
+                <div class="form-4col-field">
+                    <input asp-for="CoverImageUrl" class="form-control" placeholder="/uploads/hotels/..." />
+                    <span asp-validation-for="CoverImageUrl" class="text-danger"></span>
+                    @if (!string.IsNullOrWhiteSpace(Model.CoverImageUrl))
+                    {
+                        <img src="@Model.CoverImageUrl" alt="Cover" class="mt-2" style="max-height:80px;border-radius:6px;" />
+                    }
+                </div>
+            </div>
+
+            <div class="form-4col-row">
+                <label class="form-4col-label" for="IsFeatured">Featured</label>
+                <div class="form-4col-field form-4col-check">
+                    <input asp-for="IsFeatured" class="form-check-input" />
+                </div>
+                <label class="form-4col-label" for="IsActive">Active</label>
+                <div class="form-4col-field form-4col-check">
+                    <input asp-for="IsActive" class="form-check-input" />
+                </div>
+            </div>
+
+            <div class="form-4col-actions">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>

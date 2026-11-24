@@ -1,0 +1,21 @@
+@using TourismHajj.Helpers
+@using TourismHajj.Interfaces
+@inject IInterfaceThemeService ThemeService
+@{
+    var scope = ViewData["InterfaceThemeScope"] as string ?? "management";
+    var theme = string.Equals(scope, "customer", StringComparison.OrdinalIgnoreCase)
+        ? await ThemeService.GetCustomerThemeAsync()
+        : await ThemeService.GetManagementThemeAsync();
+}
+<style>
+:root {
+  --navy: @theme.PrimaryColor;
+  --navy-dark: @theme.PrimaryColor;
+  --navy-mid: @theme.PrimaryColor;
+  --gold: @theme.SecondaryColor;
+  --interface-primary: @theme.PrimaryColor;
+  --interface-secondary: @theme.SecondaryColor;
+  --portal-primary: @theme.PrimaryColor;
+  --portal-secondary: @theme.SecondaryColor;
+}
+</style>

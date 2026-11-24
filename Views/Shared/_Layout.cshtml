@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" crossorigin="anonymous" />
     <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+    @{ ViewData["InterfaceThemeScope"] = "management"; }
+    @await Html.PartialAsync("_InterfaceThemeStyles")
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body class="admin-body">

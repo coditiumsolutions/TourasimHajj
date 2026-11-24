@@ -1,82 +1,13 @@
-@model TourismHajj.Models.Entities.Customer
+@model CustomerInputModel
 @{ ViewData["Title"] = "New Customer"; }
+@await Html.PartialAsync("_Alerts")
 <div class="page-header"><h2>New Customer</h2></div>
 <div class="card-panel">
     <div class="card-panel-body">
-        <form asp-action="Create" method="post" class="form-4col">
-            @Html.AntiForgeryToken()
-            <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
-
-            <div class="form-4col-row">
-                <label class="form-4col-label" asp-for="CustomerName">Customer Name</label>
-                <div class="form-4col-field">
-                    <input asp-for="CustomerName" class="form-control" />
-                    <span asp-validation-for="CustomerName" class="text-danger"></span>
-                </div>
-                <label class="form-4col-label" asp-for="FatherName">Father Name</label>
-                <div class="form-4col-field">
-                    <input asp-for="FatherName" class="form-control" />
-                </div>
-            </div>
-
-            <div class="form-4col-row">
-                <label class="form-4col-label" asp-for="MobileNo">Mobile</label>
-                <div class="form-4col-field">
-                    <input asp-for="MobileNo" class="form-control" />
-                </div>
-                <label class="form-4col-label" asp-for="WhatsAppNo">WhatsApp</label>
-                <div class="form-4col-field">
-                    <input asp-for="WhatsAppNo" class="form-control" />
-                </div>
-            </div>
-
-            <div class="form-4col-row">
-                <label class="form-4col-label" asp-for="Email">Email</label>
-                <div class="form-4col-field">
-                    <input asp-for="Email" class="form-control" />
-                </div>
-                <label class="form-4col-label" asp-for="Cnic">CNIC</label>
-                <div class="form-4col-field">
-                    <input asp-for="Cnic" class="form-control" />
-                </div>
-            </div>
-
-            <div class="form-4col-row">
-                <label class="form-4col-label" asp-for="CityId">City</label>
-                <div class="form-4col-field">
-                    <select asp-for="CityId" class="form-select" asp-items="ViewBag.Cities">
-                        <option value="">--</option>
-                    </select>
-                </div>
-                <label class="form-4col-label" asp-for="CustomerType">Customer Type</label>
-                <div class="form-4col-field">
-                    <select asp-for="CustomerType" class="form-select">
-                        <option>Individual</option>
-                        <option>Family</option>
-                        <option>Corporate</option>
-                        <option>Agent</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="form-4col-row">
-                <label class="form-4col-label" asp-for="Address">Address</label>
-                <div class="form-4col-field">
-                    <textarea asp-for="Address" class="form-control" rows="2"></textarea>
-                </div>
-                <label class="form-4col-label" for="IsActive">Active</label>
-                <div class="form-4col-field form-4col-check">
-                    <input type="checkbox" class="form-check-input" id="IsActive" name="IsActive" value="true" @(Model.IsActive == true ? "checked" : null) />
-                </div>
-            </div>
-
-            <div class="form-4col-actions">
-                <button class="btn btn-primary" type="submit">Save</button>
-                <a class="btn btn-outline-secondary" asp-action="Index">Cancel</a>
-            </div>
-        </form>
+        <partial name="_CustomerForm" model="Model" />
     </div>
 </div>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/customer-group.js" asp-append-version="true"></script>
 }

@@ -3,70 +3,94 @@
     Layout = "_PublicLayout";
     ViewData["Title"] = "Hotels";
 }
-<section class="hajj-component packages-theme-all hotels-hero-component">
+<section class="hajj-component packages-theme-all hotels-hero-component hotels-packages-component">
     <div class="hajj-component-media" aria-hidden="true">
         <img src="/images/hotel01.jpg?v=1" alt="" />
     </div>
     <div class="hajj-component-shade" aria-hidden="true"></div>
-    <div class="container-xl hajj-component-inner">
-        <div class="hajj-component-copy">
+    <div class="container-xl hajj-component-inner hotels-packages-inner">
+        <div class="hajj-component-copy hotels-packages-copy">
             <h1 class="packages-hero-title">Hotels</h1>
+            <p class="packages-hero-subtitle">Stay options for Hajj, Umrah and tourism — curated hotel packages for your journey.</p>
             <div class="packages-hero-pills">
                 <span><i class="fa-solid fa-hotel"></i> @Model.Count hotel@(Model.Count == 1 ? "" : "s")</span>
             </div>
         </div>
-    </div>
-</section>
 
-<section class="packages-page packages-theme-all">
-    <div class="container-xl py-4">
-        <div class="row g-4">
+        <div class="hotels-packages-on-hero">
             @if (!Model.Any())
             {
-                <div class="col-12">
-                    <div class="packages-empty">
-                        <i class="fa-solid fa-hotel"></i>
-                        <h3>No hotels available yet</h3>
-                        <p>Hotel listings will appear here once added in the management portal.</p>
-                    </div>
+                <div class="packages-empty hotels-packages-empty-on-hero">
+                    <i class="fa-solid fa-hotel"></i>
+                    <h3>No hotels available yet</h3>
+                    <p>Hotel listings will appear here once added in the management portal.</p>
                 </div>
             }
             else
             {
-                foreach (var h in Model)
-                {
-                    <div class="col-md-6 col-xl-4">
-                        <article class="package-card package-card-rich">
-                            <div class="body">
-                                <h5>@h.HotelName</h5>
-                                <table class="package-detail-table">
-                                    <tbody>
-                                        <tr>
-                                            <th>City</th>
-                                            <td>@(h.CityName ?? "—")</td>
-                                            <th>Stars</th>
-                                            <td>@(h.StarRating?.ToString() ?? "—")</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Haram</th>
-                                            <td>@(h.DistanceFromHaramKm.HasValue ? $"{h.DistanceFromHaramKm:0.##} km" : "—")</td>
-                                            <th>Nabawi</th>
-                                            <td>@(h.DistanceFromNabawiKm.HasValue ? $"{h.DistanceFromNabawiKm:0.##} km" : "—")</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Address</th>
-                                            <td colspan="3">@(string.IsNullOrWhiteSpace(h.Address) ? "—" : h.Address)</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Contact</th>
-                                            <td colspan="3">@(string.IsNullOrWhiteSpace(h.ContactNo) ? "—" : h.ContactNo)</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </article>
-                    </div>
-                }
+                <div class="row g-3 hotels-packages-row">
+                    @foreach (var h in Model)
+                    {
+                        var currency = h.CurrencyCode ?? "PKR";
+                        <div class="col-sm-6 col-xl-4">
+                            <article class="package-card package-card-rich hotels-package-card-on-hero">
+                                @if (!string.IsNullOrWhiteSpace(h.CoverImageUrl))
+                                {
+                                    <div class="package-card-media">
+                                        <img src="@h.CoverImageUrl" alt="@h.HotelName" loading="lazy" />
+                                        @if (h.IsFeatured)
+                                        {
+                                            <span class="badge-type">Featured</span>
+                                        }
+                                    </div>
+                                }
+                                <div class="body">
+                                    <h5>@h.HotelName</h5>
+                                    <table class="package-detail-table">
+                                        <tbody>
+                                            <tr>
+                                                <th>City</th>
+                                                <td>@(h.CityName ?? "—")</td>
+                                                <th>Stars</th>
+                                                <td>@(h.StarRating?.ToString() ?? "—")</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Haram</th>
+                                                <td>@(h.DistanceFromHaramKm.HasValue ? $"{h.DistanceFromHaramKm:0.##} km" : "—")</td>
+                                                <th>Nabawi</th>
+                                                <td>@(h.DistanceFromNabawiKm.HasValue ? $"{h.DistanceFromNabawiKm:0.##} km" : "—")</td>
+                                            </tr>
+                                            @if (h.PricePerNight.HasValue || h.DurationNights.HasValue)
+                                            {
+                                                <tr>
+                                                    <th>Price / Night</th>
+                                                    <td>@(h.PricePerNight.HasValue ? $"{h.PricePerNight:N0} {currency}" : "—")</td>
+                                                    <th>Nights</th>
+                                                    <td>@(h.DurationNights?.ToString() ?? "—")</td>
+                                                </tr>
+                                            }
+                                            @if (!string.IsNullOrWhiteSpace(h.Description))
+                                            {
+                                                <tr>
+                                                    <th>Description</th>
+                                                    <td colspan="3">@h.Description</td>
+                                                </tr>
+                                            }
+                                            <tr>
+                                                <th>Address</th>
+                                                <td colspan="3">@(string.IsNullOrWhiteSpace(h.Address) ? "—" : h.Address)</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Contact</th>
+                                                <td colspan="3">@(string.IsNullOrWhiteSpace(h.ContactNo) ? "—" : h.ContactNo)</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </article>
+                        </div>
+                    }
+                </div>
             }
         </div>
     </div>

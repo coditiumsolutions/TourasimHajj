@@ -1,0 +1,56 @@
+@model InterfaceThemePickerViewModel
+@{
+    ViewData["Title"] = Model.PageTitle;
+    var actionName = Model.Scope == "customers" ? "CustomersInterface" : "PortalInterface";
+}
+@await Html.PartialAsync("_Alerts")
+<div class="page-header">
+    <div>
+        <h2>@Model.PageTitle</h2>
+        <p class="text-muted mb-0">@Model.PageSubtitle</p>
+    </div>
+</div>
+
+<div class="row g-3">
+@foreach (var theme in Model.Themes)
+{
+    var isSelected = string.Equals(theme.Id, Model.SelectedThemeId, StringComparison.OrdinalIgnoreCase);
+    <div class="col-md-6 col-xl-4">
+        <div class="card-panel h-100 @(isSelected ? "theme-card-selected" : "")" style="border:2px solid @(isSelected ? theme.SecondaryColor : "transparent");">
+            <div class="card-panel-body">
+                <div class="theme-preview mb-3" aria-hidden="true">
+                    <div class="theme-preview-primary" style="background:@theme.PrimaryColor;"></div>
+                    <div class="theme-preview-secondary" style="background:@theme.SecondaryColor;"></div>
+                </div>
+                <h5 class="mb-1">@theme.Name</h5>
+                <div class="small text-muted mb-3">
+                    Top + Side: <code>@theme.PrimaryColor</code><br />
+                    Second Navbar: <code>@theme.SecondaryColor</code>
+                </div>
+                <form asp-action="@actionName" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="themeId" value="@theme.Id" />
+                    <button type="submit" class="btn btn-sm @(isSelected ? "btn-primary" : "btn-outline-primary") w-100">
+                        @(isSelected ? "Selected" : "Apply Theme")
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+</div>
+
+<style>
+.theme-preview {
+  display: grid;
+  grid-template-rows: 54px 28px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0,0,0,.12);
+}
+.theme-preview-primary,
+.theme-preview-secondary { width: 100%; }
+.theme-card-selected {
+  box-shadow: 0 10px 28px rgba(0,0,0,.12);
+}
+</style>

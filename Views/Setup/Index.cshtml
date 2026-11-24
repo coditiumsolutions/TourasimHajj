@@ -1,0 +1,58 @@
+@model IEnumerable<TourismHajj.Models.Entities.AppConfig>
+@{
+    ViewData["Title"] = "Setup";
+}
+@await Html.PartialAsync("_Alerts")
+<div class="page-header">
+    <div>
+        <h2>Setup</h2>
+        <p class="text-muted mb-0">Key / value configuration used across the management portal.</p>
+    </div>
+    <div class="d-flex gap-2">
+        <form method="get" class="d-flex gap-2">
+            <input class="form-control form-control-sm" name="q" value="@ViewBag.Q" placeholder="Search key or value..." />
+            <button class="btn btn-sm btn-outline-secondary" type="submit">Search</button>
+        </form>
+        <a class="btn btn-sm btn-accent" asp-action="Create"><i class="fa-solid fa-plus"></i> Add Config</a>
+    </div>
+</div>
+<div class="card-panel">
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th style="width:18%;">Config Key</th>
+                    <th>Config Value</th>
+                    <th style="width:22%;">Description</th>
+                    <th style="width:8%;">Active</th>
+                    <th style="width:10%;"></th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td><strong>@item.ConfigKey</strong></td>
+                    <td>@item.ConfigValue</td>
+                    <td>@(item.Description ?? "—")</td>
+                    <td>@(item.IsActive ? "Yes" : "No")</td>
+                    <td class="text-end text-nowrap">
+                        <a class="btn btn-sm btn-outline-primary" asp-action="Edit" asp-route-id="@item.AppConfigId" title="Edit"><i class="fa-solid fa-pen"></i></a>
+                        <form asp-action="Delete" method="post" class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@item.AppConfigId" />
+                            <button type="submit" class="btn btn-sm btn-outline-danger" data-confirm="Delete this config?" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="5" class="text-center text-muted py-4">No setup configs yet. Click Add Config to create one.</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

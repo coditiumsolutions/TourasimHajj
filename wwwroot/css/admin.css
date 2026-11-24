@@ -14,7 +14,7 @@
   --sidebar-width: 278px;
   --sidebar-collapsed: 78px;
   --topbar-height: 58px;
-  --mainnav-height: 72px;
+  --mainnav-height: 56px;
   --header-stack: calc(var(--topbar-height) + var(--mainnav-height));
   --radius: 14px;
   --shadow: 0 8px 24px rgba(11, 31, 58, 0.06);
@@ -352,7 +352,7 @@ body.sidebar-collapsed .admin-main {
   display: block !important;
 }
 
-/* Second white module navbar (matches public site style) */
+/* Second module navbar */
 .admin-mainnav {
   min-height: var(--mainnav-height);
   height: auto;
@@ -383,9 +383,9 @@ body.sidebar-collapsed .admin-main {
 }
 
 .admin-nav-logo img {
-  height: 56px;
+  height: 47px;
   width: auto;
-  max-width: 220px;
+  max-width: 185px;
   object-fit: contain;
   display: block;
 }
@@ -402,6 +402,7 @@ body.sidebar-collapsed .admin-main {
   border: 0;
   background: transparent;
   color: #000;
+  text-decoration: none !important;
   font-size: 0.95rem;
   font-weight: 500;
   padding: 0.55rem 0.8rem;
@@ -409,10 +410,19 @@ body.sidebar-collapsed .admin-main {
   white-space: nowrap;
 }
 
+a.admin-module-link:hover,
+a.admin-module-link:focus,
+a.admin-module-link:active,
+a.admin-module-link:visited {
+  text-decoration: none !important;
+  color: #000;
+}
+
 .admin-module-link:hover,
 .admin-module-link.active {
   background: rgba(0,0,0,.06);
   color: #000;
+  text-decoration: none !important;
 }
 
 .admin-module-group {

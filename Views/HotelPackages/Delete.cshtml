@@ -1,0 +1,13 @@
+@model TourismHajj.Models.Entities.HotelPackage
+@{
+    ViewData["Title"] = "Deactivate Hotel Package";
+}
+<div class="page-header"><h1 class="h3 text-danger mb-0">Deactivate Hotel Package</h1></div>
+<div class="card-panel p-4">
+    <p>Deactivate hotel package <strong>@Model.HotelName</strong>@(string.IsNullOrWhiteSpace(Model.CityName) ? "" : $" in {Model.CityName}")?</p>
+    <form asp-action="Delete" asp-route-id="@Model.HotelPackageId" method="post">
+        @Html.AntiForgeryToken()
+        <button type="submit" class="btn btn-danger" data-confirm="Deactivate this hotel package?">Confirm</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+    </form>
+</div>

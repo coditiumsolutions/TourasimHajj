@@ -1,63 +1,225 @@
 @model CustomerInputModel
-<div class="card shadow-sm">
-    <div class="card-body">
-        <form asp-action="@(Model.CustomerId > 0 ? "Edit" : "Create")" method="post">
-            <input type="hidden" asp-for="CustomerId" />
-            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <label asp-for="CustomerName" class="form-label"></label>
-                    <input asp-for="CustomerName" class="form-control" />
-                    <span asp-validation-for="CustomerName" class="text-danger"></span>
-                </div>
-                <div class="col-md-6">
-                    <label asp-for="FatherName" class="form-label"></label>
-                    <input asp-for="FatherName" class="form-control" />
-                </div>
-                <div class="col-md-4">
-                    <label asp-for="MobileNo" class="form-label"></label>
-                    <input asp-for="MobileNo" class="form-control" />
-                </div>
-                <div class="col-md-4">
-                    <label asp-for="WhatsAppNo" class="form-label"></label>
-                    <input asp-for="WhatsAppNo" class="form-control" />
-                </div>
-                <div class="col-md-4">
-                    <label asp-for="Email" class="form-label"></label>
-                    <input asp-for="Email" class="form-control" />
-                </div>
-                <div class="col-md-4">
-                    <label asp-for="Cnic" class="form-label"></label>
-                    <input asp-for="Cnic" class="form-control" />
-                </div>
-                <div class="col-md-4">
-                    <label asp-for="CustomerType" class="form-label"></label>
-                    <select asp-for="CustomerType" asp-items="ViewBag.CustomerTypes" class="form-select"></select>
-                </div>
-                <div class="col-md-4">
-                    <label asp-for="CityId" class="form-label"></label>
-                    <select asp-for="CityId" asp-items="ViewBag.CityId" class="form-select">
-                        <option value="">-- Select --</option>
-                    </select>
-                </div>
-                <div class="col-12">
-                    <label asp-for="Address" class="form-label"></label>
-                    <textarea asp-for="Address" rows="2" class="form-control"></textarea>
-                </div>
-                <div class="col-12">
-                    <div class="form-check">
-                        <input asp-for="IsActive" class="form-check-input" />
-                        <label asp-for="IsActive" class="form-check-label"></label>
-                    </div>
-                </div>
-            </div>
-            <div class="mt-4 d-flex gap-2">
-                <button type="submit" class="btn btn-primary">Save</button>
-                <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
-            </div>
-        </form>
-    </div>
-</div>
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+@{
+    var isEdit = Model.CustomerId > 0;
+    var relationships = new[] { "Self", "Spouse", "Child", "Parent", "Sibling", "Friend", "Companion", "Relative", "Other" };
 }
+<form asp-action="@(isEdit ? "Edit" : "Create")" method="post" class="form-4col" id="customerGroupForm">
+    @Html.AntiForgeryToken()
+    @if (isEdit)
+    {
+        <input type="hidden" asp-for="CustomerId" />
+        <input type="hidden" asp-for="CreatedDate" />
+    }
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+    <div class="form-4col-row">
+        <label class="form-4col-label" asp-for="CustomerName">Customer Name</label>
+        <div class="form-4col-field">
+            <input asp-for="CustomerName" class="form-control" />
+            <span asp-validation-for="CustomerName" class="text-danger"></span>
+        </div>
+        <label class="form-4col-label" asp-for="FatherName">Father Name</label>
+        <div class="form-4col-field">
+            <input asp-for="FatherName" class="form-control" />
+        </div>
+    </div>
+
+    <div class="form-4col-row">
+        <label class="form-4col-label" asp-for="TrackingNo">Tracking No</label>
+        <div class="form-4col-field">
+            <input asp-for="TrackingNo" class="form-control" placeholder="Auto if left blank (CUST-00001)" />
+            <span class="text-muted small">Use this number to track the customer and group.</span>
+        </div>
+        <label class="form-4col-label" asp-for="GroupType">Group Type</label>
+        <div class="form-4col-field">
+            <select asp-for="GroupType" class="form-select">
+                <option value="">— Select —</option>
+                <option>Family</option>
+                <option>Friends</option>
+                <option>Companion</option>
+                <option>Mixed</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-4col-row">
+        <label class="form-4col-label" asp-for="MobileNo">Mobile</label>
+        <div class="form-4col-field">
+            <input asp-for="MobileNo" class="form-control" />
+        </div>
+        <label class="form-4col-label" asp-for="WhatsAppNo">WhatsApp</label>
+        <div class="form-4col-field">
+            <input asp-for="WhatsAppNo" class="form-control" />
+        </div>
+    </div>
+
+    <div class="form-4col-row">
+        <label class="form-4col-label" asp-for="Email">Email</label>
+        <div class="form-4col-field">
+            <input asp-for="Email" class="form-control" />
+        </div>
+        <label class="form-4col-label" asp-for="Cnic">CNIC</label>
+        <div class="form-4col-field">
+            <input asp-for="Cnic" class="form-control" />
+        </div>
+    </div>
+
+    <div class="form-4col-row">
+        <label class="form-4col-label" asp-for="CityId">City</label>
+        <div class="form-4col-field">
+            <select asp-for="CityId" class="form-select" asp-items="ViewBag.Cities">
+                <option value="">--</option>
+            </select>
+        </div>
+        <label class="form-4col-label" asp-for="CustomerType">Customer Type</label>
+        <div class="form-4col-field">
+            <select asp-for="CustomerType" class="form-select">
+                <option>Individual</option>
+                <option>Family</option>
+                <option>Corporate</option>
+                <option>Agent</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-4col-row">
+        <label class="form-4col-label" asp-for="Address">Address</label>
+        <div class="form-4col-field">
+            <textarea asp-for="Address" class="form-control" rows="2"></textarea>
+        </div>
+        <label class="form-4col-label" asp-for="IsActive">Active</label>
+        <div class="form-4col-field form-4col-check">
+            <input asp-for="IsActive" class="form-check-input" />
+        </div>
+    </div>
+
+    <div class="mt-4 mb-2 d-flex justify-content-between align-items-center">
+        <div>
+            <h5 class="mb-0">Group Members</h5>
+            <p class="text-muted small mb-0">Add family, friends, or companions with relationship and passport number.</p>
+        </div>
+        <button type="button" class="btn btn-sm btn-outline-primary" id="addGroupMemberBtn">
+            <i class="fa-solid fa-plus"></i> Add Member
+        </button>
+    </div>
+
+    <div class="table-responsive border rounded">
+        <table class="table table-sm mb-0 align-middle" id="groupMembersTable">
+            <thead>
+                <tr>
+                    <th style="min-width:160px;">Full Name</th>
+                    <th style="min-width:130px;">Relationship</th>
+                    <th style="min-width:140px;">Passport No</th>
+                    <th style="min-width:120px;">Mobile</th>
+                    <th style="min-width:100px;">Gender</th>
+                    <th style="width:48px;"></th>
+                </tr>
+            </thead>
+            <tbody id="groupMembersBody">
+            @for (var i = 0; i < Model.Members.Count; i++)
+            {
+                <tr class="group-member-row">
+                    <td>
+                        <input type="hidden" name="Members[@i].TravelerId" value="@Model.Members[i].TravelerId" />
+                        <input class="form-control form-control-sm" name="Members[@i].FullName" value="@Model.Members[i].FullName" placeholder="Member name" />
+                    </td>
+                    <td>
+                        <select class="form-select form-select-sm" name="Members[@i].Relationship">
+                            <option value="">—</option>
+                            @foreach (var rel in relationships)
+                            {
+                                if (string.Equals(Model.Members[i].Relationship, rel, StringComparison.OrdinalIgnoreCase))
+                                {
+                                    <option value="@rel" selected>@rel</option>
+                                }
+                                else
+                                {
+                                    <option value="@rel">@rel</option>
+                                }
+                            }
+                        </select>
+                    </td>
+                    <td>
+                        <input class="form-control form-control-sm" name="Members[@i].PassportNo" value="@Model.Members[i].PassportNo" placeholder="Passport #" />
+                    </td>
+                    <td>
+                        <input class="form-control form-control-sm" name="Members[@i].MobileNo" value="@Model.Members[i].MobileNo" />
+                    </td>
+                    <td>
+                        <select class="form-select form-select-sm" name="Members[@i].Gender">
+                            <option value="">—</option>
+                            @if (Model.Members[i].Gender == "Male")
+                            {
+                                <option value="Male" selected>Male</option>
+                            }
+                            else
+                            {
+                                <option value="Male">Male</option>
+                            }
+                            @if (Model.Members[i].Gender == "Female")
+                            {
+                                <option value="Female" selected>Female</option>
+                            }
+                            else
+                            {
+                                <option value="Female">Female</option>
+                            }
+                        </select>
+                    </td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-sm btn-outline-danger remove-member-btn" title="Remove">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="form-4col-actions mt-3">
+        <button class="btn btn-primary" type="submit">@(isEdit ? "Update" : "Save")</button>
+        <a class="btn btn-outline-secondary" asp-action="Index">Cancel</a>
+    </div>
+</form>
+
+<template id="groupMemberRowTemplate">
+    <tr class="group-member-row">
+        <td>
+            <input type="hidden" name="Members[__INDEX__].TravelerId" value="0" />
+            <input class="form-control form-control-sm" name="Members[__INDEX__].FullName" placeholder="Member name" />
+        </td>
+        <td>
+            <select class="form-select form-select-sm" name="Members[__INDEX__].Relationship">
+                <option value="">—</option>
+                <option>Self</option>
+                <option>Spouse</option>
+                <option>Child</option>
+                <option>Parent</option>
+                <option>Sibling</option>
+                <option>Friend</option>
+                <option>Companion</option>
+                <option>Relative</option>
+                <option>Other</option>
+            </select>
+        </td>
+        <td>
+            <input class="form-control form-control-sm" name="Members[__INDEX__].PassportNo" placeholder="Passport #" />
+        </td>
+        <td>
+            <input class="form-control form-control-sm" name="Members[__INDEX__].MobileNo" />
+        </td>
+        <td>
+            <select class="form-select form-select-sm" name="Members[__INDEX__].Gender">
+                <option value="">—</option>
+                <option>Male</option>
+                <option>Female</option>
+            </select>
+        </td>
+        <td class="text-center">
+            <button type="button" class="btn btn-sm btn-outline-danger remove-member-btn" title="Remove">
+                <i class="fa-solid fa-trash"></i>
+            </button>
+        </td>
+    </tr>
+</template>

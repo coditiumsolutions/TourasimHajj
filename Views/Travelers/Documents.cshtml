@@ -1,0 +1,181 @@
+@model TravelerDocumentsPageViewModel
+@{
+    ViewData["Title"] = "Traveler Documents";
+    var docTypes = new[] { "Passport", "CNIC", "Photo", "Visa", "Vaccination", "Ticket", "Other" };
+}
+@await Html.PartialAsync("_Alerts")
+<div class="page-header">
+    <div>
+        <h2>Traveler Documents</h2>
+        <p class="text-muted mb-0">Select a traveler and upload passport, CNIC, photos, or other files.</p>
+    </div>
+    <a class="btn btn-sm btn-outline-secondary" asp-action="Index">All Travelers</a>
+</div>
+
+<div class="row g-3">
+    <div class="col-lg-4">
+        <div class="card-panel">
+            <div class="card-panel-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Travelers</h5>
+            </div>
+            <div class="card-panel-body">
+                <form method="get" class="mb-3">
+                    <div class="input-group input-group-sm">
+                        <input class="form-control" name="q" value="@Model.Search" placeholder="Search traveler / customer / passport" />
+                        <button class="btn btn-outline-secondary" type="submit">Search</button>
+                    </div>
+                </form>
+                <div class="list-group list-group-flush traveler-docs-list">
+                    @foreach (var t in Model.Travelers)
+                    {
+                        var active = Model.SelectedTravelerId == t.TravelerId ? "active" : "";
+                        <a class="list-group-item list-group-item-action @active"
+                           asp-action="Documents"
+                           asp-route-travelerId="@t.TravelerId"
+                           asp-route-q="@Model.Search">
+                            <div class="d-flex justify-content-between gap-2">
+                                <div>
+                                    <strong>@t.FullName</strong>
+                                    <div class="small opacity-75">@(t.CustomerName ?? "—") · @(t.PassportNo ?? "No passport")</div>
+                                </div>
+                                <span class="badge text-bg-secondary align-self-center">@t.DocumentCount</span>
+                            </div>
+                        </a>
+                    }
+                    @if (!Model.Travelers.Any())
+                    {
+                        <div class="text-muted text-center py-3">No travelers found.</div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        @if (Model.SelectedTraveler == null)
+        {
+            <div class="card-panel">
+                <div class="card-panel-body text-center text-muted py-5">
+                    <i class="fa-solid fa-folder-open fa-2x mb-2"></i>
+                    <h5>Select a traveler</h5>
+                    <p class="mb-0">Choose a traveler from the list to view and upload documents.</p>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="card-panel mb-3">
+                <div class="card-panel-header">
+                    <h5 class="mb-0">@Model.SelectedTraveler.FullName</h5>
+                    <div class="small text-muted">
+                        Customer: @(Model.SelectedTraveler.Customer?.CustomerName ?? "—")
+                        · Passport: @(Model.SelectedTraveler.PassportNo ?? "—")
+                    </div>
+                </div>
+                <div class="card-panel-body">
+                    <form asp-action="UploadDocument" method="post" enctype="multipart/form-data" class="row g-3">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="TravelerId" value="@Model.SelectedTraveler.TravelerId" />
+
+                        <div class="col-md-4">
+                            <label class="form-label">Document Type</label>
+                            <select name="DocumentType" class="form-select" required>
+                                @foreach (var type in docTypes)
+                                {
+                                    if (Model.Upload.DocumentType == type)
+                                    {
+                                        <option value="@type" selected>@type</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@type">@type</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Document Number</label>
+                            <input name="DocumentNumber" class="form-control" value="@Model.Upload.DocumentNumber" />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">File (JPG/PNG/PDF)</label>
+                            <input type="file" name="documentFile" class="form-control" accept=".jpg,.jpeg,.png,.webp,.gif,.pdf" required />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Issue Date</label>
+                            <input type="date" name="IssueDate" class="form-control" value="@Model.Upload.IssueDate?.ToString("yyyy-MM-dd")" />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Expiry Date</label>
+                            <input type="date" name="ExpiryDate" class="form-control" value="@Model.Upload.ExpiryDate?.ToString("yyyy-MM-dd")" />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Remarks</label>
+                            <input name="Remarks" class="form-control" value="@Model.Upload.Remarks" />
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa-solid fa-upload me-1"></i> Upload Document
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card-panel">
+                <div class="card-panel-header"><h5 class="mb-0">Uploaded Documents</h5></div>
+                <div class="table-responsive">
+                    <table class="table table-sm table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Number</th>
+                                <th>Issue</th>
+                                <th>Expiry</th>
+                                <th>Uploaded</th>
+                                <th>File</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var d in Model.Documents)
+                        {
+                            <tr>
+                                <td>@d.DocumentType</td>
+                                <td>@(d.DocumentNumber ?? "—")</td>
+                                <td>@(d.IssueDate?.ToString("dd-MMM-yyyy") ?? "—")</td>
+                                <td>@(d.ExpiryDate?.ToString("dd-MMM-yyyy") ?? "—")</td>
+                                <td>@(d.UploadedDate?.ToString("dd-MMM-yyyy") ?? "—")</td>
+                                <td>
+                                    @if (!string.IsNullOrWhiteSpace(d.FilePath))
+                                    {
+                                        <a href="@d.FilePath" target="_blank" rel="noopener">View</a>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Missing</span>
+                                    }
+                                </td>
+                                <td class="text-end">
+                                    <form asp-action="DeleteDocument" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@d.DocumentId" />
+                                        <input type="hidden" name="travelerId" value="@Model.SelectedTraveler.TravelerId" />
+                                        <button type="submit" class="btn btn-sm btn-outline-danger" data-confirm="Delete this document?">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                        @if (!Model.Documents.Any())
+                        {
+                            <tr><td colspan="7" class="text-center text-muted py-4">No documents uploaded for this traveler yet.</td></tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+    </div>
+</div>

@@ -5,34 +5,34 @@
             ? "active" : "";
 
     var activeModule =
+        ModuleActive("Setup", "Interface") == "active" ? "setup" :
         ModuleActive("TravelPackages", "Destinations", "Services") == "active" ? "travel" :
+        ModuleActive("HotelPackages", "Hotels") == "active" ? "hotels" :
+        ModuleActive("GalleryManagement") == "active" ? "gallery" :
         ModuleActive("HajjSeasons", "PilgrimGroups") == "active" ? "hajj" :
         ModuleActive("VisaApplications") == "active" ? "umrah" :
         ModuleActive("Customers", "Travelers") == "active" ? "customer" :
-        ModuleActive("Suppliers", "Hotels", "TransportProviders") == "active" ? "supplier" :
+        ModuleActive("Suppliers", "TransportProviders") == "active" ? "supplier" :
         ModuleActive("Bookings") == "active" ? "booking" :
         ModuleActive("Payments", "SupplierPayments", "Expenses", "Refunds") == "active" ? "accounts" :
         ModuleActive("Reports") == "active" ? "reports" :
-        ModuleActive("Employees", "Countries", "Cities", "Gallery") == "active" ? "administration" :
+        ModuleActive("Employees", "Countries", "Cities") == "active" ? "administration" :
         "travel";
 
-    var modulesGroupActive = activeModule is "hajj" or "umrah" or "supplier" or "accounts";
+    var modulesGroupActive = activeModule is "hajj" or "umrah" or "supplier" or "accounts" or "reports" or "administration";
 }
 <nav class="admin-mainnav no-print" data-active-module="@activeModule">
     <div class="admin-mainnav-inner">
         <a class="admin-nav-logo" asp-controller="Dashboard" asp-action="Index" aria-label="Al-Haram Travel home">
-            <img src="~/images/Logo_2.png" alt="Al-Haram Travel" />
+            <img src="~/images/logo06.jpg" alt="Al-Haram Travel" />
         </a>
 
         <div class="admin-mainnav-links">
             <button type="button" class="admin-module-link @(activeModule == "travel" ? "active" : "")" data-module="travel">Travel</button>
             <button type="button" class="admin-module-link @(activeModule == "customer" ? "active" : "")" data-module="customer">Customer</button>
             <button type="button" class="admin-module-link @(activeModule == "booking" ? "active" : "")" data-module="booking">Booking</button>
-            <button type="button" class="admin-module-link @(activeModule == "reports" ? "active" : "")" data-module="reports">Reports</button>
-            <button type="button" class="admin-module-link @(activeModule == "administration" ? "active" : "")" data-module="administration">Administration</button>
-
-            <a class="admin-module-link @(ModuleActive("Hotels") == "active" ? "active" : "")" asp-controller="Hotels" asp-action="Index">Hotels</a>
-            <a class="admin-module-link @(ModuleActive("Gallery") == "active" ? "active" : "")" asp-controller="Gallery" asp-action="Index">Gallery</a>
+            <a class="admin-module-link @(activeModule == "hotels" ? "active" : "")" asp-controller="HotelPackages" asp-action="Index" data-module="hotels">Hotels</a>
+            <a class="admin-module-link @(activeModule == "gallery" ? "active" : "")" asp-controller="GalleryManagement" asp-action="Index" data-module="gallery">Gallery</a>
 
             <div class="admin-module-group @(modulesGroupActive ? "active" : "")" data-module-group="modules">
                 <button type="button" class="admin-module-link admin-module-group-toggle" data-module-group-toggle>
@@ -43,6 +43,8 @@
                     <button type="button" class="admin-module-link @(activeModule == "umrah" ? "active" : "")" data-module="umrah">Umrah</button>
                     <button type="button" class="admin-module-link @(activeModule == "supplier" ? "active" : "")" data-module="supplier">Supplier</button>
                     <button type="button" class="admin-module-link @(activeModule == "accounts" ? "active" : "")" data-module="accounts">Accounts</button>
+                    <button type="button" class="admin-module-link @(activeModule == "reports" ? "active" : "")" data-module="reports">Reports</button>
+                    <button type="button" class="admin-module-link @(activeModule == "administration" ? "active" : "")" data-module="administration">Administration</button>
                 </div>
             </div>
         </div>

@@ -1,0 +1,45 @@
+@model AppConfigInputModel
+@{
+    var isEdit = Model.AppConfigId > 0;
+}
+<form asp-action="@(isEdit ? "Edit" : "Create")" method="post" class="form-4col">
+    @Html.AntiForgeryToken()
+    @if (isEdit)
+    {
+        <input type="hidden" asp-for="AppConfigId" />
+    }
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+    <div class="form-4col-row">
+        <label class="form-4col-label" asp-for="ConfigKey"></label>
+        <div class="form-4col-field">
+            <input asp-for="ConfigKey" class="form-control" placeholder="e.g. Cities" />
+            <span asp-validation-for="ConfigKey" class="text-danger"></span>
+        </div>
+        <label class="form-4col-label" asp-for="IsActive"></label>
+        <div class="form-4col-field form-4col-check">
+            <input asp-for="IsActive" class="form-check-input" />
+        </div>
+    </div>
+
+    <div class="form-4col-row">
+        <label class="form-4col-label" asp-for="ConfigValue"></label>
+        <div class="form-4col-field" style="grid-column: span 3;">
+            <textarea asp-for="ConfigValue" class="form-control" rows="4" placeholder="e.g. Karachi, Multan, Lahore, Rawalpindi"></textarea>
+            <span asp-validation-for="ConfigValue" class="text-danger"></span>
+            <span class="text-muted small">Use comma-separated values when storing lists.</span>
+        </div>
+    </div>
+
+    <div class="form-4col-row">
+        <label class="form-4col-label" asp-for="Description"></label>
+        <div class="form-4col-field" style="grid-column: span 3;">
+            <input asp-for="Description" class="form-control" placeholder="Optional note about this setting" />
+        </div>
+    </div>
+
+    <div class="form-4col-actions">
+        <button type="submit" class="btn btn-primary">@(isEdit ? "Update" : "Save")</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+    </div>
+</form>

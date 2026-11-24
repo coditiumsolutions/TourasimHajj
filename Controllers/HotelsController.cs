@@ -15,8 +15,16 @@ public class HotelsController : Controller
 
     public async Task<IActionResult> Index(bool includeInactive, CancellationToken cancellationToken)
     {
+        ViewData["Title"] = includeInactive ? "Inactive Hotels" : "All Hotels";
         var hotels = await _suppliers.GetHotelsAsync(includeInactive, cancellationToken);
         return View(new HotelListViewModel { Hotels = hotels, IncludeInactive = includeInactive });
+    }
+
+    public async Task<IActionResult> Details(int id, CancellationToken cancellationToken)
+    {
+        var entity = await _suppliers.GetHotelByIdAsync(id, cancellationToken);
+        if (entity is null) return NotFound();
+        return View(entity);
     }
 
     public async Task<IActionResult> Create(CancellationToken cancellationToken)

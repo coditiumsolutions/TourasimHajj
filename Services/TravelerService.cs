@@ -72,4 +72,73 @@ public class TravelerService : ITravelerService
 
     public Task<List<TravelerDocument>> GetDocumentsAsync(int travelerId) =>
         _db.TravelerDocuments.Where(d => d.TravelerId == travelerId).OrderByDescending(d => d.UploadedDate).ToListAsync();
+
+    public async Task<TravelerDocumentsPageViewModel> GetDocumentsPageAsync(
+        int? travelerId,
+        string? search,
+        CancellationToken cancellationToken = default)
+    {
+        var travelerQuery = _db.Travelers.AsNoTracking()
+            .Include(t => t.Customer)
+            .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            travelerQuery = travelerQuery.Where(t =>
+                t.FullName.Contains(search) ||
+                (t.PassportNo != null && t.PassportNo.Contains(search)) ||
+                (t.Customer != null && t.Customer.CustomerName.Contains(search)));
+        }
+
+        var travelers = await travelerQuery
+            .OrderBy(t => t.FullName)
+            .Select(t => new TravelerDocumentListItem
+            {
+                TravelerId = t.TravelerId,
+                FullName = t.FullName,
+                CustomerName = t.Customer != null ? t.Customer.CustomerName : null,
+                PassportNo = t.PassportNo,
+                DocumentCount = t.TravelerDocuments.Count
+            })
+            .ToListAsync(cancellationToken);
+
+        Traveler? selected = null;
+        IReadOnlyList<TravelerDocument> documents = Array.Empty<TravelerDocument>();
+        if (travelerId.HasValue)
+        {
+            selected = await _db.Travelers.AsNoTracking()
+                .Include(t => t.Customer)
+                .FirstOrDefaultAsync(t => t.TravelerId == travelerId.Value, cancellationToken);
+            if (selected != null)
+            {
+                documents = await _db.TravelerDocuments.AsNoTracking()
+                    .Where(d => d.TravelerId == travelerId.Value)
+                    .OrderByDescending(d => d.UploadedDate)
+                    .ToListAsync(cancellationToken);
+            }
+        }
+
+        return new TravelerDocumentsPageViewModel
+        {
+            SelectedTravelerId = travelerId,
+            Search = search,
+            Travelers = travelers,
+            SelectedTraveler = selected,
+            Documents = documents,
+            Upload = new TravelerDocumentInputModel
+            {
+                TravelerId = travelerId ?? 0,
+                DocumentType = "Passport",
+                DocumentNumber = selected?.PassportNo
+            }
+        };
+    }
+
+    public async Task DeleteDocumentAsync(int documentId, CancellationToken cancellationToken = default)
+    {
+        var doc = await _db.TravelerDocuments.FindAsync([documentId], cancellationToken);
+        if (doc is null) return;
+        _db.TravelerDocuments.Remove(doc);
+        await _db.SaveChangesAsync(cancellationToken);
+    }
 }

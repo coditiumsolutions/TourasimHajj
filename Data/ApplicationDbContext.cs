@@ -14,6 +14,8 @@ public partial class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
     }
 
+    public virtual DbSet<AppConfig> AppConfigs { get; set; }
+
     public virtual DbSet<AuditLog> AuditLogs { get; set; }
 
     public virtual DbSet<Booking> Bookings { get; set; }
@@ -41,6 +43,8 @@ public partial class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public virtual DbSet<HajjSeason> HajjSeasons { get; set; }
 
     public virtual DbSet<Hotel> Hotels { get; set; }
+
+    public virtual DbSet<HotelPackage> HotelPackages { get; set; }
 
     public virtual DbSet<PackageDeparture> PackageDepartures { get; set; }
 
@@ -81,6 +85,13 @@ public partial class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<AppConfig>(entity =>
+        {
+            entity.HasKey(e => e.AppConfigId);
+            entity.HasIndex(e => e.ConfigKey).IsUnique();
+            entity.Property(e => e.IsActive).HasDefaultValue(true);
+        });
 
         modelBuilder.Entity<AuditLog>(entity =>
         {

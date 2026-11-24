@@ -1,6 +1,13 @@
 @model TourismHajj.Models.Entities.Traveler
 @{ ViewData["Title"] = "Traveler Details"; }
-<div class="page-header"><h2>@Model.FullName</h2><a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@Model.TravelerId">Edit</a></div>
+@await Html.PartialAsync("_Alerts")
+<div class="page-header">
+    <h2>@Model.FullName</h2>
+    <div class="d-flex gap-2">
+        <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@Model.TravelerId">Edit</a>
+        <a class="btn btn-sm btn-outline-success" asp-action="Documents" asp-route-travelerId="@Model.TravelerId">Upload Documents</a>
+    </div>
+</div>
 <div class="card-panel"><div class="card-panel-body">
 <dl class="row">
 <dt class="col-sm-3">Customer</dt><dd class="col-sm-9">@Model.Customer?.CustomerName</dd>
@@ -12,6 +19,28 @@
 </dl>
 <h5>Documents</h5>
 <table class="table table-sm"><thead><tr><th>Type</th><th>Number</th><th>Expiry</th><th>File</th></tr></thead>
-<tbody>@foreach (var d in Model.TravelerDocuments){<tr><td>@d.DocumentType</td><td>@d.DocumentNumber</td><td>@d.ExpiryDate</td><td>@d.FilePath</td></tr>}
-@if(!Model.TravelerDocuments.Any()){<tr><td colspan="4" class="text-muted">No documents uploaded</td></tr>}</tbody></table>
+<tbody>
+@foreach (var d in Model.TravelerDocuments)
+{
+    <tr>
+        <td>@d.DocumentType</td>
+        <td>@(d.DocumentNumber ?? "—")</td>
+        <td>@(d.ExpiryDate?.ToString("dd-MMM-yyyy") ?? "—")</td>
+        <td>
+            @if (!string.IsNullOrWhiteSpace(d.FilePath))
+            {
+                <a href="@d.FilePath" target="_blank" rel="noopener">View</a>
+            }
+            else
+            {
+                <span class="text-muted">Missing</span>
+            }
+        </td>
+    </tr>
+}
+@if (!Model.TravelerDocuments.Any())
+{
+    <tr><td colspan="4" class="text-muted">No documents uploaded</td></tr>
+}
+</tbody></table>
 </div></div>

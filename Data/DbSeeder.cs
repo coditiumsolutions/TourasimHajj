@@ -29,6 +29,54 @@ public static class DbSeeder
             END
             """);
 
+        await db.Database.ExecuteSqlRawAsync("""
+            IF OBJECT_ID(N'[dbo].[HotelPackages]', N'U') IS NULL
+            BEGIN
+                CREATE TABLE [dbo].[HotelPackages](
+                    [HotelPackageId] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+                    [HotelName] NVARCHAR(150) NOT NULL,
+                    [Description] NVARCHAR(2000) NULL,
+                    [CityName] NVARCHAR(100) NULL,
+                    [StarRating] INT NULL,
+                    [Address] NVARCHAR(500) NULL,
+                    [DistanceFromHaramKm] DECIMAL(10,2) NULL,
+                    [DistanceFromNabawiKm] DECIMAL(10,2) NULL,
+                    [ContactNo] NVARCHAR(30) NULL,
+                    [CoverImageUrl] NVARCHAR(500) NULL,
+                    [PricePerNight] DECIMAL(18,2) NULL,
+                    [CurrencyCode] NVARCHAR(10) NULL CONSTRAINT DF_HotelPackages_Currency DEFAULT(N'PKR'),
+                    [DurationNights] INT NULL,
+                    [SortOrder] INT NOT NULL CONSTRAINT DF_HotelPackages_SortOrder DEFAULT(0),
+                    [IsFeatured] BIT NOT NULL CONSTRAINT DF_HotelPackages_IsFeatured DEFAULT(0),
+                    [IsActive] BIT NOT NULL CONSTRAINT DF_HotelPackages_IsActive DEFAULT(1),
+                    [CreatedDate] DATETIME2 NULL
+                );
+            END
+            """);
+
+        await db.Database.ExecuteSqlRawAsync("""
+            IF COL_LENGTH(N'dbo.Customers', N'TrackingNo') IS NULL
+                ALTER TABLE [dbo].[Customers] ADD [TrackingNo] NVARCHAR(30) NULL;
+            IF COL_LENGTH(N'dbo.Customers', N'GroupType') IS NULL
+                ALTER TABLE [dbo].[Customers] ADD [GroupType] NVARCHAR(30) NULL;
+            """);
+
+        await db.Database.ExecuteSqlRawAsync("""
+            IF OBJECT_ID(N'[dbo].[AppConfigs]', N'U') IS NULL
+            BEGIN
+                CREATE TABLE [dbo].[AppConfigs](
+                    [AppConfigId] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+                    [ConfigKey] NVARCHAR(100) NOT NULL,
+                    [ConfigValue] NVARCHAR(2000) NOT NULL,
+                    [Description] NVARCHAR(500) NULL,
+                    [IsActive] BIT NOT NULL CONSTRAINT DF_AppConfigs_IsActive DEFAULT(1),
+                    [CreatedDate] DATETIME2 NULL,
+                    [UpdatedDate] DATETIME2 NULL
+                );
+                CREATE UNIQUE INDEX IX_AppConfigs_ConfigKey ON [dbo].[AppConfigs]([ConfigKey]);
+            END
+            """);
+
         foreach (var role in AppRoles.All)
         {
             if (!await roleManager.RoleExistsAsync(role))
@@ -130,6 +178,80 @@ public static class DbSeeder
                 });
             }
 
+            await db.SaveChangesAsync();
+        }
+
+        if (!await db.AppConfigs.AnyAsync())
+        {
+            var now = DateTime.Now;
+            db.AppConfigs.AddRange(
+                new Models.Entities.AppConfig
+                {
+                    ConfigKey = "Cities",
+                    ConfigValue = "Karachi, Multan, Lahore, Rawalpindi, Islamabad, Peshawar, Quetta, Faisalabad",
+                    Description = "Comma-separated city list used by setup / lookup options.",
+                    IsActive = true,
+                    CreatedDate = now,
+                    UpdatedDate = now
+                },
+                new Models.Entities.AppConfig
+                {
+                    ConfigKey = "GroupTypes",
+                    ConfigValue = "Family, Friends, Companion, Mixed",
+                    Description = "Customer group type options.",
+                    IsActive = true,
+                    CreatedDate = now,
+                    UpdatedDate = now
+                },
+                new Models.Entities.AppConfig
+                {
+                    ConfigKey = "DocumentTypes",
+                    ConfigValue = "Passport, CNIC, Photo, Visa, Vaccination, Ticket, Other",
+                    Description = "Traveler document type options.",
+                    IsActive = true,
+                    CreatedDate = now,
+                    UpdatedDate = now
+                },
+                new Models.Entities.AppConfig
+                {
+                    ConfigKey = TourismHajj.Helpers.InterfaceThemes.ManagementConfigKey,
+                    ConfigValue = TourismHajj.Helpers.InterfaceThemes.DefaultThemeId,
+                    Description = "Selected management portal interface theme.",
+                    IsActive = true,
+                    CreatedDate = now,
+                    UpdatedDate = now
+                },
+                new Models.Entities.AppConfig
+                {
+                    ConfigKey = TourismHajj.Helpers.InterfaceThemes.CustomerConfigKey,
+                    ConfigValue = TourismHajj.Helpers.InterfaceThemes.DefaultThemeId,
+                    Description = "Selected customers portal interface theme.",
+                    IsActive = true,
+                    CreatedDate = now,
+                    UpdatedDate = now
+                }
+            );
+            await db.SaveChangesAsync();
+        }
+        else
+        {
+            var now = DateTime.Now;
+            async Task EnsureThemeConfig(string key, string description)
+            {
+                if (await db.AppConfigs.AnyAsync(c => c.ConfigKey == key)) return;
+                db.AppConfigs.Add(new Models.Entities.AppConfig
+                {
+                    ConfigKey = key,
+                    ConfigValue = TourismHajj.Helpers.InterfaceThemes.DefaultThemeId,
+                    Description = description,
+                    IsActive = true,
+                    CreatedDate = now,
+                    UpdatedDate = now
+                });
+            }
+
+            await EnsureThemeConfig(TourismHajj.Helpers.InterfaceThemes.ManagementConfigKey, "Selected management portal interface theme.");
+            await EnsureThemeConfig(TourismHajj.Helpers.InterfaceThemes.CustomerConfigKey, "Selected customers portal interface theme.");
             await db.SaveChangesAsync();
         }
     }

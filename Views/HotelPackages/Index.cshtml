@@ -1,0 +1,83 @@
+@model IEnumerable<TourismHajj.Models.Entities.HotelPackage>
+@{
+    ViewData["Title"] = ViewData["Title"] ?? "Hotel Packages";
+    var includeInactive = (bool)(ViewBag.IncludeInactive ?? false);
+}
+@await Html.PartialAsync("_Alerts")
+<div class="page-header">
+    <div>
+        <h2>@ViewData["Title"]</h2>
+    </div>
+    <div class="d-flex gap-2">
+        @if (includeInactive)
+        {
+            <a class="btn btn-sm btn-outline-secondary" asp-action="Index">Active Packages</a>
+        }
+        else
+        {
+            <a class="btn btn-sm btn-outline-secondary" asp-action="Index" asp-route-includeInactive="true">Inactive</a>
+        }
+        <a class="btn btn-sm btn-accent" asp-action="Create"><i class="fa-solid fa-plus"></i> Add Hotel Package</a>
+    </div>
+</div>
+<div class="card-panel">
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>City</th>
+                    <th>Stars</th>
+                    <th>Price / Night</th>
+                    <th>Featured</th>
+                    <th>Active</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @if (!string.IsNullOrWhiteSpace(item.CoverImageUrl))
+                        {
+                            <img src="@item.CoverImageUrl" alt="@item.HotelName" style="width:72px;height:48px;object-fit:cover;border-radius:6px;" />
+                        }
+                        else
+                        {
+                            <span class="text-muted">—</span>
+                        }
+                    </td>
+                    <td>@item.HotelName</td>
+                    <td>@(item.CityName ?? "—")</td>
+                    <td>@(item.StarRating?.ToString() ?? "—")</td>
+                    <td>
+                        @if (item.PricePerNight.HasValue)
+                        {
+                            @($"{item.PricePerNight:N0} {item.CurrencyCode ?? "PKR"}")
+                        }
+                        else
+                        {
+                            <span>—</span>
+                        }
+                    </td>
+                    <td>@(item.IsFeatured ? "Yes" : "No")</td>
+                    <td>@(item.IsActive ? "Yes" : "No")</td>
+                    <td class="text-end text-nowrap">
+                        <a class="btn btn-sm btn-outline-secondary" asp-action="Details" asp-route-id="@item.HotelPackageId" title="Details"><i class="fa-solid fa-eye"></i></a>
+                        <a class="btn btn-sm btn-outline-primary" asp-action="Edit" asp-route-id="@item.HotelPackageId" title="Edit"><i class="fa-solid fa-pen"></i></a>
+                        <a class="btn btn-sm btn-outline-danger" asp-action="Delete" asp-route-id="@item.HotelPackageId" title="Deactivate"><i class="fa-solid fa-trash"></i></a>
+                    </td>
+                </tr>
+            }
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="8" class="text-center text-muted py-4">No hotel packages found.</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
