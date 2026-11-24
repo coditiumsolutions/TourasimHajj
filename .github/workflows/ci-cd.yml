@@ -98,10 +98,10 @@ jobs:
           retention-days: 14
 
   deploy:
-    name: Deploy FTP
+    name: Deploy Web Deploy
     needs: publish
     if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - name: Download live_tourism artifact
         uses: actions/download-artifact@v4
@@ -109,27 +109,82 @@ jobs:
           name: live_tourism
           path: live_tourism
 
-      - name: Check FTP secrets
-        id: ftp
+      - name: Verify Web Deploy secrets
+        shell: pwsh
         env:
-          FTP_SERVER: ${{ secrets.FTP_SERVER }}
-          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
-          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          WEBDEPLOY_COMPUTER_NAME: ${{ secrets.WEBDEPLOY_COMPUTER_NAME }}
+          WEBDEPLOY_SITE_NAME: ${{ secrets.WEBDEPLOY_SITE_NAME }}
+          WEBDEPLOY_USERNAME: ${{ secrets.WEBDEPLOY_USERNAME }}
+          WEBDEPLOY_PASSWORD: ${{ secrets.WEBDEPLOY_PASSWORD }}
         run: |
-          if [ -z "$FTP_SERVER" ] || [ -z "$FTP_USERNAME" ] || [ -z "$FTP_PASSWORD" ]; then
-            echo "configured=false" >> "$GITHUB_OUTPUT"
-            echo "FTP secrets not configured; skipping deploy."
-          else
-            echo "configured=true" >> "$GITHUB_OUTPUT"
-          fi
+          $missing = @()
+          if ([string]::IsNullOrWhiteSpace($env:WEBDEPLOY_COMPUTER_NAME)) { $missing += 'WEBDEPLOY_COMPUTER_NAME' }
+          if ([string]::IsNullOrWhiteSpace($env:WEBDEPLOY_SITE_NAME)) { $missing += 'WEBDEPLOY_SITE_NAME' }
+          if ([string]::IsNullOrWhiteSpace($env:WEBDEPLOY_USERNAME)) { $missing += 'WEBDEPLOY_USERNAME' }
+          if ([string]::IsNullOrWhiteSpace($env:WEBDEPLOY_PASSWORD)) { $missing += 'WEBDEPLOY_PASSWORD' }
+          if ($missing.Count -gt 0) {
+            throw "Missing required GitHub secrets: $($missing -join ', ')"
+          }
+          Write-Host "Web Deploy secrets present."
 
-      - name: Deploy to hosting via FTP
-        if: steps.ftp.outputs.configured == 'true'
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./live_tourism/
-          server-dir: ${{ secrets.FTP_REMOTE_DIR || './' }}
-          dangerous-clean-slate: false
+      - name: Ensure msdeploy.exe
+        shell: pwsh
+        run: |
+          $candidates = @(
+            "${env:ProgramFiles}\IIS\Microsoft Web Deploy V4\msdeploy.exe",
+            "${env:ProgramFiles}\IIS\Microsoft Web Deploy V3\msdeploy.exe",
+            "${env:ProgramFiles(x86)}\IIS\Microsoft Web Deploy V3\msdeploy.exe"
+          )
+          $msdeploy = $candidates | Where-Object { Test-Path $_ } | Select-Object -First 1
+          if (-not $msdeploy) {
+            Write-Host "msdeploy.exe not found; installing Web Deploy via Chocolatey..."
+            choco install webdeploy -y --no-progress
+            $msdeploy = $candidates | Where-Object { Test-Path $_ } | Select-Object -First 1
+          }
+          if (-not $msdeploy) { throw "msdeploy.exe still not found after install." }
+          Write-Host "Using $msdeploy"
+          & $msdeploy -verb:dump -source:runCommand 2>$null | Out-Null
+          "MSDEPLOY_PATH=$msdeploy" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+
+      - name: Deploy to IIS via MSDeploy
+        shell: pwsh
+        env:
+          WEBDEPLOY_COMPUTER_NAME: ${{ secrets.WEBDEPLOY_COMPUTER_NAME }}
+          WEBDEPLOY_SITE_NAME: ${{ secrets.WEBDEPLOY_SITE_NAME }}
+          WEBDEPLOY_USERNAME: ${{ secrets.WEBDEPLOY_USERNAME }}
+          WEBDEPLOY_PASSWORD: ${{ secrets.WEBDEPLOY_PASSWORD }}
+        run: |
+          $msdeploy = $env:MSDEPLOY_PATH
+          if (-not $msdeploy -or -not (Test-Path $msdeploy)) {
+            throw "MSDEPLOY_PATH is not set or invalid."
+          }
+
+          $sourcePath = (Resolve-Path ".\live_tourism").Path
+          $site = $env:WEBDEPLOY_SITE_NAME
+          $computer = $env:WEBDEPLOY_COMPUTER_NAME
+          $user = $env:WEBDEPLOY_USERNAME
+          $pass = $env:WEBDEPLOY_PASSWORD
+
+          Write-Host "Deploying '$sourcePath' -> site '$site'"
+          Write-Host "ComputerName: $computer"
+
+          $dest = "contentPath=$site,ComputerName=$computer,UserName=$user,Password=$pass,AuthType=Basic,includeAcls=False"
+
+          & $msdeploy `
+            -verb:sync `
+            "-source:contentPath=$sourcePath" `
+            "-dest:$dest" `
+            -allowUntrusted `
+            -enableRule:DoNotDeleteRule `
+            -enableRule:AppOffline `
+            -disableLink:AppPoolExtension `
+            -disableLink:ContentExtension `
+            -disableLink:CertificateExtension `
+            -retryAttempts:3 `
+            -retryInterval:5000
+
+          if ($LASTEXITCODE -ne 0) {
+            throw "msdeploy failed with exit code $LASTEXITCODE"
+          }
+
+          Write-Host "Web Deploy completed successfully."
