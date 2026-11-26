@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using TourismHajj.Data;
 using TourismHajj.Helpers;
 using TourismHajj.Interfaces;
 
@@ -9,8 +11,13 @@ namespace TourismHajj.Controllers;
 public class PackagesController : Controller
 {
     private readonly IPublicSiteService _publicSite;
+    private readonly ApplicationDbContext _db;
 
-    public PackagesController(IPublicSiteService publicSite) => _publicSite = publicSite;
+    public PackagesController(IPublicSiteService publicSite, ApplicationDbContext db)
+    {
+        _publicSite = publicSite;
+        _db = db;
+    }
 
     [HttpGet]
     public async Task<IActionResult> Details(int id, CancellationToken cancellationToken)
@@ -24,8 +31,19 @@ public class PackagesController : Controller
     }
 
     [HttpGet]
-    public IActionResult Book(int id)
+    public async Task<IActionResult> Book(int id, CancellationToken cancellationToken)
     {
+        var packageType = await _db.TravelPackages.AsNoTracking()
+            .Where(p => p.PackageId == id)
+            .Select(p => p.PackageType)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (string.Equals(packageType, "Hajj", StringComparison.OrdinalIgnoreCase))
+        {
+            TempData["Info"] = "Hajj packages are enquiry-only (Ministry / Nusuk campaigns). Please register your interest.";
+            return RedirectToAction("Index", "Contact", new { subject = "Hajj interest" });
+        }
+
         if (User.Identity?.IsAuthenticated != true || !User.IsInRole(AppRoles.Customer))
         {
             var returnUrl = Url.Action("Book", "Packages", new { id }) ?? $"/Packages/Book/{id}";

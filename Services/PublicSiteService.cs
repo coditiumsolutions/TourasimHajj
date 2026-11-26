@@ -9,6 +9,13 @@ namespace TourismHajj.Services;
 public class PublicSiteService : IPublicSiteService
 {
     private readonly ApplicationDbContext _db;
+    private readonly IFlightSearchService _flights;
+
+    public PublicSiteService(ApplicationDbContext db, IFlightSearchService flights)
+    {
+        _db = db;
+        _flights = flights;
+    }
 
     private static readonly string DefaultCover =
         "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=1200&q=80";
@@ -53,8 +60,6 @@ public class PublicSiteService : IPublicSiteService
             _ => DefaultCover
         };
     }
-
-    public PublicSiteService(ApplicationDbContext db) => _db = db;
 
     public async Task<PublicHomeViewModel> GetHomeAsync(CancellationToken cancellationToken = default)
     {
@@ -143,6 +148,28 @@ public class PublicSiteService : IPublicSiteService
             .Select(pd => pd.Destination?.ImageUrl)
             .FirstOrDefault(u => !string.IsNullOrWhiteSpace(u));
 
+        var isHajj = string.Equals(package.PackageType, "Hajj", StringComparison.OrdinalIgnoreCase);
+        var nextDeparture = package.PackageDepartures
+            .Where(d => d.DepartureDate >= DateOnly.FromDateTime(DateTime.Today))
+            .OrderBy(d => d.DepartureDate)
+            .Select(d => (DateTime?)d.DepartureDate.ToDateTime(TimeOnly.MinValue))
+            .FirstOrDefault();
+
+        IReadOnlyList<FlightOfferItem> suggestedFlights = Array.Empty<FlightOfferItem>();
+        if (!isHajj)
+        {
+            try
+            {
+                suggestedFlights = (await _flights.SuggestForPackageAsync(package.PackageType, nextDeparture, cancellationToken))
+                    .Take(4)
+                    .ToList();
+            }
+            catch
+            {
+                suggestedFlights = Array.Empty<FlightOfferItem>();
+            }
+        }
+
         return new PublicPackageDetailsViewModel
         {
             Package = package,
@@ -159,7 +186,10 @@ public class PublicSiteService : IPublicSiteService
                 .Where(d => d.DepartureDate >= DateOnly.FromDateTime(DateTime.Today))
                 .OrderBy(d => d.DepartureDate)
                 .ToList(),
-            Hotels = hotels
+            Hotels = hotels,
+            SuggestedFlights = suggestedFlights,
+            IsHajjEnquiryOnly = isHajj,
+            FlightsDemoMode = !_flights.IsLiveSearchAvailable
         };
     }
 

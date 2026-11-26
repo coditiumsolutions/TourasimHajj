@@ -43,6 +43,12 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 builder.Services.Configure<CompanyProfileOptions>(
     builder.Configuration.GetSection(CompanyProfileOptions.SectionName));
+builder.Services.Configure<HotelbedsOptions>(
+    builder.Configuration.GetSection(HotelbedsOptions.SectionName));
+builder.Services.Configure<AmadeusOptions>(
+    builder.Configuration.GetSection(AmadeusOptions.SectionName));
+builder.Services.Configure<PaymentGatewayOptions>(
+    builder.Configuration.GetSection(PaymentGatewayOptions.SectionName));
 
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
@@ -59,6 +65,33 @@ builder.Services.AddScoped<IAuditService, AuditService>();
 builder.Services.AddScoped<IPublicSiteService, PublicSiteService>();
 builder.Services.AddScoped<ICustomerPortalService, CustomerPortalService>();
 builder.Services.AddScoped<IInterfaceThemeService, InterfaceThemeService>();
+builder.Services.AddScoped<IHotelSearchService, HotelSearchService>();
+builder.Services.AddSingleton<TourismHajj.Services.Hotelbeds.DemoHotelProvider>();
+builder.Services.AddHttpClient<TourismHajj.Services.Hotelbeds.HotelbedsProvider>((sp, client) =>
+{
+    var opts = sp.GetRequiredService<Microsoft.Extensions.Options.IOptions<HotelbedsOptions>>().Value;
+    var baseUrl = string.IsNullOrWhiteSpace(opts.BaseUrl)
+        ? "https://api.test.hotelbeds.com"
+        : opts.BaseUrl.TrimEnd('/');
+    client.BaseAddress = new Uri(baseUrl + "/");
+    client.Timeout = TimeSpan.FromSeconds(45);
+}).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+{
+    AutomaticDecompression = System.Net.DecompressionMethods.GZip | System.Net.DecompressionMethods.Deflate
+});
+builder.Services.AddScoped<IHotelProvider, TourismHajj.Services.Hotelbeds.CompositeHotelProvider>();
+builder.Services.AddScoped<IFlightSearchService, FlightSearchService>();
+builder.Services.AddSingleton<TourismHajj.Services.Amadeus.DemoFlightProvider>();
+builder.Services.AddHttpClient<TourismHajj.Services.Amadeus.AmadeusProvider>((sp, client) =>
+{
+    var opts = sp.GetRequiredService<Microsoft.Extensions.Options.IOptions<AmadeusOptions>>().Value;
+    var baseUrl = string.IsNullOrWhiteSpace(opts.BaseUrl)
+        ? "https://test.api.amadeus.com"
+        : opts.BaseUrl.TrimEnd('/');
+    client.BaseAddress = new Uri(baseUrl + "/");
+    client.Timeout = TimeSpan.FromSeconds(45);
+});
+builder.Services.AddScoped<IFlightProvider, TourismHajj.Services.Amadeus.CompositeFlightProvider>();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddControllersWithViews();

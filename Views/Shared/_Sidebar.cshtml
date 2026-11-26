@@ -10,8 +10,8 @@
 
     var activeModule =
         GroupOpen("Setup", "Interface") ? "setup" :
-        GroupOpen("TravelPackages", "Destinations", "Services") ? "travel" :
-        GroupOpen("HotelPackages", "Hotels") ? "hotels" :
+        GroupOpen("TravelPackages", "Destinations", "Services", "FlightReservations") ? "travel" :
+        GroupOpen("HotelPackages", "HotelReservations", "Hotels") ? "hotels" :
         GroupOpen("GalleryManagement") ? "gallery" :
         GroupOpen("HajjSeasons", "PilgrimGroups") ? "hajj" :
         GroupOpen("VisaApplications") ? "umrah" :
@@ -65,7 +65,8 @@
                 <a class="menu-link" asp-controller="TravelPackages" asp-action="Index" asp-route-type="Umrah"><i class="fa-solid fa-circle menu-dot"></i><span class="menu-label">Umrah Packages</span></a>
                 <a class="menu-link @Active("Destinations")" asp-controller="Destinations" asp-action="Index"><i class="fa-solid fa-circle menu-dot"></i><span class="menu-label">Destinations</span></a>
                 <a class="menu-link @Active("Services")" asp-controller="Services" asp-action="Index"><i class="fa-solid fa-circle menu-dot"></i><span class="menu-label">Package Services</span></a>
-                <a class="menu-link" asp-controller="TravelPackages" asp-action="Index"><i class="fa-solid fa-circle menu-dot"></i><span class="menu-label">Flight Management</span></a>
+                <a class="menu-link" asp-controller="FlightReservations" asp-action="Index"><i class="fa-solid fa-circle menu-dot"></i><span class="menu-label">Flight Management</span></a>
+                <a class="menu-link" asp-controller="FlightReservations" asp-action="ApiStatus"><i class="fa-solid fa-circle menu-dot"></i><span class="menu-label">Amadeus API Status</span></a>
             </div>
         </div>
 
@@ -76,6 +77,8 @@
                 <a class="menu-link @Active("HotelPackages","Create")" asp-controller="HotelPackages" asp-action="Create"><i class="fa-solid fa-circle menu-dot"></i><span class="menu-label">Add Hotel Package</span></a>
                 <a class="menu-link @Active("HotelPackages","Edit")" asp-controller="HotelPackages" asp-action="Index"><i class="fa-solid fa-circle menu-dot"></i><span class="menu-label">Edit Packages</span></a>
                 <a class="menu-link" asp-controller="HotelPackages" asp-action="Index" asp-route-includeInactive="true"><i class="fa-solid fa-circle menu-dot"></i><span class="menu-label">Inactive Packages</span></a>
+                <a class="menu-link @Active("HotelReservations","Index")" asp-controller="HotelReservations" asp-action="Index"><i class="fa-solid fa-circle menu-dot"></i><span class="menu-label">Live Reservations</span></a>
+                <a class="menu-link @Active("HotelReservations","ApiStatus")" asp-controller="HotelReservations" asp-action="ApiStatus"><i class="fa-solid fa-circle menu-dot"></i><span class="menu-label">Hotelbeds API</span></a>
             </div>
         </div>
 

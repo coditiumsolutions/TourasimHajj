@@ -59,6 +59,9 @@ public class PublicPackageDetailsViewModel
     public List<Models.Entities.PackageService> ExcludedServices { get; set; } = [];
     public List<PackageDeparture> Departures { get; set; } = [];
     public List<Hotel> Hotels { get; set; } = [];
+    public IReadOnlyList<FlightOfferItem> SuggestedFlights { get; set; } = Array.Empty<FlightOfferItem>();
+    public bool IsHajjEnquiryOnly { get; set; }
+    public bool FlightsDemoMode { get; set; }
 }
 
 public class ContactFormViewModel

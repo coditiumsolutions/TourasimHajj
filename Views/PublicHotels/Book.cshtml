@@ -1,0 +1,80 @@
+@model HotelBookPageViewModel
+@{
+    Layout = "_PublicLayout";
+}
+<section class="container-xl py-4" style="max-width:720px">
+    <h1 class="h3 mb-3">Complete hotel booking</h1>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h2 class="h5">@Model.HotelName</h2>
+            <p class="mb-1 text-muted">@Model.Destination · @Model.RoomName @(string.IsNullOrWhiteSpace(Model.BoardName) ? "" : "· " + Model.BoardName)</p>
+            <p class="mb-1">@Model.CheckIn.ToString("dd MMM yyyy") – @Model.CheckOut.ToString("dd MMM yyyy")</p>
+            <p class="fw-semibold mb-0">@Model.SellingRate.ToString("0.##") @Model.Currency</p>
+            @if (!string.IsNullOrWhiteSpace(Model.CancellationPolicySummary))
+            {
+                <p class="small text-muted mt-2 mb-0">@Model.CancellationPolicySummary</p>
+            }
+        </div>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+    {
+        <div class="alert alert-danger">@Model.ErrorMessage</div>
+    }
+
+    <form method="post" asp-action="Book" class="card shadow-sm">
+        <div class="card-body">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="RateKey" />
+            <input type="hidden" asp-for="HotelCode" />
+            <input type="hidden" asp-for="HotelName" />
+            <input type="hidden" asp-for="Destination" />
+            <input type="hidden" asp-for="RoomName" />
+            <input type="hidden" asp-for="BoardName" />
+            <input type="hidden" asp-for="SellingRate" />
+            <input type="hidden" asp-for="Currency" />
+            <input type="hidden" asp-for="CancellationPolicySummary" />
+            <input type="hidden" asp-for="CheckIn" />
+            <input type="hidden" asp-for="CheckOut" />
+
+            <h3 class="h6 text-uppercase text-muted">Lead guest</h3>
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <label class="form-label" asp-for="HolderFirstName"></label>
+                    <input class="form-control" asp-for="HolderFirstName" />
+                    <span class="text-danger small" asp-validation-for="HolderFirstName"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" asp-for="HolderLastName"></label>
+                    <input class="form-control" asp-for="HolderLastName" />
+                    <span class="text-danger small" asp-validation-for="HolderLastName"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" asp-for="HolderEmail"></label>
+                    <input class="form-control" asp-for="HolderEmail" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" asp-for="HolderPhone"></label>
+                    <input class="form-control" asp-for="HolderPhone" />
+                </div>
+            </div>
+
+            <h3 class="h6 text-uppercase text-muted">Room guest (optional if same as lead)</h3>
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <label class="form-label" asp-for="GuestFirstName"></label>
+                    <input class="form-control" asp-for="GuestFirstName" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" asp-for="GuestLastName"></label>
+                    <input class="form-control" asp-for="GuestLastName" />
+                </div>
+            </div>
+
+            <p class="small text-muted">Payment settles with Hotelbeds per your agency contract. This portal stores the supplier confirmation for your records.</p>
+            <button type="submit" class="btn btn-primary">Confirm booking</button>
+            <a class="btn btn-link" asp-action="Index">Cancel</a>
+        </div>
+    </form>
+</section>

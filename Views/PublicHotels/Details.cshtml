@@ -1,0 +1,65 @@
+@model HotelDetailPageViewModel
+@{
+    Layout = "_PublicLayout";
+    var h = Model.Hotel;
+    var s = Model.Search;
+}
+<section class="container-xl py-4">
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="Index">Hotels</a></li>
+            <li class="breadcrumb-item active">@h.HotelName</li>
+        </ol>
+    </nav>
+
+    <div class="d-flex flex-wrap justify-content-between gap-2 mb-3">
+        <div>
+            <h1 class="h3 mb-1">@h.HotelName</h1>
+            <p class="text-muted mb-0">
+                @(h.DestinationName ?? s.Destination)
+                @if (h.CategoryCode.HasValue) { <span>· @h.CategoryCode★</span> }
+                · @s.CheckIn.ToString("dd MMM yyyy") – @s.CheckOut.ToString("dd MMM yyyy")
+            </p>
+        </div>
+        <a class="btn btn-outline-secondary"
+           href="/Hotels/Search?Destination=@Uri.EscapeDataString(s.Destination)&CheckIn=@s.CheckIn.ToString("yyyy-MM-dd")&CheckOut=@s.CheckOut.ToString("yyyy-MM-dd")&Rooms=@s.Rooms&Adults=@s.Adults&Children=@s.Children">Back to results</a>
+    </div>
+
+    @if (!h.Rooms.Any())
+    {
+        <div class="alert alert-warning">No rooms available for this hotel on the selected dates.</div>
+    }
+    else
+    {
+        <div class="table-responsive card shadow-sm">
+            <table class="table table-hover mb-0 align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Room</th>
+                        <th>Board</th>
+                        <th>Cancellation</th>
+                        <th class="text-end">Price</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var room in h.Rooms.OrderBy(r => r.SellingRate))
+                {
+                    <tr>
+                        <td>@room.RoomName</td>
+                        <td>@(room.BoardName ?? room.BoardCode ?? "—")</td>
+                        <td class="small text-muted">@(room.CancellationPolicySummary ?? "See rate terms")</td>
+                        <td class="text-end fw-semibold">@room.SellingRate.ToString("0.##") @room.Currency</td>
+                        <td class="text-end">
+                            <a class="btn btn-sm btn-primary"
+                               href="/Hotels/Book?rateKey=@Uri.EscapeDataString(room.RateKey)&destination=@Uri.EscapeDataString(s.Destination)">
+                                Book
+                            </a>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+</section>

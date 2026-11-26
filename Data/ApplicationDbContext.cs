@@ -46,6 +46,10 @@ public partial class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 
     public virtual DbSet<HotelPackage> HotelPackages { get; set; }
 
+    public virtual DbSet<HotelReservation> HotelReservations { get; set; }
+
+    public virtual DbSet<FlightReservation> FlightReservations { get; set; }
+
     public virtual DbSet<PackageDeparture> PackageDepartures { get; set; }
 
     public virtual DbSet<PackageDestination> PackageDestinations { get; set; }

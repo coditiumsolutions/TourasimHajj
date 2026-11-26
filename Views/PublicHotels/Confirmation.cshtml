@@ -1,0 +1,38 @@
+@model TourismHajj.Models.Entities.HotelReservation
+@{
+    Layout = "_PublicLayout";
+}
+<section class="container-xl py-5" style="max-width:720px">
+    <div class="text-center mb-4">
+        <i class="fa-solid fa-circle-check text-success" style="font-size:2.5rem"></i>
+        <h1 class="h3 mt-2">Booking @(Model.Status)</h1>
+        <p class="text-muted">Thank you. Your hotel request has been recorded.</p>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <dl class="row mb-0">
+                <dt class="col-sm-4">Reference</dt>
+                <dd class="col-sm-8">@(Model.SupplierBookingReference ?? Model.ClientReference ?? Model.HotelReservationId.ToString())</dd>
+                <dt class="col-sm-4">Hotel</dt>
+                <dd class="col-sm-8">@Model.HotelName</dd>
+                <dt class="col-sm-4">Destination</dt>
+                <dd class="col-sm-8">@Model.Destination</dd>
+                <dt class="col-sm-4">Stay</dt>
+                <dd class="col-sm-8">@Model.CheckIn.ToString("dd MMM yyyy") – @Model.CheckOut.ToString("dd MMM yyyy")</dd>
+                <dt class="col-sm-4">Room</dt>
+                <dd class="col-sm-8">@(Model.RoomName ?? "—") @(string.IsNullOrWhiteSpace(Model.BoardName) ? "" : "· " + Model.BoardName)</dd>
+                <dt class="col-sm-4">Amount</dt>
+                <dd class="col-sm-8">@(Model.SellingAmount?.ToString("0.##") ?? "—") @Model.Currency</dd>
+                <dt class="col-sm-4">Guest</dt>
+                <dd class="col-sm-8">@Model.HolderFirstName @Model.HolderLastName</dd>
+                <dt class="col-sm-4">Provider</dt>
+                <dd class="col-sm-8">@Model.Provider</dd>
+            </dl>
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <a class="btn btn-primary" asp-action="Index">Back to hotels</a>
+    </div>
+</section>

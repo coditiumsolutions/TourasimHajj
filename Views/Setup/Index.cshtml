@@ -9,6 +9,7 @@
         <p class="text-muted mb-0">Key / value configuration used across the management portal.</p>
     </div>
     <div class="d-flex gap-2">
+        <a class="btn btn-sm btn-outline-secondary" asp-controller="HotelReservations" asp-action="ApiStatus"><i class="fa-solid fa-hotel"></i> Hotelbeds API</a>
         <form method="get" class="d-flex gap-2">
             <input class="form-control form-control-sm" name="q" value="@ViewBag.Q" placeholder="Search key or value..." />
             <button class="btn btn-sm btn-outline-secondary" type="submit">Search</button>

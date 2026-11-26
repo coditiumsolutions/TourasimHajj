@@ -1,0 +1,68 @@
+@model IEnumerable<FlightReservationListItem>
+@{
+    ViewData["Title"] = "Flight Reservations";
+    var apiOk = ViewBag.ApiConfigured as bool? == true;
+}
+@await Html.PartialAsync("_Alerts")
+<div class="page-header">
+    <div>
+        <h2>Flight Reservations</h2>
+        <p class="text-muted mb-0">
+            Amadeus:
+            @if (apiOk)
+            { <span class="badge bg-success">Live keys configured</span> }
+            else
+            { <span class="badge bg-secondary">Demo mode</span> }
+        </p>
+    </div>
+    <div class="d-flex gap-2">
+        <a class="btn btn-sm btn-outline-secondary" asp-action="ApiStatus">API status</a>
+        <a class="btn btn-sm btn-outline-primary" href="/Flights" target="_blank">Open public search</a>
+        <form method="get" class="d-flex gap-2">
+            <input class="form-control form-control-sm" name="q" value="@ViewBag.Q" placeholder="Search..." />
+            <button class="btn btn-sm btn-outline-secondary">Search</button>
+        </form>
+    </div>
+</div>
+<div class="card-panel">
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>Created</th>
+                    <th>Ref / Ticket</th>
+                    <th>Route</th>
+                    <th>Flight</th>
+                    <th>Traveler</th>
+                    <th>Pay</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var r in Model)
+            {
+                <tr>
+                    <td>@r.CreatedDate.ToLocalTime().ToString("dd MMM HH:mm")</td>
+                    <td>
+                        <div>@(r.SupplierBookingReference ?? "—")</div>
+                        <div class="small text-muted">@(r.TicketNumber ?? "")</div>
+                    </td>
+                    <td>@r.Route</td>
+                    <td>@r.FlightNumber<br /><span class="small text-muted">@r.DepartureAt.ToString("dd MMM yyyy HH:mm")</span></td>
+                    <td>@r.HolderName</td>
+                    <td>@(r.PaymentMethod ?? "—")</td>
+                    <td><span class="badge badge-soft">@r.Status</span></td>
+                    <td class="text-end">
+                        <a class="btn btn-sm btn-outline-secondary" asp-action="Details" asp-route-id="@r.FlightReservationId">View</a>
+                    </td>
+                </tr>
+            }
+            @if (!Model.Any())
+            {
+                <tr><td colspan="8" class="text-muted text-center py-4">No flight reservations yet.</td></tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

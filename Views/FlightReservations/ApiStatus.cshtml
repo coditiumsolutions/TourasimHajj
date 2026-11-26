@@ -1,0 +1,26 @@
+@{
+    ViewData["Title"] = "Flight API status";
+    var apiOk = ViewBag.ApiConfigured as bool? == true;
+}
+@await Html.PartialAsync("_Alerts")
+<div class="page-header"><div><h2>Flight API status</h2></div>
+<a class="btn btn-sm btn-outline-secondary" asp-action="Index">Reservations</a></div>
+<div class="card-panel">
+    <p>
+        <strong>Amadeus:</strong>
+        @if (apiOk)
+        {
+            <span class="badge bg-success">Configured</span>
+            <span class="text-muted">Live Flight Offers Search is active.</span>
+        }
+        else
+        {
+            <span class="badge bg-secondary">Demo</span>
+            <span class="text-muted">Add <code>Amadeus:ClientId</code> and <code>ClientSecret</code> in appsettings.</span>
+        }
+    </p>
+    <p class="mb-0">
+        <strong>Payment gateway:</strong> configure <code>PaymentGateway</code> (Tap / Stripe / BenefitPay) for Bahrain checkout.
+        Public search: <a href="/Flights" target="_blank">/Flights</a>
+    </p>
+</div>

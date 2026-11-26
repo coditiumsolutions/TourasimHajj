@@ -6,8 +6,8 @@
 
     var activeModule =
         ModuleActive("Setup", "Interface") == "active" ? "setup" :
-        ModuleActive("TravelPackages", "Destinations", "Services") == "active" ? "travel" :
-        ModuleActive("HotelPackages", "Hotels") == "active" ? "hotels" :
+        ModuleActive("TravelPackages", "Destinations", "Services", "FlightReservations") == "active" ? "travel" :
+        ModuleActive("HotelPackages", "HotelReservations", "Hotels") == "active" ? "hotels" :
         ModuleActive("GalleryManagement") == "active" ? "gallery" :
         ModuleActive("HajjSeasons", "PilgrimGroups") == "active" ? "hajj" :
         ModuleActive("VisaApplications") == "active" ? "umrah" :

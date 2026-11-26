@@ -13,11 +13,14 @@ public class ContactController : Controller
     public ContactController(IPublicSiteService publicSite) => _publicSite = publicSite;
 
     [HttpGet]
-    public IActionResult Index()
+    public IActionResult Index(string? subject)
     {
         ViewData["Title"] = "Contact Us";
         ViewData["MetaDescription"] = "Contact Al-Haram Travel for tourism, Hajj and Umrah travel assistance.";
-        return View(new ContactFormViewModel());
+        return View(new ContactFormViewModel
+        {
+            Subject = string.IsNullOrWhiteSpace(subject) ? null : subject.Trim()
+        });
     }
 
     [HttpPost, ValidateAntiForgeryToken]

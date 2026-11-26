@@ -1,0 +1,32 @@
+@{
+    ViewData["Title"] = "Hotel API status";
+    var apiOk = ViewBag.ApiConfigured as bool? == true;
+}
+<div class="mb-3">
+    <a asp-action="Index" class="btn btn-link px-0">&larr; Reservations</a>
+</div>
+<div class="card shadow-sm" style="max-width:720px">
+    <div class="card-body">
+        <h1 class="h4 mb-3">Hotelbeds API</h1>
+        <p>
+            Status:
+            @if (apiOk)
+            {
+                <span class="badge text-bg-success">Configured</span>
+            }
+            else
+            {
+                <span class="badge text-bg-warning">Not configured</span>
+            }
+        </p>
+        <p class="mb-2">Register for a free evaluation key at <a href="https://developer.hotelbeds.com/" target="_blank" rel="noopener">developer.hotelbeds.com</a>.</p>
+        <p class="mb-2">Then set these values (never commit real secrets):</p>
+        <ul>
+            <li><code>Hotelbeds:ApiKey</code></li>
+            <li><code>Hotelbeds:Secret</code></li>
+            <li><code>Hotelbeds:BaseUrl</code> — sandbox <code>https://api.test.hotelbeds.com</code>, live <code>https://api.hotelbeds.com</code></li>
+            <li>Optional destination codes: <code>MakkahDestinationCode</code>, <code>MadinahDestinationCode</code></li>
+        </ul>
+        <p class="mb-0">Local development: use <code>dotnet user-secrets set "Hotelbeds:ApiKey" "..."</code> and the same for <code>Secret</code>, or put values in <code>appsettings.Development.json</code> (gitignored).</p>
+    </div>
+</div>

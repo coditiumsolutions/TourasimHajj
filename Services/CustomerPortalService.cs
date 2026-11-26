@@ -226,6 +226,13 @@ public class CustomerPortalService : ICustomerPortalService
         var c = await GetCustomerByUserIdAsync(userId, cancellationToken);
         if (c == null) return (false, "Customer profile not found.", null);
 
+        var packageType = await _db.TravelPackages.AsNoTracking()
+            .Where(p => p.PackageId == model.PackageId)
+            .Select(p => p.PackageType)
+            .FirstOrDefaultAsync(cancellationToken);
+        if (string.Equals(packageType, "Hajj", StringComparison.OrdinalIgnoreCase))
+            return (false, "Hajj packages cannot be booked online. Please register interest via Contact — arrangements are made through licensed Ministry / Nusuk campaigns.", null);
+
         var owned = await _db.Travelers
             .Where(t => t.CustomerId == c.CustomerId && model.TravelerIds.Contains(t.TravelerId))
             .Select(t => t.TravelerId)

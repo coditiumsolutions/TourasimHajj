@@ -1,6 +1,17 @@
 @model IEnumerable<TourismHajj.Models.Entities.TravelPackage>
 @{ ViewData["Title"] = ViewData["Title"] ?? "Travel Packages"; }
 @await Html.PartialAsync("_Alerts")
+<div class="alert alert-info d-flex flex-wrap justify-content-between align-items-center gap-2">
+    <div>
+        <strong>Supplier APIs:</strong> Hotels via Hotelbeds · Flights via Amadeus (BAH→JED) · Payments via Tap / Stripe / BenefitPay (config in appsettings).
+        Hajj packages stay <em>enquiry-only</em> (Ministry / Nusuk) — no online booking.
+    </div>
+    <div class="d-flex gap-2">
+        <a class="btn btn-sm btn-outline-primary" href="/Flights" target="_blank">Public flights</a>
+        <a class="btn btn-sm btn-outline-primary" href="/Hotels" target="_blank">Public hotels</a>
+        <a class="btn btn-sm btn-outline-secondary" asp-controller="FlightReservations" asp-action="Index">Flight bookings</a>
+    </div>
+</div>
 <div class="page-header"><div><h2>@ViewData["Title"]</h2></div>
 <div class="d-flex gap-2">
 <form method="get" class="d-flex gap-2">

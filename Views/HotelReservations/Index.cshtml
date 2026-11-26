@@ -1,0 +1,80 @@
+@model List<HotelReservationListItem>
+@{
+    ViewData["Title"] = "Hotel Reservations";
+    var apiOk = ViewBag.ApiConfigured as bool? == true;
+}
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+    <div>
+        <h1 class="h3 mb-1">Hotel Reservations</h1>
+        <p class="text-muted mb-0">
+            Hotelbeds live bookings
+            @if (apiOk)
+            {
+                <span class="badge text-bg-success">API configured</span>
+            }
+            else
+            {
+                <span class="badge text-bg-warning">API keys missing</span>
+            }
+        </p>
+    </div>
+    <div class="d-flex gap-2">
+        <a class="btn btn-outline-secondary btn-sm" asp-action="ApiStatus">API status</a>
+        <a class="btn btn-outline-primary btn-sm" asp-controller="HotelPackages" asp-action="Index">Hotel packages</a>
+    </div>
+</div>
+
+<form method="get" class="row g-2 mb-3">
+    <div class="col-md-4">
+        <input class="form-control" name="q" value="@ViewBag.Q" placeholder="Search name, email, ref, status..." />
+    </div>
+    <div class="col-auto">
+        <button class="btn btn-primary" type="submit">Search</button>
+    </div>
+</form>
+
+<div class="card shadow-sm">
+    <div class="table-responsive">
+        <table class="table table-hover mb-0 align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Created</th>
+                    <th>Ref</th>
+                    <th>Hotel</th>
+                    <th>Stay</th>
+                    <th>Guest</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            @if (!Model.Any())
+            {
+                <tr><td colspan="8" class="text-center text-muted py-4">No hotel reservations yet.</td></tr>
+            }
+            else
+            {
+                foreach (var r in Model)
+                {
+                    <tr>
+                        <td class="small">@r.CreatedDate.ToLocalTime().ToString("dd MMM yyyy HH:mm")</td>
+                        <td class="small">@(r.SupplierBookingReference ?? "—")</td>
+                        <td>
+                            <div>@r.HotelName</div>
+                            <div class="small text-muted">@r.Destination · @r.Provider</div>
+                        </td>
+                        <td class="small">@r.CheckIn.ToString("dd MMM") – @r.CheckOut.ToString("dd MMM yyyy")</td>
+                        <td>@(string.IsNullOrWhiteSpace(r.HolderName) ? "—" : r.HolderName)</td>
+                        <td>@(r.SellingAmount?.ToString("0.##") ?? "—") @r.Currency</td>
+                        <td><span class="badge text-bg-secondary">@r.Status</span></td>
+                        <td class="text-end">
+                            <a class="btn btn-sm btn-outline-primary" asp-action="Details" asp-route-id="@r.HotelReservationId">View</a>
+                        </td>
+                    </tr>
+                }
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,121 @@
+@model FlightSearchPageViewModel
+@{
+    Layout = "_PublicLayout";
+    ViewData["Title"] = "Flights";
+    var search = Model.Search;
+}
+<section class="hajj-component packages-theme-all hotels-hero-component hotels-packages-component">
+    <div class="hajj-component-media" aria-hidden="true">
+        <img src="/images/hotel01.jpg?v=1" alt="" />
+    </div>
+    <div class="hajj-component-shade" aria-hidden="true"></div>
+    <div class="container-xl hajj-component-inner hotels-packages-inner">
+        <div class="hajj-component-copy hotels-packages-copy">
+            <h1 class="packages-hero-title">Flights</h1>
+            <p class="packages-hero-subtitle">Search Bahrain (BAH) to Jeddah (JED) and more via Amadeus — then book your e-ticket.</p>
+            <div class="packages-hero-pills">
+                @if (Model.IsDemoMode)
+                {
+                    <span><i class="fa-solid fa-flask"></i> Demo Amadeus</span>
+                }
+                else
+                {
+                    <span><i class="fa-solid fa-plug"></i> Live Amadeus</span>
+                }
+                <span><i class="fa-solid fa-credit-card"></i> @Model.PaymentProvider</span>
+            </div>
+        </div>
+
+        <div class="hotels-packages-on-hero">
+            <form class="card border-0 shadow-sm p-3 mb-4 bg-white bg-opacity-95" method="get" action="/Flights/Search">
+                <div class="row g-2 align-items-end">
+                    <div class="col-md-2">
+                        <label class="form-label small mb-1">From</label>
+                        <input class="form-control text-uppercase" name="Origin" maxlength="3" value="@search.Origin" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label small mb-1">To</label>
+                        <input class="form-control text-uppercase" name="Destination" maxlength="3" value="@search.Destination" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label small mb-1">Depart</label>
+                        <input class="form-control" type="date" name="DepartureDate" value="@search.DepartureDate.ToString("yyyy-MM-dd")" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label small mb-1">Return</label>
+                        <input class="form-control" type="date" name="ReturnDate" value="@(search.ReturnDate?.ToString("yyyy-MM-dd") ?? "")" />
+                    </div>
+                    <div class="col-md-1">
+                        <label class="form-label small mb-1">Adults</label>
+                        <input class="form-control" type="number" min="1" max="9" name="Adults" value="@search.Adults" />
+                    </div>
+                    <div class="col-md-1">
+                        <label class="form-label small mb-1">Children</label>
+                        <input class="form-control" type="number" min="0" max="8" name="Children" value="@search.Children" />
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fa-solid fa-magnifying-glass"></i> Search
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+            {
+                <div class="alert @(Model.IsDemoMode && Model.Results.Any() ? "alert-info" : "alert-warning")">@Model.ErrorMessage</div>
+            }
+            @if (TempData["Error"] is string tempErr)
+            {
+                <div class="alert alert-danger">@tempErr</div>
+            }
+
+            @if (Model.Searched && Model.Results.Any())
+            {
+                <h2 class="h5 text-white mb-3">Available flights (@Model.Results.Count)</h2>
+                <div class="row g-3 hotels-packages-row mb-4">
+                    @foreach (var f in Model.Results)
+                    {
+                        <div class="col-sm-6 col-xl-4">
+                            <article class="package-card package-card-rich hotels-package-card-on-hero">
+                                <div class="body">
+                                    <h5>@f.CarrierName · @f.FlightNumber</h5>
+                                    <table class="package-detail-table">
+                                        <tbody>
+                                            <tr>
+                                                <th>Route</th>
+                                                <td colspan="3">@f.Origin → @f.Destination</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Depart</th>
+                                                <td colspan="3">@f.DepartureAt.ToString("dd MMM yyyy HH:mm")</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Arrive</th>
+                                                <td colspan="3">@f.ArrivalAt.ToString("dd MMM yyyy HH:mm")</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Duration</th>
+                                                <td>@f.Duration</td>
+                                                <th>Stops</th>
+                                                <td>@(f.Stops == 0 ? "Non-stop" : f.Stops.ToString())</td>
+                                            </tr>
+                                            <tr>
+                                                <th>From</th>
+                                                <td colspan="3"><strong>@f.TotalPrice.ToString("0.##") @f.Currency</strong></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <a class="btn btn-sm btn-outline-primary mt-2"
+                                       href="/Flights/Book?offerId=@Uri.EscapeDataString(f.OfferId)">
+                                        Select &amp; book
+                                    </a>
+                                </div>
+                            </article>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</section>

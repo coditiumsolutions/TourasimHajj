@@ -1,7 +1,8 @@
-@model List<PublicHotelCardViewModel>
+@model HotelSearchPageViewModel
 @{
     Layout = "_PublicLayout";
     ViewData["Title"] = "Hotels";
+    var search = Model.Search;
 }
 <section class="hajj-component packages-theme-all hotels-hero-component hotels-packages-component">
     <div class="hajj-component-media" aria-hidden="true">
@@ -11,25 +12,121 @@
     <div class="container-xl hajj-component-inner hotels-packages-inner">
         <div class="hajj-component-copy hotels-packages-copy">
             <h1 class="packages-hero-title">Hotels</h1>
-            <p class="packages-hero-subtitle">Stay options for Hajj, Umrah and tourism — curated hotel packages for your journey.</p>
+            <p class="packages-hero-subtitle">Search Makkah &amp; Madinah rates, then book a room — or browse curated packages.</p>
             <div class="packages-hero-pills">
-                <span><i class="fa-solid fa-hotel"></i> @Model.Count hotel@(Model.Count == 1 ? "" : "s")</span>
+                @if (Model.IsDemoMode)
+                {
+                    <span><i class="fa-solid fa-flask"></i> Demo availability</span>
+                }
+                else
+                {
+                    <span><i class="fa-solid fa-plug"></i> Live Hotelbeds</span>
+                }
             </div>
         </div>
 
         <div class="hotels-packages-on-hero">
-            @if (!Model.Any())
+            <form class="card border-0 shadow-sm p-3 mb-4 bg-white bg-opacity-95" method="get" action="/Hotels/Search">
+                <div class="row g-2 align-items-end">
+                    <div class="col-md-3">
+                        <label class="form-label small mb-1" asp-for="Search.Destination">Destination</label>
+                        <select class="form-select" name="Destination" asp-for="@search.Destination">
+                            <option value="Makkah">Makkah</option>
+                            <option value="Madinah">Madinah</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label small mb-1">Check-in</label>
+                        <input class="form-control" type="date" name="CheckIn" value="@search.CheckIn.ToString("yyyy-MM-dd")" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label small mb-1">Check-out</label>
+                        <input class="form-control" type="date" name="CheckOut" value="@search.CheckOut.ToString("yyyy-MM-dd")" />
+                    </div>
+                    <div class="col-md-1">
+                        <label class="form-label small mb-1">Rooms</label>
+                        <input class="form-control" type="number" min="1" max="9" name="Rooms" value="@search.Rooms" />
+                    </div>
+                    <div class="col-md-1">
+                        <label class="form-label small mb-1">Adults</label>
+                        <input class="form-control" type="number" min="1" max="12" name="Adults" value="@search.Adults" />
+                    </div>
+                    <div class="col-md-1">
+                        <label class="form-label small mb-1">Children</label>
+                        <input class="form-control" type="number" min="0" max="8" name="Children" value="@search.Children" />
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fa-solid fa-magnifying-glass"></i> Search
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+            {
+                <div class="alert @(Model.IsDemoMode && Model.LiveResults.Any() ? "alert-info" : "alert-warning")">@Model.ErrorMessage</div>
+            }
+            @if (TempData["Error"] is string tempErr)
+            {
+                <div class="alert alert-danger">@tempErr</div>
+            }
+
+            @if (Model.Searched && Model.LiveResults.Any())
+            {
+                <h2 class="h5 text-white mb-3">
+                    @(Model.IsDemoMode ? "Available hotels" : "Live availability")
+                    (@Model.LiveResults.Count)
+                </h2>
+                <div class="row g-3 hotels-packages-row mb-4">
+                    @foreach (var h in Model.LiveResults)
+                    {
+                        <div class="col-sm-6 col-xl-4">
+                            <article class="package-card package-card-rich hotels-package-card-on-hero">
+                                <div class="body">
+                                    <h5>@h.HotelName</h5>
+                                    <table class="package-detail-table">
+                                        <tbody>
+                                            <tr>
+                                                <th>City</th>
+                                                <td>@(h.DestinationName ?? search.Destination)</td>
+                                                <th>Stars</th>
+                                                <td>@(h.CategoryCode?.ToString() ?? h.CategoryName ?? "—")</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Area</th>
+                                                <td colspan="3">@(h.ZoneName ?? "—")</td>
+                                            </tr>
+                                            <tr>
+                                                <th>From</th>
+                                                <td colspan="3"><strong>@h.MinRate.ToString("0.##") @h.Currency</strong> total stay</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <a class="btn btn-sm btn-outline-primary mt-2"
+                                       href="/Hotels/Details/@Uri.EscapeDataString(h.HotelCode)?Destination=@Uri.EscapeDataString(search.Destination)&CheckIn=@search.CheckIn.ToString("yyyy-MM-dd")&CheckOut=@search.CheckOut.ToString("yyyy-MM-dd")&Rooms=@search.Rooms&Adults=@search.Adults&Children=@search.Children">
+                                        View rooms
+                                    </a>
+                                </div>
+                            </article>
+                        </div>
+                    }
+                </div>
+            }
+
+            <h2 class="h5 text-white mb-3">Curated hotel packages</h2>
+            @if (!Model.ManualPackages.Any())
             {
                 <div class="packages-empty hotels-packages-empty-on-hero">
                     <i class="fa-solid fa-hotel"></i>
-                    <h3>No hotels available yet</h3>
-                    <p>Hotel listings will appear here once added in the management portal.</p>
+                    <h3>No manual packages yet</h3>
+                    <p>Add packages in Hotel Packages admin, or use search above for availability.</p>
                 </div>
             }
             else
             {
                 <div class="row g-3 hotels-packages-row">
-                    @foreach (var h in Model)
+                    @foreach (var h in Model.ManualPackages)
                     {
                         var currency = h.CurrencyCode ?? "PKR";
                         <div class="col-sm-6 col-xl-4">
@@ -55,34 +152,10 @@
                                                 <td>@(h.StarRating?.ToString() ?? "—")</td>
                                             </tr>
                                             <tr>
-                                                <th>Haram</th>
-                                                <td>@(h.DistanceFromHaramKm.HasValue ? $"{h.DistanceFromHaramKm:0.##} km" : "—")</td>
-                                                <th>Nabawi</th>
-                                                <td>@(h.DistanceFromNabawiKm.HasValue ? $"{h.DistanceFromNabawiKm:0.##} km" : "—")</td>
-                                            </tr>
-                                            @if (h.PricePerNight.HasValue || h.DurationNights.HasValue)
-                                            {
-                                                <tr>
-                                                    <th>Price / Night</th>
-                                                    <td>@(h.PricePerNight.HasValue ? $"{h.PricePerNight:N0} {currency}" : "—")</td>
-                                                    <th>Nights</th>
-                                                    <td>@(h.DurationNights?.ToString() ?? "—")</td>
-                                                </tr>
-                                            }
-                                            @if (!string.IsNullOrWhiteSpace(h.Description))
-                                            {
-                                                <tr>
-                                                    <th>Description</th>
-                                                    <td colspan="3">@h.Description</td>
-                                                </tr>
-                                            }
-                                            <tr>
-                                                <th>Address</th>
-                                                <td colspan="3">@(string.IsNullOrWhiteSpace(h.Address) ? "—" : h.Address)</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Contact</th>
-                                                <td colspan="3">@(string.IsNullOrWhiteSpace(h.ContactNo) ? "—" : h.ContactNo)</td>
+                                                <th>Price</th>
+                                                <td colspan="3">
+                                                    @(h.PricePerNight.HasValue ? $"{h.PricePerNight:0.##} {currency}/night" : "—")
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>

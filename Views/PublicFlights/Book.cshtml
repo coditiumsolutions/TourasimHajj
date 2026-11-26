@@ -1,0 +1,79 @@
+@model FlightBookPageViewModel
+@{
+    Layout = "_PublicLayout";
+}
+<section class="container-xl py-4" style="max-width:720px">
+    <h1 class="h3 mb-3">Complete flight booking</h1>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h2 class="h5">@Model.CarrierName · @Model.FlightNumber</h2>
+            <p class="mb-1 text-muted">@Model.Origin → @Model.Destination @(Model.IsRoundTrip ? "· Round trip" : "· One way")</p>
+            <p class="mb-1">@Model.DepartureAt.ToString("dd MMM yyyy HH:mm") → @Model.ArrivalAt.ToString("dd MMM yyyy HH:mm")</p>
+            <p class="fw-semibold mb-0">@Model.TotalPrice.ToString("0.##") @Model.Currency</p>
+            @if (!string.IsNullOrWhiteSpace(Model.Summary))
+            {
+                <p class="small text-muted mt-2 mb-0">@Model.Summary</p>
+            }
+        </div>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+    {
+        <div class="alert alert-danger">@Model.ErrorMessage</div>
+    }
+
+    <form method="post" action="/Flights/Book" class="card shadow-sm">
+        <div class="card-body">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="OfferId" />
+            <input type="hidden" asp-for="CarrierName" />
+            <input type="hidden" asp-for="FlightNumber" />
+            <input type="hidden" asp-for="Origin" />
+            <input type="hidden" asp-for="Destination" />
+            <input type="hidden" asp-for="DepartureAt" />
+            <input type="hidden" asp-for="ArrivalAt" />
+            <input type="hidden" asp-for="TotalPrice" />
+            <input type="hidden" asp-for="Currency" />
+            <input type="hidden" asp-for="Summary" />
+            <input type="hidden" asp-for="IsRoundTrip" />
+
+            <h3 class="h6 text-uppercase text-muted">Traveler</h3>
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <label class="form-label" asp-for="TravelerFirstName"></label>
+                    <input class="form-control" asp-for="TravelerFirstName" />
+                    <span class="text-danger small" asp-validation-for="TravelerFirstName"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" asp-for="TravelerLastName"></label>
+                    <input class="form-control" asp-for="TravelerLastName" />
+                    <span class="text-danger small" asp-validation-for="TravelerLastName"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" asp-for="Email"></label>
+                    <input class="form-control" asp-for="Email" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" asp-for="Phone"></label>
+                    <input class="form-control" asp-for="Phone" />
+                </div>
+            </div>
+
+            <h3 class="h6 text-uppercase text-muted">Payment (Bahrain)</h3>
+            <div class="mb-3">
+                <label class="form-label" asp-for="PaymentMethod"></label>
+                <select class="form-select" asp-for="PaymentMethod">
+                    @foreach (var m in Model.AvailablePaymentMethods)
+                    {
+                        <option value="@m">@m</option>
+                    }
+                </select>
+                <div class="form-text">Tap / Stripe / BenefitPay keys can be added in appsettings. Until live checkout is enabled, booking is recorded and ticketed in demo mode.</div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Confirm &amp; issue e-ticket</button>
+            <a class="btn btn-link" href="/Flights">Cancel</a>
+        </div>
+    </form>
+</section>

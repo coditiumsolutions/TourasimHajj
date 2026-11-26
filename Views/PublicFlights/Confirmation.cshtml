@@ -1,0 +1,41 @@
+@model TourismHajj.Models.Entities.FlightReservation
+@{
+    Layout = "_PublicLayout";
+}
+<section class="container-xl py-5" style="max-width:720px">
+    <div class="text-center mb-4">
+        <div class="display-6 text-success mb-2"><i class="fa-solid fa-circle-check"></i></div>
+        <h1 class="h3">Flight booked</h1>
+        <p class="text-muted mb-0">Your e-ticket reference is ready.</p>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <dl class="row mb-0">
+                <dt class="col-sm-4">Booking ref</dt>
+                <dd class="col-sm-8">@(Model.SupplierBookingReference ?? "—")</dd>
+                <dt class="col-sm-4">E-ticket</dt>
+                <dd class="col-sm-8">@(Model.TicketNumber ?? "—")</dd>
+                <dt class="col-sm-4">Flight</dt>
+                <dd class="col-sm-8">@(Model.CarrierName) · @Model.FlightNumber</dd>
+                <dt class="col-sm-4">Route</dt>
+                <dd class="col-sm-8">@Model.Origin → @Model.Destination</dd>
+                <dt class="col-sm-4">Depart</dt>
+                <dd class="col-sm-8">@Model.DepartureAt.ToString("dd MMM yyyy HH:mm")</dd>
+                <dt class="col-sm-4">Traveler</dt>
+                <dd class="col-sm-8">@Model.TravelerFirstName @Model.TravelerLastName</dd>
+                <dt class="col-sm-4">Amount</dt>
+                <dd class="col-sm-8">@((Model.SellingAmount ?? 0).ToString("0.##")) @Model.Currency</dd>
+                <dt class="col-sm-4">Payment</dt>
+                <dd class="col-sm-8">@(Model.PaymentMethod ?? "—") · @(Model.PaymentStatus ?? "—")</dd>
+                <dt class="col-sm-4">Status</dt>
+                <dd class="col-sm-8"><span class="badge bg-success">@Model.Status</span></dd>
+            </dl>
+        </div>
+    </div>
+
+    <div class="mt-4 d-flex gap-2 justify-content-center">
+        <a class="btn btn-outline-primary" href="/Flights">Search more flights</a>
+        <a class="btn btn-outline-secondary" href="/Hotels">Find hotels</a>
+    </div>
+</section>

@@ -1,7 +1,12 @@
 @model PublicPackageDetailsViewModel
+@using Microsoft.Extensions.Options
+@using TourismHajj.Helpers
+@inject IOptions<CompanyProfileOptions> CompanyOptions
 @{
     Layout = "_PublicLayout";
     var p = Model.Package;
+    var isHajj = Model.IsHajjEnquiryOnly;
+    var whatsapp = (CompanyOptions.Value.WhatsApp ?? "").Trim().TrimStart('+');
 }
 <section class="package-hero" style="background-image:url('@Model.CoverImageUrl');">
     <div class="container-xl package-hero-content">
@@ -19,8 +24,64 @@
                     <h3>Overview</h3>
                     <p>@(p.Description ?? "Package details will be updated by the travel operations team.")</p>
                     <div class="price mb-3">From @(p.CurrencyCode ?? "PKR") @((p.AdultPrice ?? 0).ToString("N0"))</div>
-                    <a class="btn-gold" asp-controller="Packages" asp-action="Book" asp-route-id="@p.PackageId">Book Now</a>
+                    @if (isHajj)
+                    {
+                        <div class="alert alert-warning">
+                            Hajj in Bahrain is arranged only through Ministry of Hajj approved campaigns / Nusuk.
+                            Online ticket sales are not available — register your interest and our licensed team will call you.
+                        </div>
+                        <a class="btn-gold" asp-controller="Contact" asp-action="Index" asp-route-subject="@($"Hajj interest — {p.PackageName}")">Register interest</a>
+                        <a class="btn btn-outline-secondary ms-2" href="https://wa.me/@whatsapp?text=@Uri.EscapeDataString($"Hajj interest: {p.PackageName}")" target="_blank" rel="noopener">WhatsApp</a>
+                    }
+                    else
+                    {
+                        <a class="btn-gold" asp-controller="Packages" asp-action="Book" asp-route-id="@p.PackageId">Book Now</a>
+                        <a class="btn btn-outline-secondary ms-2" href="/Flights">Search flights</a>
+                        <a class="btn btn-outline-secondary ms-2" href="/Hotels">Search hotels</a>
+                    }
                 </div>
+
+                @if (!isHajj)
+                {
+                    <div class="contact-panel mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h3 class="mb-0">Flights (Amadeus)</h3>
+                            @if (Model.FlightsDemoMode)
+                            {
+                                <span class="badge bg-secondary">Demo</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success">Live</span>
+                            }
+                        </div>
+                        <p class="text-muted small">Bahrain (BAH) → Jeddah (JED) sample offers for this package’s dates. Select a flight to book and receive an e-ticket.</p>
+                        @if (!Model.SuggestedFlights.Any())
+                        {
+                            <p class="mb-2">No offers loaded. <a href="/Flights">Open flight search</a>.</p>
+                        }
+                        else
+                        {
+                            <div class="list-group list-group-flush mb-3">
+                                @foreach (var f in Model.SuggestedFlights)
+                                {
+                                    <div class="list-group-item px-0 d-flex flex-wrap justify-content-between gap-2 align-items-center">
+                                        <div>
+                                            <strong>@f.CarrierName · @f.FlightNumber</strong>
+                                            <div class="small text-muted">@f.Origin → @f.Destination · @f.DepartureAt.ToString("dd MMM HH:mm") · @(f.Stops == 0 ? "Non-stop" : f.Stops + " stop")</div>
+                                        </div>
+                                        <div class="text-end">
+                                            <div class="fw-semibold">@f.TotalPrice.ToString("0.##") @f.Currency</div>
+                                            <a class="btn btn-sm btn-outline-primary" href="/Flights/Book?offerId=@Uri.EscapeDataString(f.OfferId)">Select</a>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        <a class="btn btn-sm btn-outline-secondary" href="/Flights">See all flights</a>
+                        <a class="btn btn-sm btn-outline-secondary" href="/Hotels">Hotels (Hotelbeds)</a>
+                    </div>
+                }
 
                 <div class="contact-panel mb-4">
                     <h3>Daily Itinerary</h3>
@@ -95,7 +156,11 @@
                     }
                     @if (!Model.Hotels.Any())
                     {
-                        <p class="text-muted mb-0">Hotel allocation confirmed after booking.</p>
+                        <p class="text-muted mb-0">Hotel allocation confirmed after booking. <a href="/Hotels">Browse live hotels</a>.</p>
+                    }
+                    else
+                    {
+                        <a class="btn btn-sm btn-outline-secondary mt-2" href="/Hotels">Live Hotelbeds search</a>
                     }
                 </div>
             </div>

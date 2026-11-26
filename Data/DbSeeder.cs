@@ -77,6 +77,79 @@ public static class DbSeeder
             END
             """);
 
+        await db.Database.ExecuteSqlRawAsync("""
+            IF OBJECT_ID(N'[dbo].[HotelReservations]', N'U') IS NULL
+            BEGIN
+                CREATE TABLE [dbo].[HotelReservations](
+                    [HotelReservationId] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+                    [Provider] NVARCHAR(40) NOT NULL CONSTRAINT DF_HotelReservations_Provider DEFAULT(N'Hotelbeds'),
+                    [SupplierBookingReference] NVARCHAR(80) NULL,
+                    [ClientReference] NVARCHAR(40) NULL,
+                    [HotelCode] NVARCHAR(40) NULL,
+                    [HotelName] NVARCHAR(200) NOT NULL,
+                    [Destination] NVARCHAR(100) NOT NULL CONSTRAINT DF_HotelReservations_Destination DEFAULT(N''),
+                    [RoomName] NVARCHAR(150) NULL,
+                    [BoardName] NVARCHAR(80) NULL,
+                    [CheckIn] DATETIME2 NOT NULL,
+                    [CheckOut] DATETIME2 NOT NULL,
+                    [Rooms] INT NOT NULL CONSTRAINT DF_HotelReservations_Rooms DEFAULT(1),
+                    [Adults] INT NOT NULL CONSTRAINT DF_HotelReservations_Adults DEFAULT(2),
+                    [Children] INT NOT NULL CONSTRAINT DF_HotelReservations_Children DEFAULT(0),
+                    [NetAmount] DECIMAL(18,2) NULL,
+                    [SellingAmount] DECIMAL(18,2) NULL,
+                    [Currency] NVARCHAR(10) NULL,
+                    [Status] NVARCHAR(30) NOT NULL CONSTRAINT DF_HotelReservations_Status DEFAULT(N'PENDING'),
+                    [HolderFirstName] NVARCHAR(80) NULL,
+                    [HolderLastName] NVARCHAR(80) NULL,
+                    [HolderEmail] NVARCHAR(150) NULL,
+                    [HolderPhone] NVARCHAR(30) NULL,
+                    [GuestsJson] NVARCHAR(MAX) NULL,
+                    [SupplierRawJson] NVARCHAR(MAX) NULL,
+                    [CustomerId] INT NULL,
+                    [CreatedDate] DATETIME2 NOT NULL CONSTRAINT DF_HotelReservations_Created DEFAULT(SYSUTCDATETIME()),
+                    [UpdatedDate] DATETIME2 NULL
+                );
+                CREATE INDEX IX_HotelReservations_CreatedDate ON [dbo].[HotelReservations]([CreatedDate] DESC);
+                CREATE INDEX IX_HotelReservations_SupplierRef ON [dbo].[HotelReservations]([SupplierBookingReference]);
+            END
+            """);
+
+        await db.Database.ExecuteSqlRawAsync("""
+            IF OBJECT_ID(N'[dbo].[FlightReservations]', N'U') IS NULL
+            BEGIN
+                CREATE TABLE [dbo].[FlightReservations](
+                    [FlightReservationId] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+                    [Provider] NVARCHAR(40) NOT NULL CONSTRAINT DF_FlightReservations_Provider DEFAULT(N'Amadeus'),
+                    [SupplierBookingReference] NVARCHAR(80) NULL,
+                    [ClientReference] NVARCHAR(40) NULL,
+                    [TicketNumber] NVARCHAR(40) NULL,
+                    [Origin] NVARCHAR(10) NOT NULL CONSTRAINT DF_FlightReservations_Origin DEFAULT(N''),
+                    [Destination] NVARCHAR(10) NOT NULL CONSTRAINT DF_FlightReservations_Destination DEFAULT(N''),
+                    [FlightNumber] NVARCHAR(20) NOT NULL CONSTRAINT DF_FlightReservations_FlightNumber DEFAULT(N''),
+                    [CarrierName] NVARCHAR(80) NULL,
+                    [DepartureAt] DATETIME2 NOT NULL,
+                    [ArrivalAt] DATETIME2 NOT NULL,
+                    [IsRoundTrip] BIT NOT NULL CONSTRAINT DF_FlightReservations_IsRoundTrip DEFAULT(0),
+                    [SellingAmount] DECIMAL(18,2) NULL,
+                    [Currency] NVARCHAR(10) NULL,
+                    [Status] NVARCHAR(30) NOT NULL CONSTRAINT DF_FlightReservations_Status DEFAULT(N'PENDING'),
+                    [PaymentMethod] NVARCHAR(40) NULL,
+                    [PaymentStatus] NVARCHAR(30) NULL,
+                    [TravelerFirstName] NVARCHAR(80) NULL,
+                    [TravelerLastName] NVARCHAR(80) NULL,
+                    [Email] NVARCHAR(150) NULL,
+                    [Phone] NVARCHAR(30) NULL,
+                    [OfferSummary] NVARCHAR(MAX) NULL,
+                    [SupplierRawJson] NVARCHAR(MAX) NULL,
+                    [CustomerId] INT NULL,
+                    [CreatedDate] DATETIME2 NOT NULL CONSTRAINT DF_FlightReservations_Created DEFAULT(SYSUTCDATETIME()),
+                    [UpdatedDate] DATETIME2 NULL
+                );
+                CREATE INDEX IX_FlightReservations_CreatedDate ON [dbo].[FlightReservations]([CreatedDate] DESC);
+                CREATE INDEX IX_FlightReservations_Ticket ON [dbo].[FlightReservations]([TicketNumber]);
+            END
+            """);
+
         foreach (var role in AppRoles.All)
         {
             if (!await roleManager.RoleExistsAsync(role))
